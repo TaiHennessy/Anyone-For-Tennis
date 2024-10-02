@@ -13,6 +13,11 @@ namespace AnyoneForTennis.Controllers
             _logger = logger;
         }
 
+        public IActionResult Homepage()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();
