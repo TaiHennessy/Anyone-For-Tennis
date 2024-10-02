@@ -3,16 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Must Have VPN On otherwise the pages will not load properly when pulling from database
+// Add services to the container.
 
-// Resolving Invalid operation exception by adding the database context and configuration services
+// Register the production context (read-only) using the ProductionConnection
 builder.Services.AddDbContext<Hitdb1Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection")));
+
+// Register the local context (for local features) using the DefaultConnection
+builder.Services.AddDbContext<LocalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Serive lifetime
-builder.Services.AddScoped<Hitdb1Context>();
-
-// Add services to the container.
+// Add controllers with views
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -26,17 +27,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
-
 app.UseAuthorization();
 
+// Map default routes
 app.MapControllerRoute(
     name: "default",
-    //Changed the default route to the welcome homepage
     pattern: "{controller=Home}/{action=Homepage}/{id?}");
 
+// Run the application
 app.Run();

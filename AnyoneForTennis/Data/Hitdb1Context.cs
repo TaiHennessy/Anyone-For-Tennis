@@ -69,3 +69,63 @@ public partial class Hitdb1Context : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+
+public class LocalDbContext : DbContext
+{
+    public LocalDbContext(DbContextOptions<LocalDbContext> options)
+        : base(options)
+    {
+    }
+
+    // Define local-only tables
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserMember> UserMembers { get; set; }
+    public DbSet<UserCoach> UserCoaches { get; set; }
+    public DbSet<SchedulePlus> SchedulePlus { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Configure local-only models
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.UserId);
+            entity.Property(e => e.Username).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Password).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.IsAdmin).IsRequired();
+        });
+
+        modelBuilder.Entity<UserMember>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.MemberId });
+            entity.HasOne(um => um.User)
+                .WithMany(u => u.UserMembers)
+                .HasForeignKey(um => um.UserId);
+            entity.HasOne(um => um.Member)
+                .WithMany()
+                .HasForeignKey(um => um.MemberId);
+        });
+
+        modelBuilder.Entity<UserCoach>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.CoachId });
+            entity.HasOne(uc => uc.User)
+                .WithMany(u => u.UserCoaches)
+                .HasForeignKey(uc => uc.UserId);
+            entity.HasOne(uc => uc.Coach)
+                .WithMany()
+                .HasForeignKey(uc => uc.CoachId);
+        });
+
+        modelBuilder.Entity<SchedulePlus>(entity =>
+        {
+            entity.HasKey(e => e.SchedulePlusId);
+            entity.HasOne(sp => sp.Schedule)
+                .WithMany()
+                .HasForeignKey(sp => sp.ScheduleId);
+            entity.Property(sp => sp.DateTime).IsRequired();
+            entity.Property(sp => sp.Duration).IsRequired();
+        });
+
+        base.OnModelCreating(modelBuilder);
+    }
+}

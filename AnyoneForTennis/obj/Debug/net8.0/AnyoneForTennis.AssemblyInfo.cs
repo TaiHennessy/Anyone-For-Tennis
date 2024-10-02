@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AnyoneForTennis")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7943cc8472e76012c8b6334ac72b7385cc5f8519")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a748984b4efc0d2731317386fd31e6869f4b582f")]
 [assembly: System.Reflection.AssemblyProductAttribute("AnyoneForTennis")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AnyoneForTennis")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
