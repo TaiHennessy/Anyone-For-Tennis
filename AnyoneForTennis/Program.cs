@@ -1,5 +1,7 @@
 using AnyoneForTennis.Data;
 using Microsoft.EntityFrameworkCore;
+using AnyoneForTennis.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,17 @@ builder.Services.AddDbContext<LocalDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Seed Data Initialiser
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
