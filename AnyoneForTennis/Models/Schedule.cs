@@ -12,4 +12,7 @@ public partial class Schedule
     public string? Location { get; set; }
 
     public string? Description { get; set; }
+
+    // 1 to 1 relationship
+    public SchedulePlus SchedulePlus { get; set; }
 }

@@ -13,10 +13,12 @@ namespace AnyoneForTennis.Controllers
     public class SchedulesController : Controller
     {
         private readonly Hitdb1Context _context;
+        private readonly LocalDbContext _localContext;
 
-        public SchedulesController(Hitdb1Context context)
+        public SchedulesController(Hitdb1Context context, LocalDbContext localContext)
         {
             _context = context;
+            _localContext = localContext;
         }
 
         /*
@@ -26,9 +28,9 @@ namespace AnyoneForTennis.Controllers
 
         //Schedule View Pages
         //Schedule Page
-        public IActionResult Schedule()
+        public async Task<IActionResult> Schedule()
         {
-            return View();
+            return View(await _localContext.Schedule.ToListAsync());
         }
 
         //Coach Schedule Page - with Authorization once the roles are set up

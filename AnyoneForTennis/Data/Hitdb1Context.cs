@@ -82,6 +82,7 @@ public class LocalDbContext : DbContext
     public DbSet<UserMember> UserMembers { get; set; }
     public DbSet<UserCoach> UserCoaches { get; set; }
     public DbSet<SchedulePlus> SchedulePlus { get; set; }
+    public DbSet<Schedule> Schedule { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -124,6 +125,14 @@ public class LocalDbContext : DbContext
                 .HasForeignKey(sp => sp.ScheduleId);
             entity.Property(sp => sp.DateTime).IsRequired();
             entity.Property(sp => sp.Duration).IsRequired();
+        });
+
+        modelBuilder.Entity<Schedule>(entity =>
+        {
+            entity.HasKey(e => e.ScheduleId);
+            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Location).HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(200);
         });
 
         base.OnModelCreating(modelBuilder);

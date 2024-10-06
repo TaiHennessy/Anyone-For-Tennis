@@ -17,91 +17,91 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AnyoneForTennis
 build_property.RootNamespace = AnyoneForTennis
-build_property.ProjectDir = C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\
+build_property.ProjectDir = C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis
+build_property.MSBuildProjectDirectory = C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Create.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hlc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Delete.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hlc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Details.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hlc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Edit.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hlc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Index.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Coaches/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hlc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Homepage.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Homepage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIb21lcGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Index.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Privacy.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/CoachSchedule.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/CoachSchedule.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXENvYWNoU2NoZWR1bGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/ControlPanel.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/ControlPanel.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXENvbnRyb2xQYW5lbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Create.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Delete.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Details.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Edit.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Schedule.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Schedules/Schedule.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2NoZWR1bGVzXFNjaGVkdWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/Error.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/_ViewImports.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/_ViewStart.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/source/repos/AnyoneTennis/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/_Layout.cshtml]
+[C:/Uni/Yr 3 S2/HIT339/Group Assignment/Anyone-For-Tennis/AnyoneForTennis/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-2jjxxz8kws
