@@ -130,6 +130,7 @@ public class LocalDbContext : DbContext
         modelBuilder.Entity<Schedule>(entity =>
         {
             entity.HasKey(e => e.ScheduleId);
+            entity.Property(e => e.ScheduleId).ValueGeneratedOnAdd();
             entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
             entity.Property(e => e.Location).HasMaxLength(200);
             entity.Property(e => e.Description).HasMaxLength(200);

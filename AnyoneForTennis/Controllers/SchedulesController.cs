@@ -21,11 +21,6 @@ namespace AnyoneForTennis.Controllers
             _localContext = localContext;
         }
 
-        /*
-            I put the Schedule View Pages and the Admin Schedule Pages into once controller
-            to keep it concise, can always seperate them later on if needed.
-        */
-
         //Schedule View Pages
         //Schedule Page
         public async Task<IActionResult> Schedule()
@@ -42,28 +37,50 @@ namespace AnyoneForTennis.Controllers
 
         // Admin Pages
         // GET: Schedules - Admin Control Page
+        // Using a view model both the local and main schedules can be displayed
         public async Task<IActionResult> ControlPanel()
         {
-            return View(await _context.Schedules.ToListAsync());
+            var viewModel = new ScheduleViewModel
+            {
+                MainSchedule = await _context.Schedules.ToListAsync(),
+                LocalSchedule = await _localContext.Schedule.ToListAsync()
+            };
+            return View(viewModel);
         }
 
         // GET: Schedules/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // Local boolean to deal with ID from main being used for local detail
+        public async Task<IActionResult> Details(int? id, bool isLocal = false)
         {
+            // If ID for both is null
             if (id == null)
             {
                 return NotFound();
             }
 
-            var schedule = await _context.Schedules
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (schedule == null)
+            if (isLocal)
             {
-                return NotFound();
+                // Local
+                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleLocal != null)
+                {
+                    return View(scheduleLocal);
+                }
             }
-
-            return View(schedule);
+            else
+            {
+                // Main
+                var scheduleMain = await _context.Schedules
+                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleMain != null)
+                {
+                    return View(scheduleMain);
+                }
+            }
+            // if Neither
+            return NotFound();
         }
+
 
         // GET: Schedules/Create
         public IActionResult Create()
@@ -71,36 +88,52 @@ namespace AnyoneForTennis.Controllers
             return View();
         }
 
+        // Can't write to main, only local, as main is a read-only
         // POST: Schedules/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,Name,Location,Description")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("Name,Location,Description")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(schedule);
-                await _context.SaveChangesAsync();
+                _localContext.Add(schedule);
+                await _localContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(schedule);
         }
 
         // GET: Schedules/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, bool isLocal = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var schedule = await _context.Schedules.FindAsync(id);
-            if (schedule == null)
+            if (isLocal)
             {
-                return NotFound();
+                // Local
+                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleLocal != null)
+                {
+                    return View(scheduleLocal);
+                }
             }
-            return View(schedule);
+            else
+            {
+                // Main
+                var scheduleMain = await _context.Schedules
+                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleMain != null)
+                {
+                    return View(scheduleMain);
+                }
+            }
+            // if Neither
+            return NotFound();
         }
 
         // POST: Schedules/Edit/5
@@ -139,21 +172,34 @@ namespace AnyoneForTennis.Controllers
         }
 
         // GET: Schedules/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool isLocal = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var schedule = await _context.Schedules
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (schedule == null)
+            if (isLocal)
             {
-                return NotFound();
+                // Local
+                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleLocal != null)
+                {
+                    return View(scheduleLocal);
+                }
             }
-
-            return View(schedule);
+            else
+            {
+                // Main
+                var scheduleMain = await _context.Schedules
+                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                if (scheduleMain != null)
+                {
+                    return View(scheduleMain);
+                }
+            }
+            // if Neither
+            return NotFound();
         }
 
         // POST: Schedules/Delete/5
