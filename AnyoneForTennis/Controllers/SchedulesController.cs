@@ -23,7 +23,7 @@ namespace AnyoneForTennis.Controllers
 
         //Schedule View Pages
         //Schedule Page
-        public async Task<IActionResult> Schedule()
+        public async Task<IActionResult> GetSchedule()
         {
             return View(await _localContext.Schedule.ToListAsync());
         }
@@ -85,6 +85,7 @@ namespace AnyoneForTennis.Controllers
         // GET: Schedules/Create
         public IActionResult Create()
         {
+            ViewBag.Locations = Schedule.GetLocations();
             return View();
         }
 
