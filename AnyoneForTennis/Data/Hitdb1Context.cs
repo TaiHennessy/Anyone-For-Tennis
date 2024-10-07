@@ -134,6 +134,9 @@ public class LocalDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
             entity.Property(e => e.Location).HasMaxLength(200);
             entity.Property(e => e.Description).HasMaxLength(200);
+            entity.HasOne(e => e.SchedulePlus)
+                .WithOne(sp => sp.Schedule)
+                .HasForeignKey<SchedulePlus>(sp => sp.ScheduleId);
         });
 
         base.OnModelCreating(modelBuilder);

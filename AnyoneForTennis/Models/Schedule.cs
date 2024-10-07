@@ -14,5 +14,5 @@ public partial class Schedule
     public string? Description { get; set; }
 
     // 1 to 1 relationship
-    public SchedulePlus SchedulePlus { get; set; }
+    public SchedulePlus? SchedulePlus { get; set; }
 }

@@ -98,9 +98,15 @@ namespace AnyoneForTennis.Controllers
         {
             if (ModelState.IsValid)
             {
+                schedule.SchedulePlus = new SchedulePlus
+                {
+                    // Dont remember what duration was for.
+                    DateTime = DateTime.Now,
+                    Duration = 1
+                };
                 _localContext.Add(schedule);
                 await _localContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ControlPanel));
             }
             return View(schedule);
         }
