@@ -9,6 +9,9 @@
 
         // Navigation properties
         public Schedule Schedule { get; set; }
+
+        public Coach Coach { get; set; }
+
     }
 
 }

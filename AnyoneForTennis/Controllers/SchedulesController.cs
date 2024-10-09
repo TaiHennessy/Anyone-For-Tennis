@@ -76,10 +76,13 @@ namespace AnyoneForTennis.Controllers
             return NotFound();
         }
 
+
+
         // GET: Schedules/Create
         public IActionResult Create()
         {
             ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = Coach.GetCoaches(_context);
             return View();
         }
 
@@ -113,6 +116,7 @@ namespace AnyoneForTennis.Controllers
             }
 
             ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = Coach.GetCoaches(_context);
             return View(schedule);
         }
 
