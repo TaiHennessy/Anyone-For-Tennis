@@ -1,4 +1,5 @@
-﻿@model AnyoneForTennis.Models.Schedule
+﻿@model AnyoneForTennis.Models.SchedulesViewModel
+
 
 @{
     ViewData["Title"] = "Create";
@@ -13,23 +14,23 @@
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Schedule.Name" class="control-label"></label>
+                <input asp-for="Schedule.Name" class="form-control" />
+                <span asp-validation-for="Schedule.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <select asp-for="Location" class="form-control" asp-items="ViewBag.Locations"></select>
-                <span asp-validation-for="Location" class="text-danger"></span>
+                <label asp-for="Schedule.Location" class="control-label"></label>
+                <select asp-for="Schedule.Location" class="form-control" asp-items="ViewBag.Locations"></select>
+                <span asp-validation-for="Schedule.Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Schedule.Description" class="control-label"></label>
+                <input asp-for="Schedule.Description" class="form-control" />
+                <span asp-validation-for="Schedule.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SchedulePlus.DateTime" class="control-label"></label>
-                <input asp-for="SchedulePlus.DateTime" class="form-control" id="DateTime" name="SchedulePlus.DateTime" />
+                <input asp-for="SchedulePlus.DateTime" class="form-control" type="datetime-local" />
                 <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,17 +45,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $(document).ready(function () {
-            $("#DateTime").datepicker({
-                dateFormat: 'yy-mm-dd'
-            }).on("change", function () {
-                let date = $(this).datepicker("getDate");
-                let formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
-                $(this).val(formattedDate);
-            });
-        });
-    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-
