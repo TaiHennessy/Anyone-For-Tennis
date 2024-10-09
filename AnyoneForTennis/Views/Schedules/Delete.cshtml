@@ -33,6 +33,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ScheduleId" />
+        <input type="hidden" name="isLocal" value="@ViewData["isLocal"]" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="ControlPanel">Back to List</a>
     </form>
