@@ -82,14 +82,14 @@ namespace AnyoneForTennis.Controllers
         public IActionResult Create()
         {
             ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = SchedulePlus.GetCoaches(_context);
+            ViewBag.Coaches = GetCoaches();
             return View();
         }
 
         // POST: Schedules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Schedule schedule)
+        public async Task<IActionResult> Create(Schedule schedule, int selectedCoachId)
         {
             if (ModelState.IsValid)
             {
@@ -116,8 +116,18 @@ namespace AnyoneForTennis.Controllers
             }
 
             ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = SchedulePlus.GetCoaches(_context);
+            ViewBag.Coaches = GetCoaches();
             return View(schedule);
+        }
+
+        private List<SelectListItem> GetCoaches()
+        {
+            return _context.Coaches
+                .Select(c => new SelectListItem
+                {
+                    Value = c.CoachId.ToString(),
+                    Text = $"{c.FirstName} {c.LastName}"
+                }).ToList();
         }
 
 
@@ -197,61 +207,39 @@ namespace AnyoneForTennis.Controllers
         }
 
         // GET: Schedules/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool isLocal)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            if (isLocal)
+            var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+            if (scheduleLocal != null)
             {
-                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleLocal != null)
-                {
-                    ViewData["isLocal"] = true;
-                    return View(scheduleLocal);
-                }
+                ViewData["isLocal"] = true;
+                return View(scheduleLocal);
             }
-            else
-            {
-                var scheduleMain = await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleMain != null)
-                {
-                    ViewData["isLocal"] = false;
-                    return View(scheduleMain);
-                }
-            }
-
-            return NotFound();
+                return NotFound();
         }
 
         // POST: Schedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, bool isLocal)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (isLocal)
+            var scheduleLocal = await _localContext.Schedule.FindAsync(id);
+            if (scheduleLocal != null)
             {
-                var scheduleLocal = await _localContext.Schedule.FindAsync(id);
-                if (scheduleLocal != null)
-                {
-                    _localContext.Schedule.Remove(scheduleLocal);
-                    await _localContext.SaveChangesAsync();
-                }
+                _localContext.Schedule.Remove(scheduleLocal);
+                await _localContext.SaveChangesAsync();
             }
-            else
-            {
-                Console.WriteLine("Deletion attempted on main database but not allowed");
-                return RedirectToAction(nameof(ControlPanel));
-            }
-
             return RedirectToAction(nameof(ControlPanel));
         }
 
         private bool ScheduleExists(int id)
         {
-            return _context.Schedules.Any(e => e.ScheduleId == id);
+            return _localContext.Schedule.Any(e => e.ScheduleId == id);
         }
     }
 }

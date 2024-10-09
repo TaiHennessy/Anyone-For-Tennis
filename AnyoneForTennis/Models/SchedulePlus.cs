@@ -21,15 +21,22 @@ namespace AnyoneForTennis.Models
         [ForeignKey("CoachId")]
         public Coach Coach { get; set; }
 
-        public static List<SelectListItem> GetCoaches(Hitdb1Context context)
+       /* public static List<SelectListItem> GetCoaches(Hitdb1Context context)
         {
-            var coaches = context.Coaches.
+            *//*var coaches = context.Coaches.
                 Select(coach => new SelectListItem
                 {
                     Value = coach.CoachId.ToString(),
                     Text = coach.FullName
                 }).ToList();
-            return coaches;
-        }
+            return coaches;*//*
+
+            return context.Coaches
+                .Select(coach => new SelectListItem
+                {
+                    Value = coach.CoachId.ToString(),
+                    Text = coach.FullName
+                }).ToList();
+        }*/
     }
 }
