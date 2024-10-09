@@ -82,7 +82,7 @@ namespace AnyoneForTennis.Controllers
         public IActionResult Create()
         {
             ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = Coach.GetCoaches(_context);
+            ViewBag.Coaches = SchedulePlus.GetCoaches(_context);
             return View();
         }
 
@@ -116,7 +116,7 @@ namespace AnyoneForTennis.Controllers
             }
 
             ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = Coach.GetCoaches(_context);
+            ViewBag.Coaches = SchedulePlus.GetCoaches(_context);
             return View(schedule);
         }
 

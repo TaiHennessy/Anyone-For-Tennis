@@ -17,19 +17,6 @@ public partial class Coach
 
     public byte[]? Photo { get; set; }
 
-    public static List<SelectListItem> GetCoaches(Hitdb1Context context)
-    {
-        /*return new List<SelectListItem>
-        {
-            new SelectListItem {Value = "CoachId", Text = "FirstName"}
-        };*/
+    public string? FullName => $"{FirstName} {LastName}";
 
-        var coaches = context.Coaches.
-            Select(coach => new SelectListItem
-            {
-                Value = coach.CoachId.ToString(),
-                Text = coach.FirstName
-            }).ToList();
-        return coaches;
-    }
 }
