@@ -4,6 +4,7 @@ using AnyoneForTennis.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnyoneForTennis.Migrations.LocalDb
 {
     [DbContext(typeof(LocalDbContext))]
-    partial class LocalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009114154_eightary4")]
+    partial class eightary4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,9 +116,6 @@ namespace AnyoneForTennis.Migrations.LocalDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchedulePlusId"));
 
-                    b.Property<int?>("CoachId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -126,8 +126,6 @@ namespace AnyoneForTennis.Migrations.LocalDb
                         .HasColumnType("int");
 
                     b.HasKey("SchedulePlusId");
-
-                    b.HasIndex("CoachId");
 
                     b.HasIndex("ScheduleId")
                         .IsUnique();
@@ -193,17 +191,11 @@ namespace AnyoneForTennis.Migrations.LocalDb
 
             modelBuilder.Entity("AnyoneForTennis.Models.SchedulePlus", b =>
                 {
-                    b.HasOne("AnyoneForTennis.Models.Coach", "Coach")
-                        .WithMany()
-                        .HasForeignKey("CoachId");
-
                     b.HasOne("AnyoneForTennis.Models.Schedule", "Schedule")
                         .WithOne("SchedulePlus")
                         .HasForeignKey("AnyoneForTennis.Models.SchedulePlus", "ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Coach");
 
                     b.Navigation("Schedule");
                 });
