@@ -4,6 +4,7 @@ using AnyoneForTennis.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace AnyoneForTennis.Controllers
 {
@@ -34,6 +35,10 @@ namespace AnyoneForTennis.Controllers
 
                 if (user != null)
                 {
+                    // Store user info in session
+                    HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
+
                     // User authenticated, redirect to Home/Index
                     TempData["Message"] = "Login Successful!";
                     return RedirectToAction("Index", "Home");

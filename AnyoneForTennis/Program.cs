@@ -18,6 +18,14 @@ builder.Services.AddDbContext<LocalDbContext>(options =>
 // Add controllers with views
 builder.Services.AddControllersWithViews();
 
+// Add session services
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout duration
+    options.Cookie.HttpOnly = true; // Set the cookie to be HttpOnly
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
+
 var app = builder.Build();
 
 // Seed Data Initialiser
@@ -42,7 +50,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// Enable session middleware
+app.UseSession();
+
 app.UseAuthorization();
+
+
 
 // Map default routes
 app.MapControllerRoute(

@@ -20,6 +20,8 @@ namespace AnyoneForTennis.Controllers
 
         public IActionResult Index()
         {
+            var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
+            ViewBag.IsAdmin = isAdmin; // Pass admin status to the view
             return View();
         }
 

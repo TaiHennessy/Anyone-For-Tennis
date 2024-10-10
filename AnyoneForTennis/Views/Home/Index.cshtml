@@ -4,7 +4,7 @@
 
 <h1>Welcome to the Home Page</h1>
 
-<p>You have successfully logged in!</p>
+<p>Here you can find stuff for people!</p>
 
 @if (TempData["Message"] != null)
 {
@@ -12,3 +12,11 @@
         @TempData["Message"]
     </div>
 }
+
+@if (ViewBag.IsAdmin)
+{
+    <p>This text is only visible to admins! Also, free video <a href="https://www.youtube.com/watch?v=tJi0QwGlTTk&themeRefresh=1">Can't believe this is actually real</a></p>
+}
+
+<p>This text is visible to all users.</p>
+
