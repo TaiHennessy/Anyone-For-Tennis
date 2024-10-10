@@ -13,7 +13,7 @@ namespace AnyoneForTennis.Models
         public DateTime DateTime { get; set; }
         public int Duration { get; set; } // Additional field example
 
-        public int? CoachId { get; set; } // Foreign key from Coach
+        public int CoachId { get; set; } // Foreign key from Coach
 
         // Navigation properties
         public Schedule Schedule { get; set; }

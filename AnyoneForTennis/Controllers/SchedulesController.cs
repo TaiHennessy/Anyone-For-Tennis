@@ -76,8 +76,6 @@ namespace AnyoneForTennis.Controllers
             return NotFound();
         }
 
-
-
         // GET: Schedules/Create
         public IActionResult Create()
         {
@@ -106,8 +104,34 @@ namespace AnyoneForTennis.Controllers
                 else
                 {
                     // Handle the case where parsing fails
-                    Console.WriteLine("Failed to parse DateTime from the form.");
-                    schedule.SchedulePlus.DateTime = DateTime.Now; // Set a default or show an error
+                    ModelState.AddModelError("", "Invalid DateTime provided.");
+                    ViewBag.Locations = Schedule.GetLocations();
+                    ViewBag.Coaches = GetCoaches();
+                    return View(schedule);
+                }
+
+                // Validate and set CoachId
+                if (selectedCoachId > 0)
+                {
+                    var coachExists = _localContext.Coach.Any(c => c.CoachId == selectedCoachId);
+                    if (coachExists)
+                    {
+                        schedule.SchedulePlus.CoachId = selectedCoachId;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "The selected coach does not exist.");
+                        ViewBag.Locations = Schedule.GetLocations();
+                        ViewBag.Coaches = GetCoaches();
+                        return View(schedule);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "You must select a coach.");
+                    ViewBag.Locations = Schedule.GetLocations();
+                    ViewBag.Coaches = GetCoaches();
+                    return View(schedule);
                 }
 
                 _localContext.Add(schedule);
@@ -122,14 +146,13 @@ namespace AnyoneForTennis.Controllers
 
         private List<SelectListItem> GetCoaches()
         {
-            return _context.Coaches
+            return _localContext.Coach
                 .Select(c => new SelectListItem
                 {
                     Value = c.CoachId.ToString(),
                     Text = $"{c.FirstName} {c.LastName}"
                 }).ToList();
         }
-
 
         // GET: Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id, bool isLocal = false)
@@ -220,7 +243,7 @@ namespace AnyoneForTennis.Controllers
                 ViewData["isLocal"] = true;
                 return View(scheduleLocal);
             }
-                return NotFound();
+            return NotFound();
         }
 
         // POST: Schedules/Delete/5

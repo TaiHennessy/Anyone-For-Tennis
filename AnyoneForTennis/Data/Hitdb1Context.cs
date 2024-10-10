@@ -126,7 +126,12 @@ public class LocalDbContext : DbContext
                 .HasForeignKey(sp => sp.ScheduleId);
             entity.Property(sp => sp.DateTime).IsRequired();
             entity.Property(sp => sp.Duration).IsRequired();
+            entity.HasOne(sp => sp.Coach)
+                .WithMany() // This allows multiple SchedulePlus records to reference the same Coach
+                .HasForeignKey(sp => sp.CoachId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevents cascading deletes if a Coach is removed
         });
+
 
         modelBuilder.Entity<Schedule>(entity =>
         {
