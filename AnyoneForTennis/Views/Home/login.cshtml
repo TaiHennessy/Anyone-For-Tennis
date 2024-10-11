@@ -1,26 +1,19 @@
-﻿@{
-    ViewData["Title"] = "Login";
-}
+﻿@model AnyoneForTennis.Models.User
 
-<h1>Login</h1>
+<h2>Login</h2>
 
-<form method="post">
+<form asp-action="Login" method="post">
     <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" name="username" class="form-control" required />
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" name="password" class="form-control" required />
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
-
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
 </form>

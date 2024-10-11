@@ -1,39 +1,58 @@
-using AnyoneForTennis.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using AnyoneForTennis.Models;
 
 namespace AnyoneForTennis.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
+            _signInManager = signInManager;
         }
 
-        public IActionResult Homepage()
+        public IActionResult Login()
         {
-            return View();
+            return View(new User());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(User model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login");
         }
 
         public IActionResult Index()
         {
-            var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
-            ViewBag.IsAdmin = isAdmin; // Pass admin status to the view
             return View();
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
