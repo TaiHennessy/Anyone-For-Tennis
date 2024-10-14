@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sathy\\OneDrive\\Documents\\339_Repo\\real\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {}
+    "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sathy\\OneDrive\\Documents\\339_Repo\\real\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {
+    "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sathy\\OneDrive\\Documents\\339_Repo\\real\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+        "projectUniqueName": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
         "projectName": "AnyoneForTennis",
-        "projectPath": "C:\\Users\\sathy\\OneDrive\\Documents\\339_Repo\\real\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
-        "packagesPath": "C:\\Users\\sathy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sathy\\OneDrive\\Documents\\339_Repo\\real\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
+        "projectPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+        "packagesPath": "C:\\Users\\axebl\\.nuget\\packages\\",
+        "outputPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sathy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\axebl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
