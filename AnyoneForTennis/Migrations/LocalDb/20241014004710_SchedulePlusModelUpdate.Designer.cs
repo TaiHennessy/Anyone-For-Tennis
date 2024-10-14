@@ -4,6 +4,7 @@ using AnyoneForTennis.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnyoneForTennis.Migrations.LocalDb
 {
     [DbContext(typeof(LocalDbContext))]
-    partial class LocalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014004710_SchedulePlusModelUpdate")]
+    partial class SchedulePlusModelUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,6 +119,9 @@ namespace AnyoneForTennis.Migrations.LocalDb
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CoachId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -128,6 +134,10 @@ namespace AnyoneForTennis.Migrations.LocalDb
                     b.HasKey("SchedulePlusId");
 
                     b.HasIndex("CoachId");
+
+                    b.HasIndex("CoachId1")
+                        .IsUnique()
+                        .HasFilter("[CoachId1] IS NOT NULL");
 
                     b.HasIndex("ScheduleId")
                         .IsUnique();
@@ -194,10 +204,14 @@ namespace AnyoneForTennis.Migrations.LocalDb
             modelBuilder.Entity("AnyoneForTennis.Models.SchedulePlus", b =>
                 {
                     b.HasOne("AnyoneForTennis.Models.Coach", "Coach")
-                        .WithMany("SchedulePlusPlus")
+                        .WithMany()
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("AnyoneForTennis.Models.Coach", null)
+                        .WithOne("SchedulePlus")
+                        .HasForeignKey("AnyoneForTennis.Models.SchedulePlus", "CoachId1");
 
                     b.HasOne("AnyoneForTennis.Models.Schedule", "Schedule")
                         .WithOne("SchedulePlus")
@@ -250,7 +264,7 @@ namespace AnyoneForTennis.Migrations.LocalDb
 
             modelBuilder.Entity("AnyoneForTennis.Models.Coach", b =>
                 {
-                    b.Navigation("SchedulePlusPlus");
+                    b.Navigation("SchedulePlus");
                 });
 
             modelBuilder.Entity("AnyoneForTennis.Models.Schedule", b =>

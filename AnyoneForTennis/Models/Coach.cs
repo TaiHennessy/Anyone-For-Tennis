@@ -19,6 +19,6 @@ public partial class Coach
 
     public string? FullName => $"{FirstName} {LastName}";
 
-    public SchedulePlus? SchedulePlus { get; set; }
+    public ICollection<SchedulePlus> SchedulePlusPlus { get; set; } = new List<SchedulePlus>();
 
 }

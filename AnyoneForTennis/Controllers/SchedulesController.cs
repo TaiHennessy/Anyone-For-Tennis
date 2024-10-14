@@ -79,27 +79,39 @@ namespace AnyoneForTennis.Controllers
         // GET: Schedules/Create
         public IActionResult Create()
         {
+            /* ViewBag.Locations = Schedule.GetLocations();
+             ViewBag.Coaches = GetCoaches();
+             return View();*/
+
+            var viewModel = new SchedulesViewModel
+            {
+                Schedule = new Schedule(),
+                SchedulePlus = new SchedulePlus()
+            };
             ViewBag.Locations = Schedule.GetLocations();
             ViewBag.Coaches = GetCoaches();
-            return View();
+            return View(viewModel);
         }
 
         // POST: Schedules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Schedule schedule, int selectedCoachId)
+        public async Task<IActionResult> Create(SchedulesViewModel viewModel, int selectedCoachId)
         {
             if (ModelState.IsValid)
             {
-                if (schedule.SchedulePlus == null)
+
+                var schedule = viewModel.Schedule;
+
+                if (viewModel.SchedulePlus == null)
                 {
-                    schedule.SchedulePlus = new SchedulePlus();
+                    viewModel.SchedulePlus = new SchedulePlus();
                 }
 
                 // Explicitly parse the DateTime from the form data
                 if (DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out DateTime parsedDateTime))
                 {
-                    schedule.SchedulePlus.DateTime = parsedDateTime;
+                    viewModel.SchedulePlus.DateTime = parsedDateTime;
                 }
                 else
                 {
@@ -107,7 +119,7 @@ namespace AnyoneForTennis.Controllers
                     ModelState.AddModelError("", "Invalid DateTime provided.");
                     ViewBag.Locations = Schedule.GetLocations();
                     ViewBag.Coaches = GetCoaches();
-                    return View(schedule);
+                    return View(viewModel);
                 }
 
                 // Validate and set CoachId
@@ -116,14 +128,14 @@ namespace AnyoneForTennis.Controllers
                     var coachExists = _localContext.Coach.Any(c => c.CoachId == selectedCoachId);
                     if (coachExists)
                     {
-                        schedule.SchedulePlus.CoachId = selectedCoachId;
+                        viewModel.SchedulePlus.CoachId = selectedCoachId;
                     }
                     else
                     {
                         ModelState.AddModelError("", "The selected coach does not exist.");
                         ViewBag.Locations = Schedule.GetLocations();
                         ViewBag.Coaches = GetCoaches();
-                        return View(schedule);
+                        return View(viewModel);
                     }
                 }
                 else
@@ -131,17 +143,18 @@ namespace AnyoneForTennis.Controllers
                     ModelState.AddModelError("", "You must select a coach.");
                     ViewBag.Locations = Schedule.GetLocations();
                     ViewBag.Coaches = GetCoaches();
-                    return View(schedule);
+                    return View(viewModel);
                 }
 
-                _localContext.Add(schedule);
+                viewModel.Schedule.SchedulePlus = viewModel.SchedulePlus;
+                _localContext.Add(viewModel.Schedule);
                 await _localContext.SaveChangesAsync();
                 return RedirectToAction(nameof(ControlPanel));
             }
 
             ViewBag.Locations = Schedule.GetLocations();
             ViewBag.Coaches = GetCoaches();
-            return View(schedule);
+            return View(viewModel);
         }
 
         private List<SelectListItem> GetCoaches()
