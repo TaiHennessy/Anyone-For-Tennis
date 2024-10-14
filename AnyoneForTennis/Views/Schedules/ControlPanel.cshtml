@@ -39,9 +39,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ScheduleId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ScheduleId">Delete</a>
                 </td>
             </tr>
         }
@@ -68,25 +68,89 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.MainSchedule) 
-    {
+        @foreach (var item in Model.MainSchedule)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ScheduleId">Details</a>
+                    <!-- No delete link for main schedules -->
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<h2>Memberships</h2>
+<h3>Members</h3>
+<table class="table">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Delete</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.First().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.First().LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.First().Email)
+            </th>
+            <th></th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Member)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Coaches</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Coach.First().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coach.First().LastName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Coach)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 

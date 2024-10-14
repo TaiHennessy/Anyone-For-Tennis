@@ -83,6 +83,7 @@ public class LocalDbContext : DbContext
     public DbSet<UserCoach> UserCoaches { get; set; }
     public DbSet<SchedulePlus> SchedulePlus { get; set; }
     public DbSet<Schedule> Schedule { get; set; }
+    public DbSet<Coach> Coach { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -121,11 +122,16 @@ public class LocalDbContext : DbContext
         {
             entity.HasKey(e => e.SchedulePlusId);
             entity.HasOne(sp => sp.Schedule)
-                .WithMany()
-                .HasForeignKey(sp => sp.ScheduleId);
+                .WithOne(s => s.SchedulePlus)
+                .HasForeignKey<SchedulePlus>(sp => sp.ScheduleId);
             entity.Property(sp => sp.DateTime).IsRequired();
             entity.Property(sp => sp.Duration).IsRequired();
+            entity.HasOne(sp => sp.Coach)
+                .WithMany(c => c.SchedulePlusPlus) // This allows multiple SchedulePlus records to reference the same Coach
+                .HasForeignKey(sp => sp.CoachId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevents cascading deletes if a Coach is removed
         });
+
 
         modelBuilder.Entity<Schedule>(entity =>
         {
@@ -139,6 +145,15 @@ public class LocalDbContext : DbContext
                 .HasForeignKey<SchedulePlus>(sp => sp.ScheduleId);
         });
 
+        modelBuilder.Entity<Coach>(entity =>
+        {
+            entity.HasKey(e => e.CoachId);
+            entity.Property(e => e.CoachId).ValueGeneratedOnAdd();
+            entity.Property(e => e.FirstName).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.LastName).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Biography).HasMaxLength(200);
+            entity.Property(e => e.Photo).HasMaxLength(200);
+        });
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AnyoneForTennis.Data;
 using AnyoneForTennis.Models;
 
+
 namespace AnyoneForTennis.Controllers
 {
     public class SchedulesController : Controller
@@ -21,192 +22,222 @@ namespace AnyoneForTennis.Controllers
             _localContext = localContext;
         }
 
-        //Schedule View Pages
-        //Schedule Page
+        // Schedule Page
         public async Task<IActionResult> GetSchedule()
         {
             return View(await _localContext.Schedule.ToListAsync());
         }
 
-        //Coach Schedule Page - with Authorization once the roles are set up
+        // Coach Schedule Page
         public IActionResult CoachSchedule()
         {
             return View();
         }
 
-
-        // Admin Pages
-        // GET: Schedules - Admin Control Page
-        // Using a view model both the local and main schedules can be displayed
+        // Admin Control Page
+        // Admin Control Page
         public async Task<IActionResult> ControlPanel()
         {
             var viewModel = new ScheduleViewModel
             {
                 MainSchedule = await _context.Schedules.ToListAsync(),
-                LocalSchedule = await _localContext.Schedule.ToListAsync()
+                LocalSchedule = await _localContext.Schedule.ToListAsync(),
+                Member = await _context.Members.ToListAsync(),
+                Coach = await _context.Coaches.ToListAsync()
             };
             return View(viewModel);
         }
 
         // GET: Schedules/Details/5
-        // Local boolean to deal with ID from main being used for local detail
         public async Task<IActionResult> Details(int? id, bool isLocal = false)
         {
-            // If ID for both is null
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (isLocal)
-            {
-                // Local
-                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleLocal != null)
-                {
-                    return View(scheduleLocal);
-                }
-            }
-            else
-            {
-                // Main
-                var scheduleMain = await _context.Schedules
-                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleMain != null)
-                {
-                    return View(scheduleMain);
-                }
-            }
-            // if Neither
-            return NotFound();
+            var schedule = isLocal
+                ? await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                : await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
+
+            if (schedule == null) return NotFound();
+
+            return View(schedule);
         }
-
 
         // GET: Schedules/Create
         public IActionResult Create()
         {
+            var viewModel = new SchedulesViewModel
+            {
+                Schedule = new Schedule(),
+                SchedulePlus = new SchedulePlus(),
+                Coaches = _context.Coaches.ToList()  // Initialize the list of coaches
+            };
+
             ViewBag.Locations = Schedule.GetLocations();
-            return View();
+            ViewBag.Coaches = GetCoaches();
+            return View(viewModel);
         }
 
-        // Can't write to main, only local, as main is a read-only
         // POST: Schedules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Location,Description")] Schedule schedule)
+        public async Task<IActionResult> Create(SchedulesViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            // Step 1: Remove unnecessary fields from ModelState validation
+            Console.WriteLine("==== Debug: Removing navigation properties from ModelState ====");
+            ModelState.Remove("Coach.Coach");
+            ModelState.Remove("SchedulePlus.Coach");
+            ModelState.Remove("SchedulePlus.Schedule");
+
+            // Step 2: Log ModelState after removing properties
+            if (!ModelState.IsValid)
             {
-                schedule.SchedulePlus = new SchedulePlus
+                Console.WriteLine("==== Debug: ModelState is still invalid ====");
+                foreach (var key in ModelState.Keys)
                 {
-                    // Dont remember what duration was for.
-                    DateTime = DateTime.Now,
-                    Duration = 1
-                };
-                _localContext.Add(schedule);
+                    var state = ModelState[key];
+                    foreach (var error in state.Errors)
+                    {
+                        Console.WriteLine($"Error in {key}: {error.ErrorMessage}");
+                    }
+                }
+                PrepareViewData();
+                return View(viewModel);  // Return the view with current data
+            }
+
+            try
+            {
+                Console.WriteLine("==== Debug: ModelState is valid, proceeding to save ====");
+
+                // Step 3: Save Schedule first to generate ScheduleId
+                _localContext.Schedule.Add(viewModel.Schedule);
                 await _localContext.SaveChangesAsync();
+
+                // Step 4: Link SchedulePlus with Schedule
+                var schedulePlus = viewModel.SchedulePlus ?? new SchedulePlus();
+                schedulePlus.ScheduleId = viewModel.Schedule.ScheduleId;
+
+                // Parse DateTime from the form data
+                if (!DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out DateTime parsedDateTime))
+                {
+                    Console.WriteLine("==== Debug: Failed to parse DateTime ====");
+                    ModelState.AddModelError("", "Invalid DateTime provided.");
+                    PrepareViewData();
+                    return View(viewModel);
+                }
+                schedulePlus.DateTime = parsedDateTime;
+
+                // Validate the CoachId
+                if (!ValidateCoach(schedulePlus.CoachId, out var errorMessage))
+                {
+                    Console.WriteLine($"==== Debug: Coach validation failed: {errorMessage} ====");
+                    ModelState.AddModelError("", errorMessage);
+                    PrepareViewData();
+                    return View(viewModel);
+                }
+
+                // Save SchedulePlus
+                _localContext.SchedulePlus.Add(schedulePlus);
+                await _localContext.SaveChangesAsync();
+
+                Console.WriteLine("==== Debug: Successfully saved Schedule and SchedulePlus ====");
                 return RedirectToAction(nameof(ControlPanel));
             }
-            return View(schedule);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"==== Debug: Exception occurred: {ex.Message} ====");
+                Console.WriteLine($"==== Debug: Stack Trace: {ex.StackTrace} ====");
+                ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
+                PrepareViewData();
+                return View(viewModel);
+            }
+        }
+
+        // Helper Method to Load ViewBag Data
+        private void PrepareViewData()
+        {
+            ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = GetCoaches();
+        }
+
+        // Helper Method to Validate Coach Selection
+        private bool ValidateCoach(int coachId, out string errorMessage)
+        {
+            errorMessage = "";
+            if (coachId <= 0)
+            {
+                errorMessage = "You must select a valid coach.";
+                return false;
+            }
+
+            if (!_localContext.Coach.Any(c => c.CoachId == coachId))
+            {
+                errorMessage = "The selected coach does not exist.";
+                return false;
+            }
+
+            return true;
         }
 
         // GET: Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id, bool isLocal = false)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (isLocal)
-            {
-                // Local
-                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleLocal != null)
-                {
-                    return View(scheduleLocal);
-                }
-            }
-            else
-            {
-                // Main
-                var scheduleMain = await _context.Schedules
-                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleMain != null)
-                {
-                    return View(scheduleMain);
-                }
-            }
-            // if Neither
-            return NotFound();
+            var schedule = isLocal
+                ? await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                : await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
+
+            if (schedule == null) return NotFound();
+
+            ViewBag.Locations = Schedule.GetLocations();
+            ViewData["isLocal"] = isLocal;
+            return View(schedule);
         }
 
         // POST: Schedules/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,Name,Location,Description")] Schedule schedule)
+        public async Task<IActionResult> Edit(int id, bool isLocal, [Bind("ScheduleId,Name,Location,Description")] Schedule schedule)
         {
-            if (id != schedule.ScheduleId)
-            {
-                return NotFound();
-            }
+            if (id != schedule.ScheduleId) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(schedule);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ScheduleExists(schedule.ScheduleId))
+                    if (isLocal)
                     {
-                        return NotFound();
+                        _localContext.Update(schedule);
+                        await _localContext.SaveChangesAsync();
                     }
                     else
                     {
-                        throw;
+                        _context.Update(schedule);
+                        await _context.SaveChangesAsync();
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ScheduleExists(schedule.ScheduleId)) return NotFound();
+                    throw;
+                }
+                return RedirectToAction(nameof(ControlPanel));
             }
+
+            ViewBag.Locations = Schedule.GetLocations();
             return View(schedule);
         }
 
         // GET: Schedules/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool isLocal = false)
+        public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (isLocal)
-            {
-                // Local
-                var scheduleLocal = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleLocal != null)
-                {
-                    return View(scheduleLocal);
-                }
-            }
-            else
-            {
-                // Main
-                var scheduleMain = await _context.Schedules
-                    .FirstOrDefaultAsync(m => m.ScheduleId == id);
-                if (scheduleMain != null)
-                {
-                    return View(scheduleMain);
-                }
-            }
-            // if Neither
-            return NotFound();
+            var schedule = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+            if (schedule == null) return NotFound();
+
+            ViewData["isLocal"] = true;
+            return View(schedule);
         }
 
         // POST: Schedules/Delete/5
@@ -214,19 +245,30 @@ namespace AnyoneForTennis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var schedule = await _context.Schedules.FindAsync(id);
+            var schedule = await _localContext.Schedule.FindAsync(id);
             if (schedule != null)
             {
-                _context.Schedules.Remove(schedule);
+                _localContext.Schedule.Remove(schedule);
+                await _localContext.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ControlPanel));
         }
 
+        // Helper Method to Check if Schedule Exists
         private bool ScheduleExists(int id)
         {
-            return _context.Schedules.Any(e => e.ScheduleId == id);
+            return _localContext.Schedule.Any(e => e.ScheduleId == id);
+        }
+
+        // Helper Method to Get Coaches List
+        private List<SelectListItem> GetCoaches()
+        {
+            return _localContext.Coach
+                .Select(c => new SelectListItem
+                {
+                    Value = c.CoachId.ToString(),
+                    Text = $"{c.FirstName} {c.LastName}"
+                }).ToList();
         }
     }
 }

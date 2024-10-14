@@ -31,18 +31,22 @@ namespace AnyoneForTennis.Migrations.LocalDb
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CoachId"));
 
                     b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("varbinary(200)");
 
                     b.HasKey("CoachId");
 
@@ -109,6 +113,9 @@ namespace AnyoneForTennis.Migrations.LocalDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchedulePlusId"));
 
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -119,6 +126,8 @@ namespace AnyoneForTennis.Migrations.LocalDb
                         .HasColumnType("int");
 
                     b.HasKey("SchedulePlusId");
+
+                    b.HasIndex("CoachId");
 
                     b.HasIndex("ScheduleId")
                         .IsUnique();
@@ -184,11 +193,19 @@ namespace AnyoneForTennis.Migrations.LocalDb
 
             modelBuilder.Entity("AnyoneForTennis.Models.SchedulePlus", b =>
                 {
+                    b.HasOne("AnyoneForTennis.Models.Coach", "Coach")
+                        .WithMany("SchedulePlusPlus")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AnyoneForTennis.Models.Schedule", "Schedule")
                         .WithOne("SchedulePlus")
                         .HasForeignKey("AnyoneForTennis.Models.SchedulePlus", "ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Coach");
 
                     b.Navigation("Schedule");
                 });
@@ -229,6 +246,11 @@ namespace AnyoneForTennis.Migrations.LocalDb
                     b.Navigation("Member");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AnyoneForTennis.Models.Coach", b =>
+                {
+                    b.Navigation("SchedulePlusPlus");
                 });
 
             modelBuilder.Entity("AnyoneForTennis.Models.Schedule", b =>
