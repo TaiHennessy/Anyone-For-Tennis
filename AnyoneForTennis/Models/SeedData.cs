@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AnyoneForTennis.Data;
 using System;
@@ -106,32 +107,32 @@ namespace AnyoneForTennis.Models
                 // Seed Users if none exist in LocalDbContext
                 if (!await localContext.Users.AnyAsync())
                 {
-                    localContext.Users.AddRange(
-                        new User
-                        {
-                            Username = "Big Boy",
-                            Password = "safepassword", // Ideally hash the password here for security
-                            IsAdmin = true
-                        },
-                        new User
-                        {
-                            Username = "John Smith",
-                            Password = "123456", // Ideally hash the password here for security
-                            IsAdmin = false
-                        },
-                        new User
-                        {
-                            Username = "No Name",
-                            Password = "No Password", // Ideally hash the password here for security
-                            IsAdmin = false
-                        },
-                        new User
-                        {
-                            Username = "Luigi Mortadella",
-                            Password = "parmesan", // Ideally hash the password here for security
-                            IsAdmin = false
-                        }
-                    );
+                    var passwordHasher = new PasswordHasher<User>();
+
+                    var users = new[]
+                    {
+                        new User { UserName = "Big Boy", IsAdmin = true },
+                        new User { UserName = "John Smith", IsAdmin = false },
+                        new User { UserName = "No Name", IsAdmin = false },
+                        new User { UserName = "Luigi Mortadella", IsAdmin = false }
+                    };
+
+                    // Pre-set passwords (these will be hashed manually during seeding)
+                    var passwords = new[]
+                    {
+                        "safepassword",  // For "Big Boy"
+                        "123456",        // For "John Smith"
+                        "No Password",   // For "No Name"
+                        "parmesan"       // For "Luigi Mortadella"
+                    };
+
+                    for (int i = 0; i < users.Length; i++)
+                    {
+                        users[i].PasswordHash = passwordHasher.HashPassword(users[i], passwords[i]);
+                        localContext.Users.Add(users[i]);
+                        Console.WriteLine($"SeedData: Added user {users[i].UserName} with pre-set password.");
+                    }
+
                     await localContext.SaveChangesAsync(); // Save changes after adding users
                 }
 

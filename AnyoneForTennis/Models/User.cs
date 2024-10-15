@@ -1,10 +1,9 @@
-﻿namespace AnyoneForTennis.Models
+﻿using Microsoft.AspNetCore.Identity;
+namespace AnyoneForTennis.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int UserId { get; set; } // Primary key
-        public string Username { get; set; }
-        public string Password { get; set; }
+
         public bool IsAdmin { get; set; }
 
         // Relationships
