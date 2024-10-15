@@ -59,8 +59,24 @@ namespace AnyoneForTennis.Controllers
 
             if (schedule == null) return NotFound();
 
-            return View(schedule);
+            var schedulePlus = isLocal
+                ? await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                : null;
+
+            var viewModel = new SchedulesViewModel
+            {
+                Schedule = schedule,
+                SchedulePlus = schedulePlus,
+                Coaches = _context.Coaches.ToList()
+            };
+
+            ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = GetCoaches();
+            ViewData["isLocal"] = isLocal;
+
+            return View(viewModel);
         }
+
 
         // GET: Schedules/Create
         public IActionResult Create()
@@ -189,56 +205,149 @@ namespace AnyoneForTennis.Controllers
 
             if (schedule == null) return NotFound();
 
+            var schedulePlus = isLocal
+                ? await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                : null;
+            //: await _context.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id);
+            // Shouldnt need this as SchedulePlus is stored locally
+
+            var viewModel = new SchedulesViewModel
+            {
+                Schedule = schedule,
+                SchedulePlus = schedulePlus,
+                Coaches = _context.Coaches.ToList()
+            };
+
             ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = GetCoaches();
             ViewData["isLocal"] = isLocal;
-            return View(schedule);
+            return View(viewModel);
         }
 
         // POST: Schedules/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, bool isLocal, [Bind("ScheduleId,Name,Location,Description")] Schedule schedule)
+        public async Task<IActionResult> Edit(int id, SchedulesViewModel viewModel)
         {
-            if (id != schedule.ScheduleId) return NotFound();
+
+            bool isLocal = bool.TryParse(Request.Form["isLocal"], out var parsedIsLocal) && parsedIsLocal;
+
+            if (id != viewModel.Schedule.ScheduleId)
+            {
+                Console.WriteLine("==== Debug: Mismatched ScheduleId ====");
+                return NotFound();
+            }
+            // Remove unnecessary fields from ModelState validation
+            ModelState.Remove("Coach.Coach");
+            ModelState.Remove("SchedulePlus.Coach");
+            ModelState.Remove("SchedulePlus.Schedule");
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    Console.WriteLine("==== Debug: ModelState is valid ====");
                     if (isLocal)
                     {
-                        _localContext.Update(schedule);
+                        Console.WriteLine("==== Debug: Updating local schedule ====");
+                        _localContext.Update(viewModel.Schedule);
                         await _localContext.SaveChangesAsync();
+                        Console.WriteLine("==== Debug: Local schedule updated successfully ====");
                     }
                     else
                     {
-                        _context.Update(schedule);
+                        Console.WriteLine("==== Debug: Updating main schedule ====");
+                        _context.Update(viewModel.Schedule);
                         await _context.SaveChangesAsync();
+                        Console.WriteLine("==== Debug: Main schedule updated successfully ====");
                     }
+
+                    // Update or add SchedulePlus linked to Schedule
+                    var schedulePlus = viewModel.SchedulePlus ?? new SchedulePlus();
+                    schedulePlus.ScheduleId = viewModel.Schedule.ScheduleId;
+                    if (!DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out DateTime parsedDateTime))
+                    {
+                        Console.WriteLine("==== Debug: Failed to parse DateTime ====");
+                        ModelState.AddModelError("", "Invalid DateTime provided.");
+                        PrepareViewData();
+                        return View(viewModel);
+                    }
+                    schedulePlus.DateTime = parsedDateTime;
+                    Console.WriteLine($"==== Debug: Parsed DateTime: {parsedDateTime} ====");
+
+                    if (!ValidateCoach(schedulePlus.CoachId, out var errorMessage))
+                    {
+                        Console.WriteLine($"==== Debug: Coach validation failed: {errorMessage} ====");
+                        ModelState.AddModelError("", errorMessage);
+                        PrepareViewData();
+                        return View(viewModel);
+                    }
+
+                    // Always use the local context for SchedulePlus, as its stored locally only
+                    if (_localContext.SchedulePlus.Any(sp => sp.ScheduleId == schedulePlus.ScheduleId))
+                    {
+                        Console.WriteLine("==== Debug: Updating existing SchedulePlus ====");
+                        _localContext.Update(schedulePlus);
+                    }
+                    else
+                    {
+                        Console.WriteLine("==== Debug: Adding new SchedulePlus ====");
+                        _localContext.Add(schedulePlus);
+                    }
+
+                    await _localContext.SaveChangesAsync();
+                    Console.WriteLine("==== Debug: SchedulePlus updated/added successfully ====");
+
+                    return RedirectToAction(nameof(ControlPanel));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScheduleExists(schedule.ScheduleId)) return NotFound();
+                    if (!ScheduleExists(viewModel.Schedule.ScheduleId)) return NotFound();
                     throw;
                 }
-                return RedirectToAction(nameof(ControlPanel));
             }
 
-            ViewBag.Locations = Schedule.GetLocations();
-            return View(schedule);
+            Console.WriteLine("==== Debug: ModelState is invalid ====");
+            foreach (var key in ModelState.Keys)
+            {
+                var state = ModelState[key];
+                foreach (var error in state.Errors)
+                {
+                    Console.WriteLine($"Error in {key}: {error.ErrorMessage}");
+                }
+            }
+
+            PrepareViewData();
+            return View(viewModel);
         }
 
         // GET: Schedules/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool isLocal = false)
         {
             if (id == null) return NotFound();
 
             var schedule = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+
             if (schedule == null) return NotFound();
 
+            var schedulePlus = isLocal
+                ? await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                : null;
+
+            var viewModel = new SchedulesViewModel
+            {
+                Schedule = schedule,
+                SchedulePlus = schedulePlus,
+                Coaches = _context.Coaches.ToList()
+            };
+
+            ViewBag.Locations = Schedule.GetLocations();
+            ViewBag.Coaches = GetCoaches();
             ViewData["isLocal"] = true;
-            return View(schedule);
+
+            return View(viewModel);
         }
+
 
         // POST: Schedules/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -248,11 +357,18 @@ namespace AnyoneForTennis.Controllers
             var schedule = await _localContext.Schedule.FindAsync(id);
             if (schedule != null)
             {
+                // First, delete the related SchedulePlus records
+                var schedulePlus = await _localContext.SchedulePlus.Where(sp => sp.ScheduleId == id).ToListAsync();
+                _localContext.SchedulePlus.RemoveRange(schedulePlus);
+
+                // Now, delete the Schedule
                 _localContext.Schedule.Remove(schedule);
                 await _localContext.SaveChangesAsync();
             }
             return RedirectToAction(nameof(ControlPanel));
         }
+
+
 
         // Helper Method to Check if Schedule Exists
         private bool ScheduleExists(int id)

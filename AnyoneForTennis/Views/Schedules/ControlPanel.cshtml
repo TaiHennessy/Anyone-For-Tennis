@@ -39,9 +39,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ScheduleId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ScheduleId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Delete</a>
                 </td>
             </tr>
         }
@@ -49,9 +49,6 @@
 </table>
 
 <h2>Main Schedule</h2>
-<p>
-    Create for Local: <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -81,8 +78,8 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ScheduleId">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Details</a>
                     <!-- No delete link for main schedules -->
                 </td>
             </tr>

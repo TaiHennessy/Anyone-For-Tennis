@@ -1,40 +1,42 @@
-﻿@model AnyoneForTennis.Models.Schedule
+﻿@model AnyoneForTennis.Models.SchedulesViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Schedule</h1>
 
-<h4>Schedule</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ScheduleId" />
-            <input type="hidden" name="isLocal" value="@ViewData["isLocal"]" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <select asp-for="Location" class="form-control" asp-items="ViewBag.Locations"></select>
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Edit">
+    <div class="form-group">
+        <label asp-for="Schedule.Name" class="control-label"></label>
+        <input asp-for="Schedule.Name" class="form-control" />
+        <span asp-validation-for="Schedule.Name" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group">
+        <label asp-for="Schedule.Location" class="control-label"></label>
+        <input asp-for="Schedule.Location" class="form-control" asp-items="ViewBag.Locations" />
+        <span asp-validation-for="Schedule.Location" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Schedule.Description" class="control-label"></label>
+        <input asp-for="Schedule.Description" class="form-control" />
+        <span asp-validation-for="Schedule.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SchedulePlus.DateTime" class="control-label"></label>
+        <input asp-for="SchedulePlus.DateTime" class="form-control" />
+        <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SchedulePlus.CoachId" class="control-label"></label>
+        <select asp-for="SchedulePlus.CoachId" class="form-control" asp-items="ViewBag.Coaches"></select>
+        <span asp-validation-for="SchedulePlus.CoachId" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="Schedule.ScheduleId" />
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
 
 <div>
     <a asp-action="ControlPanel">Back to List</a>

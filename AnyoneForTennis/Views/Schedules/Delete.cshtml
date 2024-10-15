@@ -1,39 +1,51 @@
-﻿@model AnyoneForTennis.Models.Schedule
+﻿@model AnyoneForTennis.Models.SchedulesViewModel
 
 @{
     ViewData["Title"] = "Delete";
 }
 
 <h1>Delete</h1>
-
 <h3>Are you sure you want to delete this?</h3>
+
 <div>
     <h4>Schedule</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Schedule.Name)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Schedule.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Schedule.Location)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Schedule.Location)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Schedule.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Schedule.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SchedulePlus.DateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SchedulePlus.DateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SchedulePlus.CoachId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SchedulePlus.CoachId)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ScheduleId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="ControlPanel">Back to List</a>
-    </form>
 </div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Schedule.ScheduleId" />
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a asp-action="ControlPanel">Back to List</a>
+</form>
