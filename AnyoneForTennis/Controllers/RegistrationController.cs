@@ -37,26 +37,28 @@ namespace AnyoneForTennis.Controllers
                 var user = new User
                 {
                     UserName = model.Username,
+                    Email = model.Email,  // Optional: Add email if needed
                     IsAdmin = model.IsAdmin
                 };
 
-                // Create the user and hash the password
+                // Create the user with hashed password
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // Sign in the user after successful registration
+                    // Sign in the user after registration
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
 
-                // Handle errors from Identity
+                // Handle Identity errors
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            return View("~/Views/Home/Register.cshtml");  // Return the same view in case of errors
+            // If we get this far, something failed
+            return View("~/Views/Home/Register.cshtml");
         }
 
         // GET: /Registration/Login
@@ -64,7 +66,7 @@ namespace AnyoneForTennis.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            return View("~/Views/Home/Login.cshtml");  // Explicitly specify the view path
+            return View("~/Views/Home/Login.cshtml");
         }
 
         // POST: /Registration/Login
@@ -73,20 +75,60 @@ namespace AnyoneForTennis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            Console.WriteLine("Login attempt for user: " + model.Username);
+
             if (ModelState.IsValid)
             {
-                // Perform login
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                try
                 {
-                    return RedirectToAction("Index", "Home");
-                }
+                    // Retrieve user by normalized username
+                    var user = await _userManager.FindByNameAsync(model.Username.ToUpper());
+                    if (user != null)
+                    {
+                        Console.WriteLine($"User found: {user.UserName} (ID: {user.Id})");
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        // Verify password
+                        var result = await _signInManager.PasswordSignInAsync(
+                            user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                        if (result.Succeeded)
+                        {
+                            Console.WriteLine($"Login successful for user: {user.UserName}");
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else if (result.IsLockedOut)
+                        {
+                            Console.WriteLine($"User {user.UserName} is locked out.");
+                            ModelState.AddModelError(string.Empty, "Account locked. Try again later.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Password mismatch for user: {user.UserName}");
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"User not found: {model.Username}");
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log any exceptions that occur during the login process
+                    Console.WriteLine($"Error during login: {ex.Message}");
+                    ModelState.AddModelError(string.Empty, "An error occurred during login. Please try again later.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Model state is invalid. Check for missing or incorrect input.");
             }
 
-            return View("~/Views/Home/Login.cshtml");  // Return the same view in case of errors
+            return View("~/Views/Home/Login.cshtml");
         }
+
+
 
         // POST: /Registration/Logout
         [HttpPost]

@@ -4,72 +4,63 @@
 
 namespace AnyoneForTennis.Migrations.LocalDb
 {
-    /// <inheritdoc />
     public partial class AddIdentityTables : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_UserCoaches_Users_UserId",
-                table: "UserCoaches");
+            // Step 1: Drop foreign keys referencing 'Users'
+            migrationBuilder.Sql(@"
+                IF EXISTS (
+                    SELECT 1 
+                    FROM sys.foreign_keys 
+                    WHERE parent_object_id = OBJECT_ID('UserCoaches') 
+                      AND referenced_object_id = OBJECT_ID('Users')
+                )
+                BEGIN
+                    ALTER TABLE [UserCoaches] DROP CONSTRAINT [FK_UserCoaches_Users_UserId];
+                END;
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_UserMembers_Users_UserId",
-                table: "UserMembers");
+                IF EXISTS (
+                    SELECT 1 
+                    FROM sys.foreign_keys 
+                    WHERE parent_object_id = OBJECT_ID('UserMembers') 
+                      AND referenced_object_id = OBJECT_ID('Users')
+                )
+                BEGIN
+                    ALTER TABLE [UserMembers] DROP CONSTRAINT [FK_UserMembers_Users_UserId];
+                END;
+            ");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Users",
-                table: "Users");
+            // Step 2: Drop 'Users' table if it exists
+            migrationBuilder.Sql(@"
+                IF OBJECT_ID('Users', 'U') IS NOT NULL
+                BEGIN
+                    DROP TABLE Users;
+                END;
+            ");
 
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Users");
+            // Step 3: Recreate the 'Users' table with 'Id' as the primary key
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"), // Identity column
+                    Username = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id); // Primary key on 'Id'
+                });
 
-            migrationBuilder.DropColumn(
-                name: "Password",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "UserName",
-                table: "Users");
-
-            migrationBuilder.RenameColumn(
-                name: "Username",
-                table: "Users",
-                newName: "UserName");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserName",
-                table: "Users",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(200)",
-                oldMaxLength: 200);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "Users",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true)
-                .Annotation("SqlServer:Identity", "1, 1");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Users",
-                table: "Users",
-                column: "Id");
-
+            // Step 4: Recreate foreign keys
             migrationBuilder.AddForeignKey(
                 name: "FK_UserCoaches_Users_UserId",
                 table: "UserCoaches",
                 column: "UserId",
                 principalTable: "Users",
-                principalColumn: "Id",
+                principalColumn: "Id", // Updated to reference 'Id'
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
@@ -77,92 +68,18 @@ namespace AnyoneForTennis.Migrations.LocalDb
                 table: "UserMembers",
                 column: "UserId",
                 principalTable: "Users",
-                principalColumn: "Id",
+                principalColumn: "Id", // Updated to reference 'Id'
                 onDelete: ReferentialAction.Cascade);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_UserCoaches_Users_UserId",
-                table: "UserCoaches");
+            // Step 1: Drop foreign keys referencing 'Users'
+            migrationBuilder.DropForeignKey(name: "FK_UserCoaches_Users_UserId", table: "UserCoaches");
+            migrationBuilder.DropForeignKey(name: "FK_UserMembers_Users_UserId", table: "UserMembers");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_UserMembers_Users_UserId",
-                table: "UserMembers");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Users",
-                table: "Users");
-
-            migrationBuilder.RenameColumn(
-                name: "UserName",
-                table: "Users",
-                newName: "Username");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "Users",
-                type: "nvarchar(200)",
-                maxLength: 200,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Id",
-                table: "Users",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .OldAnnotation("SqlServer:Identity", "1, 1");
-
-            migrationBuilder.AddColumn<int>(
-                name: "UserId",
-                table: "Users",
-                type: "int",
-                nullable: false,
-                defaultValue: 0)
-                .Annotation("SqlServer:Identity", "1, 1");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Password",
-                table: "Users",
-                type: "nvarchar(200)",
-                maxLength: 200,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserName",
-                table: "Users",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Users",
-                table: "Users",
-                column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_UserCoaches_Users_UserId",
-                table: "UserCoaches",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_UserMembers_Users_UserId",
-                table: "UserMembers",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Cascade);
+            // Step 2: Drop the 'Users' table
+            migrationBuilder.DropTable(name: "Users");
         }
     }
 }
