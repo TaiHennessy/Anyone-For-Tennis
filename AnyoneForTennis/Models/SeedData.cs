@@ -138,33 +138,36 @@ namespace AnyoneForTennis.Models
                 // Seed Schedule Data if none exist in LocalDbContext
                 if (!await localContext.Schedule.AnyAsync())
                 {
-                    localContext.Schedule.AddRange(
-                        new Schedule
-                        {
-                            Name = "Super Tennis Training",
-                            Location = "Court D",
-                            Description = "Training for Winners"
-                        },
-                        new Schedule
-                        {
-                            Name = "Defensive Tennis Drills",
-                            Location = "Court A",
-                            Description = "Defense is the best Offence"
-                        },
-                        new Schedule
-                        {
-                            Name = "Tennis for Beginners",
-                            Location = "Court C",
-                            Description = "Training for Beginners"
-                        },
-                        new Schedule
-                        {
-                            Name = "Ultra Marathon Tennis",
-                            Location = "Court B",
-                            Description = "Not for the weak willed"
-                        }
+                    // Get coach from local seeded coach
+                    var coach1 = await localContext.Coach.FirstOrDefaultAsync(c => c.FirstName == "Jane" && c.LastName == "Johnson");
+                    var coach2 = await localContext.Coach.FirstOrDefaultAsync(c => c.FirstName == "David" && c.LastName == "Miller");
+
+                    // Compressed the seeded stuff less painful to work with
+                    var seededSchedules = new[]
+                    {
+                        new Schedule {Name = "Super Tennis Training", Location = "Court D",Description = "Training for Winners"},
+                        new Schedule {Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence"},
+                        new Schedule {Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners"},
+                        new Schedule {Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed"}
+                    };
+
+                    // Saves the schedules so that schedule variables can reference correctly
+                    localContext.Schedule.AddRange(seededSchedules);
+                    await localContext.SaveChangesAsync();
+
+                    // Getting the Schedules from the Seeded Data
+                    var schedule1 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Super Tennis Training");
+                    var schedule2 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Defensive Tennis Drills");
+                    var schedule3 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Tennis for Beginners");
+                    var schedule4 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Ultra Marathon Tennis");
+
+                    localContext.SchedulePlus.AddRange(
+                        new SchedulePlus {ScheduleId = schedule1.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 11, 11, 12, 44, 00)},
+                        new SchedulePlus {ScheduleId = schedule2.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 05, 02, 11, 50, 00)},
+                        new SchedulePlus {ScheduleId = schedule3.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 10, 09, 12, 55, 55)},
+                        new SchedulePlus {ScheduleId = schedule4.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 01, 04, 05, 06, 07)}
                     );
-                    await localContext.SaveChangesAsync(); // Save changes after adding schedules
+                    await localContext.SaveChangesAsync();
                 }
             }
         }
