@@ -23,9 +23,11 @@ builder.Services.AddIdentity<User, IdentityRole<int>>()
 // Configure the login path to point to Registration/Login
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Registration/Login";  // Set the login path to the correct URL
-    options.AccessDeniedPath = "/Registration/AccessDenied";  // Optional: You can set up access denied redirection if needed
+    options.LoginPath = "/Registration/Login";   // Set login redirection path
+    options.LogoutPath = "/Home/Logout";         // Set logout handling path
+    options.AccessDeniedPath = "/Home/AccessDenied"; // Set access denied redirection
     options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
 });
 
 // Add session services

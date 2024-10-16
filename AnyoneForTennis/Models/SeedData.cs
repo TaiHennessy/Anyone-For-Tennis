@@ -128,10 +128,10 @@ namespace AnyoneForTennis.Models
 
             var users = new[]
             {
-        new User { Id = 1, UserName = "BigBoy", Email = "bigboy@example.com", IsAdmin = true },
-        new User { Id = 2, UserName = "JohnSmith", Email = "john@example.com", IsAdmin = false },
-        new User { Id = 3, UserName = "NoName", Email = "noname@example.com", IsAdmin = false },
-        new User { Id = 4, UserName = "LuigiMortadella", Email = "luigi@example.com", IsAdmin = false }
+        new User { Id = 1, UserName = "BigBoy", Email = "bigboy@example.com", IsAdmin = true, SecurityStamp = "5e8f8f5e-4b37-4d4a-b45d-6f6c5a123456" },
+        new User { Id = 2, UserName = "JohnSmith", Email = "john@example.com", IsAdmin = false, SecurityStamp = "d9f7a8e3-2f5a-41b1-9836-4d5678912345" },
+        new User { Id = 3, UserName = "NoName", Email = "noname@example.com", IsAdmin = false, SecurityStamp = "d452f4d2-1e0a-49bb-9e45-7c6b98765432" },
+        new User { Id = 4, UserName = "LuigiMortadella", Email = "luigi@example.com", IsAdmin = false, SecurityStamp = "a2c567d8-8b34-4d23-912c-3f9c23456789" }
     };
 
             var passwords = new[]
@@ -181,6 +181,7 @@ namespace AnyoneForTennis.Models
                 }
             }
         }
+
 
 
 
