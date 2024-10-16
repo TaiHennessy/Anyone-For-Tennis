@@ -99,12 +99,13 @@ namespace AnyoneForTennis.Data
             {
                 entity.HasKey(e => new { e.UserId, e.CoachId });
                 entity.HasOne(uc => uc.User)
-                    .WithMany(u => u.UserCoaches)
+                    .WithMany(u => u.UserCoaches)  // This is the navigation property on User
                     .HasForeignKey(uc => uc.UserId);
                 entity.HasOne(uc => uc.Coach)
                     .WithMany()
                     .HasForeignKey(uc => uc.CoachId);
             });
+
 
             modelBuilder.Entity<SchedulePlus>(entity =>
             {
