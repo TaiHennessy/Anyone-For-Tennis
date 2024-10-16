@@ -1,4 +1,5 @@
 using AnyoneForTennis.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -35,5 +36,15 @@ namespace AnyoneForTennis.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        // GET: /Home/Logout
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            return View(); // This will render the Logout.cshtml view located in Views/Home
+        }
+
+
     }
 }

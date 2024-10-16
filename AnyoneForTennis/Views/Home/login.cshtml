@@ -1,26 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Login";
-}
+﻿@model AnyoneForTennis.Models.LoginViewModel
 
-<h1>Login</h1>
-
-<form method="post">
+<form asp-action="Login" asp-controller="Registration" method="post">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" name="username" class="form-control" required />
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" name="password" class="form-control" required />
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-
+    <div class="form-group">
+        <label asp-for="RememberMe"></label>
+        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+    </div>
     <button type="submit" class="btn btn-primary">Login</button>
-
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
 </form>
