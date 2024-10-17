@@ -8151,19 +8151,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\axebl\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\AnyoneTennis\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+      "projectUniqueName": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
       "projectName": "AnyoneForTennis",
-      "projectPath": "C:\\Users\\User\\source\\repos\\AnyoneTennis\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\source\\repos\\AnyoneTennis\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
+      "projectPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+      "packagesPath": "C:\\Users\\axebl\\.nuget\\packages\\",
+      "outputPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\axebl\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

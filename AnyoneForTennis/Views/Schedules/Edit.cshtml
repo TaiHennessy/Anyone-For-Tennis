@@ -4,9 +4,9 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Schedule</h1>
+<h1>Edit Local Schedule</h1>
 
-<form asp-action="Edit">
+<form asp-action="Edit" method="post">
     <div class="form-group">
         <label asp-for="Schedule.Name" class="control-label"></label>
         <input asp-for="Schedule.Name" class="form-control" />

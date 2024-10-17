@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Edit</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.ScheduleId" asp-route-isLocal="true">Delete</a>
                 </td>
@@ -78,7 +78,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Edit</a> |
+                    <!--Edit Removed for Now-->
                     <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Details</a>
                     <!-- No delete link for main schedules -->
                 </td>

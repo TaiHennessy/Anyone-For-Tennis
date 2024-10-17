@@ -195,21 +195,14 @@ namespace AnyoneForTennis.Controllers
         }
 
         // GET: Schedules/Edit/5
-        public async Task<IActionResult> Edit(int? id, bool isLocal = false)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var schedule = isLocal
-                ? await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id)
-                : await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
-
+            var schedule = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null) return NotFound();
 
-            var schedulePlus = isLocal
-                ? await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id)
-                : null;
-            //: await _context.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id);
-            // Shouldnt need this as SchedulePlus is stored locally
+            var schedulePlus = await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id) ?? new SchedulePlus();
 
             var viewModel = new SchedulesViewModel
             {
@@ -220,23 +213,18 @@ namespace AnyoneForTennis.Controllers
 
             ViewBag.Locations = Schedule.GetLocations();
             ViewBag.Coaches = GetCoaches();
-            ViewData["isLocal"] = isLocal;
+
             return View(viewModel);
         }
+
 
         // POST: Schedules/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SchedulesViewModel viewModel)
         {
+            if (id != viewModel.Schedule.ScheduleId) return NotFound();
 
-            bool isLocal = bool.TryParse(Request.Form["isLocal"], out var parsedIsLocal) && parsedIsLocal;
-
-            if (id != viewModel.Schedule.ScheduleId)
-            {
-                Console.WriteLine("==== Debug: Mismatched ScheduleId ====");
-                return NotFound();
-            }
             // Remove unnecessary fields from ModelState validation
             ModelState.Remove("Coach.Coach");
             ModelState.Remove("SchedulePlus.Coach");
@@ -246,58 +234,41 @@ namespace AnyoneForTennis.Controllers
             {
                 try
                 {
-                    Console.WriteLine("==== Debug: ModelState is valid ====");
-                    if (isLocal)
-                    {
-                        Console.WriteLine("==== Debug: Updating local schedule ====");
-                        _localContext.Update(viewModel.Schedule);
-                        await _localContext.SaveChangesAsync();
-                        Console.WriteLine("==== Debug: Local schedule updated successfully ====");
-                    }
-                    else
-                    {
-                        Console.WriteLine("==== Debug: Updating main schedule ====");
-                        _context.Update(viewModel.Schedule);
-                        await _context.SaveChangesAsync();
-                        Console.WriteLine("==== Debug: Main schedule updated successfully ====");
-                    }
+                    _localContext.Update(viewModel.Schedule);
+                    await _localContext.SaveChangesAsync();
 
-                    // Update or add SchedulePlus linked to Schedule
                     var schedulePlus = viewModel.SchedulePlus ?? new SchedulePlus();
                     schedulePlus.ScheduleId = viewModel.Schedule.ScheduleId;
-                    if (!DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out DateTime parsedDateTime))
+
+                    if (!DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out var parsedDateTime))
                     {
-                        Console.WriteLine("==== Debug: Failed to parse DateTime ====");
                         ModelState.AddModelError("", "Invalid DateTime provided.");
                         PrepareViewData();
                         return View(viewModel);
                     }
+
                     schedulePlus.DateTime = parsedDateTime;
-                    Console.WriteLine($"==== Debug: Parsed DateTime: {parsedDateTime} ====");
 
                     if (!ValidateCoach(schedulePlus.CoachId, out var errorMessage))
                     {
-                        Console.WriteLine($"==== Debug: Coach validation failed: {errorMessage} ====");
                         ModelState.AddModelError("", errorMessage);
                         PrepareViewData();
                         return View(viewModel);
                     }
 
-                    // Always use the local context for SchedulePlus, as its stored locally only
-                    if (_localContext.SchedulePlus.Any(sp => sp.ScheduleId == schedulePlus.ScheduleId))
+                    var existingSchedulePlus = await _localContext.SchedulePlus.FirstOrDefaultAsync(sp => sp.ScheduleId == schedulePlus.ScheduleId);
+                    if (existingSchedulePlus != null)
                     {
-                        Console.WriteLine("==== Debug: Updating existing SchedulePlus ====");
-                        _localContext.Update(schedulePlus);
+                        existingSchedulePlus.CoachId = schedulePlus.CoachId;
+                        existingSchedulePlus.DateTime = schedulePlus.DateTime;
+                        _localContext.Update(existingSchedulePlus);
                     }
                     else
                     {
-                        Console.WriteLine("==== Debug: Adding new SchedulePlus ====");
                         _localContext.Add(schedulePlus);
                     }
 
                     await _localContext.SaveChangesAsync();
-                    Console.WriteLine("==== Debug: SchedulePlus updated/added successfully ====");
-
                     return RedirectToAction(nameof(ControlPanel));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -307,19 +278,10 @@ namespace AnyoneForTennis.Controllers
                 }
             }
 
-            Console.WriteLine("==== Debug: ModelState is invalid ====");
-            foreach (var key in ModelState.Keys)
-            {
-                var state = ModelState[key];
-                foreach (var error in state.Errors)
-                {
-                    Console.WriteLine($"Error in {key}: {error.ErrorMessage}");
-                }
-            }
-
             PrepareViewData();
             return View(viewModel);
         }
+
 
         // GET: Schedules/Delete/5
         public async Task<IActionResult> Delete(int? id, bool isLocal = false)

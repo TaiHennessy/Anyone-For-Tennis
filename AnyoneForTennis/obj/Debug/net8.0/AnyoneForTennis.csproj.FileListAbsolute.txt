@@ -1309,3 +1309,11 @@ C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\De
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\AnyoneForTennis.pdb
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\AnyoneForTennis.genruntimeconfig.cache
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\ref\AnyoneForTennis.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Uni\Yr 3 S2\HIT339\Group Assignment\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
