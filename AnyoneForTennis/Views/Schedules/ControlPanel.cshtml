@@ -78,9 +78,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="EditMain" asp-route-id="@item.ScheduleId">Edit</a> |
+                    <!--No Edit for Main Schedules-->
                     <a asp-action="Details" asp-route-id="@item.ScheduleId" asp-route-isLocal="false">Details</a>
-                    <!-- No delete link for main schedules -->
+                    <!--No Delete for Main Schedules-->
                 </td>
             </tr>
         }

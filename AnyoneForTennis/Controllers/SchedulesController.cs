@@ -203,12 +203,6 @@ namespace AnyoneForTennis.Controllers
             return true;
         }
 
-        /* 
-         * Edit only works for the local schedules as when main is in the same function
-         * there are too many issues, so for edit and delete main schedules will most likey
-         * need unique functions just for them, in order to deal with the locally added
-         * SchedulePlus DataTime and CoachId
-        */
         // GET: Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -302,107 +296,6 @@ namespace AnyoneForTennis.Controllers
             PrepareViewData();
             return View(viewModel);
         }
-
-        // Edit Main Schedules Locally Stored Data such as DateTime and CoachId
-        // GET: Schedules/EditMain/5
-        public async Task<IActionResult> EditMain(int? id)
-        {
-            if (id == null) return NotFound();
-
-            // Retrieve Main Schedule and Related SchedulePlus
-            var schedule = await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (schedule == null) return NotFound();
-
-            var schedulePlus = await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (schedulePlus == null)
-            {
-                schedulePlus = new SchedulePlus { ScheduleId = schedule.ScheduleId };  // New SchedulePlus Linked to Main Schedule
-            }
-
-            var viewModel = new SchedulesViewModel
-            {
-                Schedule = schedule,
-                SchedulePlus = schedulePlus,
-                Coaches = _context.Coaches.ToList()
-            };
-
-            ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = GetCoaches();
-
-            return View(viewModel);
-        }
-
-        // POST: Schedules/EditMain/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMain(int id, SchedulesViewModel viewModel)
-        {
-            if (id != viewModel.Schedule.ScheduleId) return NotFound();
-
-            ModelState.Remove("Schedule.Location");
-            ModelState.Remove("Schedule.Name");
-            ModelState.Remove("Schedule.Description");
-            ModelState.Remove("Coach.Coach");
-            ModelState.Remove("SchedulePlus.Coach");
-            ModelState.Remove("SchedulePlus.Schedule");
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Ensure we use the main schedule ID
-                    var schedulePlus = viewModel.SchedulePlus;
-                    schedulePlus.ScheduleId = viewModel.Schedule.ScheduleId;
-
-                    if (!DateTime.TryParse(Request.Form["SchedulePlus.DateTime"], out var parsedDateTime))
-                    {
-                        ModelState.AddModelError("", "Invalid DateTime provided.");
-                        ViewBag.Locations = Schedule.GetLocations();
-                        ViewBag.Coaches = GetCoaches();
-                        return View(viewModel);
-                    }
-
-                    schedulePlus.DateTime = parsedDateTime;
-
-                    if (!ValidateCoach(schedulePlus.CoachId, out var errorMessage))
-                    {
-                        ModelState.AddModelError("", errorMessage);
-                        ViewBag.Locations = Schedule.GetLocations();
-                        ViewBag.Coaches = GetCoaches();
-                        return View(viewModel);
-                    }
-
-                    // Check if the SchedulePlus already exists
-                    var existingSchedulePlus = await _localContext.SchedulePlus.FirstOrDefaultAsync(sp => sp.ScheduleId == schedulePlus.ScheduleId);
-                    if (existingSchedulePlus != null)
-                    {
-                        // Update existing SchedulePlus
-                        existingSchedulePlus.CoachId = schedulePlus.CoachId;
-                        existingSchedulePlus.DateTime = schedulePlus.DateTime;
-                        _localContext.Update(existingSchedulePlus);
-                    }
-                    else
-                    {
-                        // Add new SchedulePlus
-                        _localContext.Add(schedulePlus);
-                    }
-
-                    await _localContext.SaveChangesAsync();
-                    return RedirectToAction(nameof(ControlPanel));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ScheduleExists(viewModel.Schedule.ScheduleId)) return NotFound();
-                    throw;
-                }
-            }
-            ViewBag.Locations = Schedule.GetLocations();
-            ViewBag.Coaches = GetCoaches();
-            return View(viewModel);
-        }
-
-
-
 
         // GET: Schedules/Delete/5
         public async Task<IActionResult> Delete(int? id, bool isLocal = false)
