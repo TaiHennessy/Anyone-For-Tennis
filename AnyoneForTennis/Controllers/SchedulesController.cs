@@ -194,6 +194,12 @@ namespace AnyoneForTennis.Controllers
             return true;
         }
 
+        /* 
+         * Edit only works for the local schedules as when main is in the same function
+         * there are too many issues, so for edit and delete main schedules will most likey
+         * need unique functions just for them, in order to deal with the locally added
+         * SchedulePlus DataTime and CoachId
+        */
         // GET: Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -213,6 +219,12 @@ namespace AnyoneForTennis.Controllers
 
             ViewBag.Locations = Schedule.GetLocations();
             ViewBag.Coaches = GetCoaches();
+
+            // Log the locations
+            foreach (var location in ViewBag.Locations)
+            {
+                Console.WriteLine($"Location: {location.Text} - {location.Value}");
+            }
 
             return View(viewModel);
         }
