@@ -210,43 +210,5 @@ namespace AnyoneForTennis.Models
                 }
             }
         }
-
-
-
-
-
-
-        private static async Task SeedSchedulesAsync(LocalDbContext localContext)
-        {
-            localContext.Schedule.AddRange(
-                new Schedule
-                {
-                    Name = "Super Tennis Training",
-                    Location = "Court D",
-                    Description = "Training for Winners"
-                },
-                new Schedule
-                {
-                    Name = "Defensive Tennis Drills",
-                    Location = "Court A",
-                    Description = "Defense is the best Offense"
-                },
-                new Schedule
-                {
-                    Name = "Tennis for Beginners",
-                    Location = "Court C",
-                    Description = "Training for Beginners"
-                },
-                new Schedule
-                {
-                    Name = "Ultra Marathon Tennis",
-                    Location = "Court B",
-                    Description = "Not for the weak-willed"
-                }
-            );
-
-            await localContext.SaveChangesAsync();
-            Console.WriteLine("Schedules seeded successfully.");
-        }
     }
 }

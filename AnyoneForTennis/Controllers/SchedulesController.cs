@@ -59,7 +59,9 @@ namespace AnyoneForTennis.Controllers
             if (schedule == null) return NotFound();
 
             // Always try to fetch SchedulePlus from the local context
-            var schedulePlus = await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id);
+            var schedulePlus = await _localContext.SchedulePlus
+                .Include(sp => sp.Coach)
+                .FirstOrDefaultAsync(m => m.ScheduleId == id);
 
             var viewModel = new SchedulesViewModel
             {
@@ -307,7 +309,9 @@ namespace AnyoneForTennis.Controllers
             if (schedule == null) return NotFound();
 
             var schedulePlus = isLocal
-                ? await _localContext.SchedulePlus.FirstOrDefaultAsync(m => m.ScheduleId == id)
+                ? await _localContext.SchedulePlus
+                    .Include(sp => sp.Coach)
+                    .FirstOrDefaultAsync(m => m.ScheduleId == id)
                 : null;
 
             var viewModel = new SchedulesViewModel

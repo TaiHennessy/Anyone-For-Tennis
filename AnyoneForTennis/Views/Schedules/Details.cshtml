@@ -30,16 +30,16 @@
             @Html.DisplayFor(model => model.Schedule.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SchedulePlus.DateTime)
+            Date
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SchedulePlus.DateTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SchedulePlus.CoachId)
+            Coach
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SchedulePlus.CoachId)
+            @Html.DisplayFor(model => model.SchedulePlus.Coach.FullName)
         </dd>
     </dl>
 </div>

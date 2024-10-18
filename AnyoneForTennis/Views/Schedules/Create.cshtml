@@ -36,14 +36,14 @@
 
             <!-- SchedulePlus DateTime -->
             <div class="form-group">
-                <label asp-for="SchedulePlus.DateTime" class="control-label"></label>
+                <label asp-for="SchedulePlus.DateTime" class="control-label">Date</label>
                 <input asp-for="SchedulePlus.DateTime" class="form-control" type="datetime-local" />
                 <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
             </div>
 
             <!-- SchedulePlus CoachId -->
             <div class="form-group">
-                <label asp-for="SchedulePlus.CoachId" class="control-label"></label>
+                <label asp-for="SchedulePlus.CoachId" class="control-label">Coach</label>
                 <select asp-for="SchedulePlus.CoachId" class="form-control" asp-items="ViewBag.Coaches"></select>
                 <span asp-validation-for="SchedulePlus.CoachId" class="text-danger"></span>
             </div>
