@@ -95,7 +95,10 @@ namespace AnyoneForTennis.Controllers
             var viewModel = new SchedulesViewModel
             {
                 Schedule = new Schedule(),
-                SchedulePlus = new SchedulePlus(),
+                SchedulePlus = new SchedulePlus()
+                {
+                    DateTime = DateTime.Now, // Default Time instead of 1/1/0001 12:00:00
+                },
                 Coaches = _context.Coaches.ToList()  // Initialize the list of coaches
             };
 

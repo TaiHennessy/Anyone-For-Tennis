@@ -3,8 +3,26 @@
   "WorkspaceRootPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\controllers\\registrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\controllers\\registrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\controllers\\schedulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\controllers\\schedulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.Schedule.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.SchedulePlus.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\views\\schedules\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\views\\schedules\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -21,10 +39,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\models\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\models\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\views\\schedules\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\views\\schedules\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\views\\schedules\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -47,13 +61,6 @@
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\views\\schedules\\controlpanel.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\models\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.SchedulePlus.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.Coach.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     },
     {
@@ -73,19 +80,12 @@
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\models\\scheduleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.Schedule.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\data\\hitdb1context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\data\\hitdb1context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\controllers\\registrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|solutionrelative:anyonefortennis\\controllers\\registrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1CFB4208-273A-407F-B1C4-250351BA0561}|AnyoneForTennis\\AnyoneForTennis.csproj|c:\\uni\\yr 3 s2\\hit339\\group assignment\\anyone-for-tennis\\anyonefortennis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -103,21 +103,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 19,
+          "SelectedChildIndex": 10,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Privacy.cshtml",
-              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
-              "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
-              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
-              "RelativeToolTip": "AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-18T00:59:51.493Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
@@ -136,33 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
-              "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
-              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
-              "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAGAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-18T00:54:37.289Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Coach.cs",
-              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\Coach.cs",
-              "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\Coach.cs",
-              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\Coach.cs",
-              "RelativeToolTip": "AnyoneForTennis\\Models\\Coach.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAwwAoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T00:45:37.335Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "EditMain.cshtml",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\EditMain.cshtml",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\EditMain.cshtml",
@@ -174,7 +135,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "SchedulePlus.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SchedulePlus.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\SchedulePlus.cs",
@@ -186,7 +147,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "Schedule.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\Schedule.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\Schedule.cs",
@@ -198,7 +159,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "ScheduleViewModel.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\ScheduleViewModel.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\ScheduleViewModel.cs",
@@ -210,7 +171,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "SchedulesViewModel.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SchedulesViewModel.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\SchedulesViewModel.cs",
@@ -218,8 +179,69 @@
               "RelativeToolTip": "AnyoneForTennis\\Models\\SchedulesViewModel.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-17T03:36:09.651Z",
+              "WhenOpened": "2024-10-17T03:36:09.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SeedData.cs",
+              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SeedData.cs",
+              "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\SeedData.cs",
+              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SeedData.cs",
+              "RelativeToolTip": "AnyoneForTennis\\Models\\SeedData.cs",
+              "ViewState": "AQIAAI8AAAAAAAAAAAAuwKQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-15T09:12:55.84Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RegistrationController.cs",
+              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\RegistrationController.cs",
+              "RelativeDocumentMoniker": "AnyoneForTennis\\Controllers\\RegistrationController.cs",
+              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\RegistrationController.cs",
+              "RelativeToolTip": "AnyoneForTennis\\Controllers\\RegistrationController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-15T09:43:05.854Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Coach.cs",
+              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\Coach.cs",
+              "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\Coach.cs",
+              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\Coach.cs",
+              "RelativeToolTip": "AnyoneForTennis\\Models\\Coach.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAwwAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-18T00:45:37.335Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
+              "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
+              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
+              "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\Delete.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-18T00:54:37.289Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Privacy.cshtml",
+              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
+              "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
+              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
+              "RelativeToolTip": "AnyoneForTennis\\Views\\Home\\Privacy.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-18T00:59:51.493Z"
             },
             {
               "$type": "Document",
@@ -229,14 +251,14 @@
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\Create.cshtml",
               "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Create.cshtml",
               "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\Create.cshtml",
-              "ViewState": "AQIAACUAAAAAAAAAAAAqwCoAAAAAAAAA",
+              "ViewState": "AQIAABoAAAAAAAAAAAAuwCcAAACjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-10-17T03:21:16.573Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "dbo.Coach [Data]",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.Coach.sql",
               "ToolTip": "dbo.Coach [Data]",
@@ -245,25 +267,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 3,
               "Title": "dbo.Schedule [Data]",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.Schedule.sql",
               "ToolTip": "dbo.Schedule [Data]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-10-17T03:19:58.296Z"
+              "WhenOpened": "2024-10-17T03:19:58.296Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 4,
               "Title": "dbo.SchedulePlus [Data]",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.SchedulePlus.sql",
               "ToolTip": "dbo.SchedulePlus [Data]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-10-17T03:19:45.678Z"
+              "WhenOpened": "2024-10-17T03:19:45.678Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Details.cshtml",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\Details.cshtml",
@@ -271,12 +295,11 @@
               "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\Details.cshtml",
               "ViewState": "AQIAABcAAAAAAAAAAAAqwCcAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-17T03:18:47.276Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-17T03:18:47.276Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "ControlPanel.cshtml",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\ControlPanel.cshtml",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\ControlPanel.cshtml",
@@ -284,12 +307,11 @@
               "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\ControlPanel.cshtml",
               "ViewState": "AQIAAG8AAAAAAAAAAADwv38AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-17T01:09:59.756Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-17T01:09:59.756Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Schedules\\Edit.cshtml",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Schedules\\Edit.cshtml",
@@ -297,25 +319,24 @@
               "RelativeToolTip": "AnyoneForTennis\\Views\\Schedules\\Edit.cshtml",
               "ViewState": "AQIAABEAAAAAAAAAAAAuwBoAAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-16T10:26:11.01Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-16T10:26:11.01Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "SchedulesController.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\SchedulesController.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Controllers\\SchedulesController.cs",
               "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\SchedulesController.cs",
               "RelativeToolTip": "AnyoneForTennis\\Controllers\\SchedulesController.cs",
-              "ViewState": "AQIAAC0BAAAAAAAAAAAuwDgBAAAsAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGsAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-16T09:27:38.195Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Hitdb1Context.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Data\\Hitdb1Context.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Data\\Hitdb1Context.cs",
@@ -340,31 +361,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 21,
-              "Title": "RegistrationController.cs",
-              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\RegistrationController.cs",
-              "RelativeDocumentMoniker": "AnyoneForTennis\\Controllers\\RegistrationController.cs",
-              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\RegistrationController.cs",
-              "RelativeToolTip": "AnyoneForTennis\\Controllers\\RegistrationController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-15T09:43:05.854Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "SeedData.cs",
-              "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SeedData.cs",
-              "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\SeedData.cs",
-              "ToolTip": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\SeedData.cs",
-              "RelativeToolTip": "AnyoneForTennis\\Models\\SeedData.cs",
-              "ViewState": "AQIAAMgAAAAAAAAAAAAAANMAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-15T09:12:55.84Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Controllers\\HomeController.cs",
@@ -376,7 +372,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Shared\\_Layout.cshtml",
@@ -384,12 +380,11 @@
               "RelativeToolTip": "AnyoneForTennis\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AQIAAEUAAAAAAAAAAAAAAE0AAABxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-16T07:55:27.253Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-16T07:55:27.253Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "RegisterViewModel.cs",
               "DocumentMoniker": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\Models\\RegisterViewModel.cs",
               "RelativeDocumentMoniker": "AnyoneForTennis\\Models\\RegisterViewModel.cs",
@@ -397,8 +392,7 @@
               "RelativeToolTip": "AnyoneForTennis\\Models\\RegisterViewModel.cs",
               "ViewState": "AQIAAAoAAAAAAAAAAAAQwB0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-15T09:45:32.138Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-15T09:45:32.138Z"
             },
             {
               "$type": "Document",
