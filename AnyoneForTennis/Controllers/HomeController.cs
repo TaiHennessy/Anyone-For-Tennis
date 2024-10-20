@@ -1,29 +1,78 @@
+using AnyoneForTennis.Data;
 using AnyoneForTennis.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnyoneForTennis.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly LocalDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, LocalDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Homepage()
+        // Action for Homepage
+        public async Task<IActionResult> Homepage()
         {
-            return View();
+            // Get the logged-in user's ID (using claims-based authentication)
+            var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            var viewModel = new HomePageViewModel();
+
+            // If the user is logged in, fetch their UserCoach and UserMember data
+            if (userId != null)
+            {
+                int parsedUserId = int.Parse(userId);
+
+                // Fetch UserCoach data
+                var userCoach = await _context.UserCoaches
+                    .Include(uc => uc.Coach) // Include the Coach data
+                    .Where(uc => uc.UserId == parsedUserId)
+                    .ToListAsync();
+
+                // Fetch UserMember data
+                var userMember = await _context.UserMembers
+                    .Include(um => um.Member) // Include the Member data
+                    .Where(um => um.UserId == parsedUserId)
+                    .ToListAsync();
+
+                // Assign the fetched data to the ViewModel
+                viewModel.UserCoaches = userCoach;
+                viewModel.UserMembers = userMember;
+            }
+
+            // Pass any needed data for the homepage
+            viewModel.Coaches = await _context.Coach.Take(5).ToListAsync();
+            viewModel.Schedules = await _context.Schedule.Take(5).ToListAsync();
+
+            // Return the Homepage view with the ViewModel
+            return View("Homepage", viewModel); // Explicitly specifying the "Homepage" view
         }
 
-        public IActionResult Index()
+        // Action for Index (Main Landing Page)
+        public async Task<IActionResult> Index()
         {
+            var viewModel = new HomePageViewModel
+            {
+                // Fetch coaches and schedules to display on the landing page
+                Coaches = await _context.Coach.Take(5).ToListAsync(),
+                Schedules = await _context.Schedule.Include(s => s.SchedulePlus).Take(5).ToListAsync()
+            };
+
+            // Check if the user is an admin and pass this information to the view
             var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
-            ViewBag.IsAdmin = isAdmin; // Pass admin status to the view
-            return View();
+            ViewBag.IsAdmin = isAdmin;
+
+            return View(viewModel); // This will render the Index view
         }
 
         public IActionResult Privacy()
@@ -44,7 +93,5 @@ namespace AnyoneForTennis.Controllers
         {
             return View(); // This will render the Logout.cshtml view located in Views/Home
         }
-
-
     }
 }

@@ -1,22 +1,100 @@
-﻿@{
-    ViewData["Title"] = "Welcome";
+﻿@model AnyoneForTennis.Models.HomePageViewModel
+
+@{
+    ViewData["Title"] = "Welcome to Anyone for Tennis!";
 }
 
-<h1>Welcome to the Home Page</h1>
+<!-- Main Layout with Side Panels -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Side Panel: Schedule Info -->
+        <div class="col-lg-3 col-md-4 col-sm-12 bg-light py-4 order-2 order-md-1">
+            <h3 class="text-center text-success">Upcoming Schedule</h3>
+            <ul class="list-group list-group-flush mt-3">
+                @foreach (var schedule in Model.Schedules)
+                {
+                    <li class="list-group-item">
+                        <strong>@schedule.Name</strong><br>
+                        <small>@schedule.SchedulePlus?.DateTime.ToString("dd MMM yyyy | hh:mm tt") | @schedule.Location</small>
+                    </li>
+                }
+            </ul>
+            <a href="/Schedule" class="btn btn-success btn-block mt-4">View Full Schedule</a>
+        </div>
 
-<p>Here you can find stuff for people!</p>
+        <!-- Center Panel: Main Content -->
+        <div class="col-lg-6 col-md-8 col-sm-12 text-center py-4 order-1">
+            <h1 class="display-4 text-primary">Welcome to Anyone for Tennis!</h1>
+            <p class="lead">Your go-to platform for booking tennis coaches, managing schedules, and connecting with fellow tennis enthusiasts.</p>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Message"]
+            <div class="mt-4">
+                <h2 class="font-weight-bold text-success">Explore Our Features</h2>
+                <p>Whether you're looking to sharpen your skills or just starting out, we have something for everyone!</p>
+
+                <div class="row mt-4">
+                    <!-- Feature 1 -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold text-success">Top Coaches</h5>
+                                <p class="card-text">Connect with top-rated tennis coaches.</p>
+                                <a href="/Coaches" class="btn btn-outline-success btn-sm">Meet Our Coaches</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold text-success">Manage Your Schedule</h5>
+                                <p class="card-text">Easily book tennis lessons and matches.</p>
+                                <a href="/Schedule" class="btn btn-outline-success btn-sm">View Schedule</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            @if (TempData["Message"] != null)
+            {
+                <div class="mt-4">
+                    <div class="alert alert-success">
+                        @TempData["Message"]
+                    </div>
+                </div>
+            }
+
+            <!-- Admin Section -->
+            @if (ViewBag.IsAdmin)
+            {
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h4>Admin Panel</h4>
+                        <p>Exclusive content for admins. Check out this cool <a href="https://www.youtube.com/watch?v=tJi0QwGlTTk&themeRefresh=1" target="_blank" class="text-primary">tennis video!</a></p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Right Side Panel: Coach Info -->
+        <div class="col-lg-3 col-md-4 col-sm-12 bg-light py-4 order-3">
+            <h3 class="text-center text-success">Featured Coaches</h3>
+            <ul class="list-group list-group-flush mt-3">
+                @foreach (var coach in Model.Coaches)
+                {
+                    <li class="list-group-item">
+                        <strong>@coach.FirstName @coach.LastName</strong><br>
+                    </li>
+                }
+            </ul>
+            <a href="/Coaches" class="btn btn-success btn-block mt-4">View All Coaches</a>
+        </div>
     </div>
-}
+</div>
 
-@if (ViewBag.IsAdmin)
-{
-    <p>This text is only visible to admins! Also, free video <a href="https://www.youtube.com/watch?v=tJi0QwGlTTk&themeRefresh=1">Can't believe this is actually real</a></p>
-}
-
-<p>This text is visible to all users.</p>
-
+<!-- Footer -->
+<footer class="footer-section py-3 text-center">
+    <p>&copy; 2024 Anyone for Tennis. All rights reserved.</p>
+    <a href="/Privacy" class="text-light">Privacy Policy</a> | <a href="/Contact" class="text-light">Contact Us</a>
+</footer>

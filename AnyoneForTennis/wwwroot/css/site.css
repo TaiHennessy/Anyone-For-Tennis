@@ -1,24 +1,22 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f8f9fa; /* Global background */
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .card {
@@ -30,4 +28,102 @@ body {
 .card-img {
     border-radius: 10px;
     width: 100%;
+}
+
+.card-title {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+    .list-group-item strong {
+        color: #28a745;
+    }
+
+.btn {
+    border-radius: 25px;
+}
+
+.footer-section {
+    background-color: #222;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+    .footer-section a {
+        color: #f8f9fa;
+        text-decoration: none;
+    }
+
+        .footer-section a:hover {
+            color: #28a745;
+        }
+
+/* General Container Padding */
+.container-fluid {
+    padding: 30px 15px;
+}
+
+/* Styling for headings */
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Announcements */
+.alert-success {
+    margin-top: 20px;
+}
+
+.alert-info {
+    margin-top: 20px;
+}
+
+/* Admin Panel Section */
+.admin-panel {
+    margin-top: 20px;
+    background-color: #d1ecf1;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Specific admin alert styling */
+.alert-info h4 {
+    color: #0c5460;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .list-group-item {
+        padding: 10px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .footer-section {
+        font-size: 0.9rem;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* Header and content space adjustments for mobile */
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 15px;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.2rem;
+    }
 }

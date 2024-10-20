@@ -1,8 +1,83 @@
-﻿@{
+﻿@model AnyoneForTennis.Models.HomePageViewModel
+
+@{
     ViewData["Title"] = "Home Page";
+    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Fetching UserId using the correct Claim type.
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Anyone for Tennis!</h1>
+    <p>Your go-to app for booking tennis coaches, managing schedules, and much more!</p>
+
+    <div class="mt-4">
+        <h2>Get Started</h2>
+        <p>
+            Whether you're looking for professional tennis training, booking court sessions, or just want to enhance your skills, we've got you covered.
+        </p>
+        <p>Check out our coaches, book lessons, and take your tennis game to the next level!</p>
+    </div>
+
+    <div class="mt-5">
+        <h3>Your Details</h3>
+        <p>If you're logged in, here's your profile summary:</p>
+
+        @if (userId != null)
+        {
+            // Fetch user details from UserMember or UserCoach
+            var userCoach = Model.UserCoaches?.FirstOrDefault();
+            var userMember = Model.UserMembers?.FirstOrDefault();
+
+            if (userCoach != null)
+            {
+                <div class="card mt-3">
+                    <div class="card-header">
+                        Coach Information
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> @userCoach.Coach.FirstName @userCoach.Coach.LastName</p>
+                        <p><strong>Biography:</strong> @userCoach.Coach.Biography</p>
+                        <p><strong>Photo:</strong> @userCoach.Coach.Photo</p>
+                    </div>
+                </div>
+            }
+            else if (userMember != null)
+            {
+                <div class="card mt-3">
+                    <div class="card-header">
+                        Member Information
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> @userMember.Member.FirstName @userMember.Member.LastName</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-3">
+                    No additional information found for your user profile.
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-warning mt-3">
+                You are not logged in. Please log in to view your profile and related details.
+            </div>
+        }
+    </div>
+
+    <div class="mt-5">
+        <h3>Our Coaches</h3>
+        <p>We have an excellent team of coaches ready to help you improve your game. <a asp-controller="Coaches" asp-action="Index">Meet our coaches</a>.</p>
+    </div>
+
+    <div class="mt-5">
+        <h3>Latest Tennis News</h3>
+        <p>Check out the latest updates from the tennis world, upcoming tournaments, and more.</p>
+    </div>
+
+    <div class="mt-5">
+        <h3>Contact Us</h3>
+        <p>Have any questions? Feel free to <a asp-controller="Home" asp-action="Contact">reach out to us</a>.</p>
+    </div>
 </div>
