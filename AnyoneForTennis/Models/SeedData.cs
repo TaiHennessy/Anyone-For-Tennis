@@ -24,60 +24,64 @@ namespace AnyoneForTennis.Models
                 // Ensure the local database is created
                 await localContext.Database.EnsureCreatedAsync();
 
-                // Create the Identity tables
-                await CreateIdentityTablesAsync(localContext);
+                // Fetch schedules from the source database
+                var schedulesFromSource = await coachContext.Schedules.ToListAsync();
+                Console.WriteLine($"SeedData: Number of schedules fetched from source: {schedulesFromSource.Count}");
 
-                // Fetch coaches from Hitdb1Context (source database)
-                var coachesFromSource = await coachContext.Coaches
-                    .FromSqlRaw("SELECT CoachId, FirstName, LastName, Biography, Photo FROM dbo.Coaches")
-                    .ToListAsync();
+                // Fetch schedules from the local database
+                var localSchedules = await localContext.Schedule.ToListAsync();
+                Console.WriteLine($"SeedData: Number of schedules in local database: {localSchedules.Count}");
 
-                Console.WriteLine($"SeedData: Number of coaches fetched from source: {coachesFromSource.Count}");
+                // Sync the schedules data between source and local database
+                await SyncSchedules(schedulesFromSource, localSchedules, localContext);
 
-                // Fetch coaches from the local database
-                var localCoaches = await localContext.Coach.ToListAsync();
-                Console.WriteLine($"SeedData: Number of coaches in local database: {localCoaches.Count}");
-
-                // Sync the coaches data between source and local database
-                await SyncCoaches(coachesFromSource, localCoaches, localContext);
-
-                // Seed users if none exist
-                if (!await localContext.Users.AnyAsync())
+                // Seed predefined schedules if specific ones don't exist
+                if (!await localContext.Schedule.AnyAsync(s => s.Name == "Super Tennis Training"
+                                                           || s.Name == "Defensive Tennis Drills"
+                                                           || s.Name == "Tennis for Beginners"
+                                                           || s.Name == "Ultra Marathon Tennis"))
                 {
-                    await SeedUsersAsync(localContext);
-                }
-
-                // Seed schedules if none exist
-                if (!await localContext.Schedule.AnyAsync())
-                {
-                    // Get coach from local seeded coach
+                    // Get coaches for the predefined schedules
                     var coach1 = await localContext.Coach.FirstOrDefaultAsync(c => c.FirstName == "Jane" && c.LastName == "Johnson");
                     var coach2 = await localContext.Coach.FirstOrDefaultAsync(c => c.FirstName == "David" && c.LastName == "Miller");
 
-                    // Seed schedules
-                    var seededSchedules = new[]
+                    if (coach1 == null || coach2 == null)
                     {
-                        new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
-                        new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
-                        new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
-                        new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
-                    };
+                        Console.WriteLine("Error: Could not find coaches to assign to schedules.");
+                        return;
+                    }
 
-                    localContext.Schedule.AddRange(seededSchedules);
+                    // Seed predefined schedules
+                    var predefinedSchedules = new[]
+                    {
+                new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
+                new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
+                new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
+                new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
+            };
+
+                    localContext.Schedule.AddRange(predefinedSchedules);
                     await localContext.SaveChangesAsync();
 
+                    // Assign predefined schedules to coaches with original DateTime values
                     var schedule1 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Super Tennis Training");
                     var schedule2 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Defensive Tennis Drills");
                     var schedule3 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Tennis for Beginners");
                     var schedule4 = await localContext.Schedule.FirstOrDefaultAsync(s => s.Name == "Ultra Marathon Tennis");
 
                     localContext.SchedulePlus.AddRange(
-                        new SchedulePlus { ScheduleId = schedule1.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 11, 11, 12, 44, 00) },
-                        new SchedulePlus { ScheduleId = schedule2.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 05, 02, 11, 50, 00) },
-                        new SchedulePlus { ScheduleId = schedule3.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 10, 09, 12, 55, 55) },
-                        new SchedulePlus { ScheduleId = schedule4.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 01, 04, 05, 06, 07) }
+                        new SchedulePlus { ScheduleId = schedule1.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 11, 11, 12, 44, 00) },  // Predefined DateTime
+                        new SchedulePlus { ScheduleId = schedule2.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 05, 02, 11, 50, 00) },  // Predefined DateTime
+                        new SchedulePlus { ScheduleId = schedule3.ScheduleId, CoachId = coach1.CoachId, DateTime = new DateTime(2024, 10, 09, 12, 55, 55) },  // Predefined DateTime
+                        new SchedulePlus { ScheduleId = schedule4.ScheduleId, CoachId = coach2.CoachId, DateTime = new DateTime(2024, 01, 04, 05, 06, 07) }   // Predefined DateTime
                     );
                     await localContext.SaveChangesAsync();
+                }
+
+                // Seed users if none exist
+                if (!await localContext.Users.AnyAsync())
+                {
+                    await SeedUsersAsync(localContext);
                 }
             }
         }
@@ -201,7 +205,7 @@ namespace AnyoneForTennis.Models
                             {
                                 existingCoach.FirstName = sourceCoach.FirstName;
                                 existingCoach.LastName = sourceCoach.LastName;
-                                existingCoach.Biography = sourceCoach.Biography ?? "Default biography";
+                                existingCoach.Biography = sourceCoach.Biography ??  " ";
                                 existingCoach.Photo = sourceCoach.Photo;
 
                                 Console.WriteLine($"Updated coach: {sourceCoach.FirstName} {sourceCoach.LastName}");
@@ -214,7 +218,7 @@ namespace AnyoneForTennis.Models
                                 CoachId = sourceCoach.CoachId,
                                 FirstName = sourceCoach.FirstName,
                                 LastName = sourceCoach.LastName,
-                                Biography = sourceCoach.Biography ?? "Default biography",
+                                Biography = sourceCoach.Biography ?? " ",
                                 Photo = sourceCoach.Photo
                             });
 
@@ -243,6 +247,96 @@ namespace AnyoneForTennis.Models
                 }
             }
         }
+
+        private static async Task SyncSchedules(List<Schedule> schedulesFromSource, List<Schedule> localSchedules, LocalDbContext localContext)
+        {
+            using (var transaction = await localContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Enable identity insert for schedules to preserve IDs
+                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Schedule ON;");
+
+                    var random = new Random(); // To generate random values
+
+                    foreach (var sourceSchedule in schedulesFromSource)
+                    {
+                        // Check if the schedule exists in the local database
+                        var existingSchedule = localSchedules.FirstOrDefault(s => s.ScheduleId == sourceSchedule.ScheduleId);
+
+                        if (existingSchedule != null)
+                        {
+                            // Update the existing schedule
+                            if (existingSchedule.Name != sourceSchedule.Name ||
+                                existingSchedule.Location != sourceSchedule.Location ||
+                                existingSchedule.Description != sourceSchedule.Description)
+                            {
+                                existingSchedule.Name = sourceSchedule.Name;
+                                existingSchedule.Location = sourceSchedule.Location;
+                                existingSchedule.Description = sourceSchedule.Description;
+
+                                Console.WriteLine($"Updated schedule: {sourceSchedule.Name}");
+                            }
+                        }
+                        else
+                        {
+                            // Add new schedule if it doesn't exist locally
+                            localContext.Schedule.Add(new Schedule
+                            {
+                                ScheduleId = sourceSchedule.ScheduleId,
+                                Name = sourceSchedule.Name,
+                                Location = sourceSchedule.Location,
+                                Description = sourceSchedule.Description
+                            });
+
+                            Console.WriteLine($"Added new schedule: {sourceSchedule.Name}");
+                        }
+
+                        // Check if a SchedulePlus already exists for this schedule
+                        var existingSchedulePlus = await localContext.SchedulePlus
+                            .FirstOrDefaultAsync(sp => sp.ScheduleId == sourceSchedule.ScheduleId);
+
+                        if (existingSchedulePlus == null)
+                        {
+                            // Assign a random CoachId between 1 and 20 for the new SchedulePlus
+                            int randomCoachId = random.Next(1, 21); // Generates a random number between 1 and 20
+
+                            localContext.SchedulePlus.Add(new SchedulePlus
+                            {
+                                ScheduleId = sourceSchedule.ScheduleId,
+                                CoachId = randomCoachId, // Assign random CoachId between 1 and 20
+                                DateTime = GetRandomDate(random)
+                            });
+
+                            Console.WriteLine($"Added new SchedulePlus for schedule: {sourceSchedule.Name} with random CoachId: {randomCoachId}.");
+                        }
+                    }
+
+                    // Save all changes
+                    await localContext.SaveChangesAsync();
+                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Schedule OFF;");
+                    await transaction.CommitAsync();
+                    Console.WriteLine("Schedule data synchronized successfully.");
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine($"Error syncing schedules: {ex.Message}");
+                }
+            }
+        }
+
+
+        private static DateTime GetRandomDate(Random random)
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now.AddYears(1);
+
+            int range = (end - start).Days;
+            return start.AddDays(random.Next(range)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
+        }
+
+
 
         private static async Task SeedUsersAsync(LocalDbContext localContext)
         {

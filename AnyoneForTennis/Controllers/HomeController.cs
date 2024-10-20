@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace AnyoneForTennis.Controllers
 {
@@ -21,7 +22,7 @@ namespace AnyoneForTennis.Controllers
         }
 
         // Action for Homepage
-        public async Task<IActionResult> Homepage()
+        public async Task<IActionResult> Index()
         {
             // Get the logged-in user's ID (using claims-based authentication)
             var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -50,16 +51,20 @@ namespace AnyoneForTennis.Controllers
                 viewModel.UserMembers = userMember;
             }
 
-            // Pass any needed data for the homepage
+            // Pass coaches and schedules for the homepage display
             viewModel.Coaches = await _context.Coach.Take(5).ToListAsync();
-            viewModel.Schedules = await _context.Schedule.Take(5).ToListAsync();
+            viewModel.Schedules = await _context.Schedule.Include(s => s.SchedulePlus).Take(5).ToListAsync();
+
+            // Check if the user is an admin and pass this information to the view
+            var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
+            ViewBag.IsAdmin = isAdmin;
 
             // Return the Homepage view with the ViewModel
-            return View("Homepage", viewModel); // Explicitly specifying the "Homepage" view
+            return View("Index", viewModel);
         }
 
-        // Action for Index (Main Landing Page)
-        public async Task<IActionResult> Index()
+        // Action for Homepage (Main Landing Page)
+        public async Task<IActionResult> HomePage()
         {
             var viewModel = new HomePageViewModel
             {
@@ -72,7 +77,8 @@ namespace AnyoneForTennis.Controllers
             var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
             ViewBag.IsAdmin = isAdmin;
 
-            return View(viewModel); // This will render the Index view
+            // Return the Index view
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

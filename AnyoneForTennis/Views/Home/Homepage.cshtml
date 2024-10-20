@@ -1,83 +1,100 @@
 ﻿@model AnyoneForTennis.Models.HomePageViewModel
 
 @{
-    ViewData["Title"] = "Home Page";
-    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Fetching UserId using the correct Claim type.
+    ViewData["Title"] = "Welcome to Anyone for Tennis!";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Anyone for Tennis!</h1>
-    <p>Your go-to app for booking tennis coaches, managing schedules, and much more!</p>
+<!-- Main Layout with Side Panels -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Side Panel: Schedule Info -->
+        <div class="col-lg-3 col-md-4 col-sm-12 bg-light py-4 order-2 order-md-1">
+            <h3 class="text-center text-success">Upcoming Schedule</h3>
+            <ul class="list-group list-group-flush mt-3">
+                @foreach (var schedule in Model.Schedules)
+                {
+                    <li class="list-group-item">
+                        <strong>@schedule.Name</strong><br>
+                        <small>@schedule.SchedulePlus?.DateTime.ToString("dd MMM yyyy | hh:mm tt") | @schedule.Location</small>
+                    </li>
+                }
+            </ul>
+            <a href="/Schedule" class="btn btn-success btn-block mt-4">View Full Schedule</a>
+        </div>
 
-    <div class="mt-4">
-        <h2>Get Started</h2>
-        <p>
-            Whether you're looking for professional tennis training, booking court sessions, or just want to enhance your skills, we've got you covered.
-        </p>
-        <p>Check out our coaches, book lessons, and take your tennis game to the next level!</p>
-    </div>
+        <!-- Center Panel: Main Content -->
+        <div class="col-lg-6 col-md-8 col-sm-12 text-center py-4 order-1">
+            <h1 class="display-4 text-primary">Welcome to Anyone for Tennis!</h1>
+            <p class="lead">Your go-to platform for booking tennis coaches, managing schedules, and connecting with fellow tennis enthusiasts.</p>
 
-    <div class="mt-5">
-        <h3>Your Details</h3>
-        <p>If you're logged in, here's your profile summary:</p>
+            <div class="mt-4">
+                <h2 class="font-weight-bold text-success">Explore Our Features</h2>
+                <p>Whether you're looking to sharpen your skills or just starting out, we have something for everyone!</p>
 
-        @if (userId != null)
-        {
-            // Fetch user details from UserMember or UserCoach
-            var userCoach = Model.UserCoaches?.FirstOrDefault();
-            var userMember = Model.UserMembers?.FirstOrDefault();
-
-            if (userCoach != null)
-            {
-                <div class="card mt-3">
-                    <div class="card-header">
-                        Coach Information
+                <div class="row mt-4">
+                    <!-- Feature 1 -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold text-success">Top Coaches</h5>
+                                <p class="card-text">Connect with top-rated tennis coaches.</p>
+                                <a href="/Coaches" class="btn btn-outline-success btn-sm">Meet Our Coaches</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p><strong>Name:</strong> @userCoach.Coach.FirstName @userCoach.Coach.LastName</p>
-                        <p><strong>Biography:</strong> @userCoach.Coach.Biography</p>
-                        <p><strong>Photo:</strong> @userCoach.Coach.Photo</p>
+                    <!-- Feature 2 -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold text-success">Manage Your Schedule</h5>
+                                <p class="card-text">Easily book tennis lessons and matches.</p>
+                                <a href="/Schedule" class="btn btn-outline-success btn-sm">View Schedule</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            }
-            else if (userMember != null)
-            {
-                <div class="card mt-3">
-                    <div class="card-header">
-                        Member Information
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Name:</strong> @userMember.Member.FirstName @userMember.Member.LastName</p>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-info mt-3">
-                    No additional information found for your user profile.
-                </div>
-            }
-        }
-        else
-        {
-            <div class="alert alert-warning mt-3">
-                You are not logged in. Please log in to view your profile and related details.
             </div>
-        }
-    </div>
 
-    <div class="mt-5">
-        <h3>Our Coaches</h3>
-        <p>We have an excellent team of coaches ready to help you improve your game. <a asp-controller="Coaches" asp-action="Index">Meet our coaches</a>.</p>
-    </div>
+            <!-- Announcements -->
+            @if (TempData["Message"] != null)
+            {
+                <div class="mt-4">
+                    <div class="alert alert-success">
+                        @TempData["Message"]
+                    </div>
+                </div>
+            }
 
-    <div class="mt-5">
-        <h3>Latest Tennis News</h3>
-        <p>Check out the latest updates from the tennis world, upcoming tournaments, and more.</p>
-    </div>
+            <!-- Admin Section -->
+            @if (ViewBag.IsAdmin)
+            {
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h4>Admin Panel</h4>
+                        <p>Exclusive content for admins. Check out this cool <a href="https://www.youtube.com/watch?v=tJi0QwGlTTk&themeRefresh=1" target="_blank" class="text-primary">tennis video!</a></p>
+                    </div>
+                </div>
+            }
+        </div>
 
-    <div class="mt-5">
-        <h3>Contact Us</h3>
-        <p>Have any questions? Feel free to <a asp-controller="Home" asp-action="Contact">reach out to us</a>.</p>
+        <!-- Right Side Panel: Coach Info -->
+        <div class="col-lg-3 col-md-4 col-sm-12 bg-light py-4 order-3">
+            <h3 class="text-center text-success">Featured Coaches</h3>
+            <ul class="list-group list-group-flush mt-3">
+                @foreach (var coach in Model.Coaches)
+                {
+                    <li class="list-group-item">
+                        <strong>@coach.FirstName @coach.LastName</strong><br>
+                    </li>
+                }
+            </ul>
+            <a href="/Coaches" class="btn btn-success btn-block mt-4">View All Coaches</a>
+        </div>
     </div>
 </div>
+
+<!-- Footer -->
+<footer class="footer-section py-3 text-center">
+    <p>&copy; 2024 Anyone for Tennis. All rights reserved.</p>
+    <a href="/Privacy" class="text-light">Privacy Policy</a> | <a href="/Contact" class="text-light">Contact Us</a>
+</footer>

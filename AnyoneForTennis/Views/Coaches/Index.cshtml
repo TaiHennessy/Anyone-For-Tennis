@@ -2,14 +2,20 @@
 
 @{
     ViewData["Title"] = "Coaches";
+    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Get logged-in UserId
+    var isAdmin = (bool)ViewBag.IsAdmin; // Check if the user is an admin
+    var userCoachId = ViewBag.UserCoachId; // Pass UserCoachId from the controller
 }
 
 <div class="container mt-5">
     <h1 class="text-center mb-5">Our Coaches</h1>
 
-    <div class="text-right mb-3">
-        <a class="btn btn-success" asp-action="Create">Create New Coach</a>
-    </div>
+    @if (isAdmin)
+    {
+        <div class="text-right mb-3">
+            <a class="btn btn-success" asp-action="Create">Create New Coach</a>
+        </div>
+    }
 
     <div class="row">
         @foreach (var coach in Model)
@@ -31,8 +37,16 @@
                         <p class="card-text text-muted">@Html.DisplayFor(modelItem => coach.Biography)</p>
                         <div class="mt-3">
                             <a class="btn btn-primary" asp-action="Details" asp-route-id="@coach.CoachId">View Details</a>
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@coach.CoachId">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@coach.CoachId">Delete</a>
+
+                            @if (isAdmin || userCoachId == coach.CoachId)
+                            {
+                                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@coach.CoachId">Edit</a>
+                            }
+
+                            @if (isAdmin)
+                            {
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@coach.CoachId">Delete</a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -67,10 +81,10 @@
 </style>
 
 @functions {
-    // Function to return a random pastel color
+    // Function to return a random pastel color focusing on blues and greens
     private string GetRandomPastelColor()
     {
-        var colors = new[] { "#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF" };
+        var colors = new[] { "#BAFFC9", "#BAE1FF", "#C4F7D7", "#A9D6E5", "#B7E4C7", "#CDE4F4", "#D1F2EB" };
         Random rand = new Random();
         return colors[rand.Next(colors.Length)];
     }

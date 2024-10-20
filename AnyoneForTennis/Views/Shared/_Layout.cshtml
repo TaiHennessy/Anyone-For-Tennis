@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AnyoneForTennis.styles.css" asp-append-version="true" />
+    <style>
+        /* Make text larger for all elements */
+        body {
+            font-size: 1.1rem;
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -25,10 +32,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Homepage">Homepage</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">My Page</a>  <!-- Renamed from Index -->
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Coaches" asp-action="Index">Coaches</a>
@@ -36,9 +40,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="GetSchedule">Schedule</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="ControlPanel">ControlPanel</a>
-                        </li>
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var userId = UserManager.GetUserId(User);
+                            var user = await UserManager.FindByIdAsync(userId);
+                            if (user?.IsAdmin == true)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="ControlPanel">ControlPanel</a>  <!-- Visible only to Admins -->
+                                </li>
+                            }
+                        }
                     </ul>
 
                     <ul class="navbar-nav">
@@ -67,6 +80,7 @@
             </div>
         </nav>
     </header>
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -78,6 +92,7 @@
             &copy; 2024 - AnyoneForTennis - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
