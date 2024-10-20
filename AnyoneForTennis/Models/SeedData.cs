@@ -250,71 +250,72 @@ namespace AnyoneForTennis.Models
 
         private static async Task SyncSchedules(List<Schedule> schedulesFromSource, List<Schedule> localSchedules, LocalDbContext localContext)
         {
+            var random = new Random();
+
+            // List of random tennis-related descriptions
+            var tennisDescriptions = new List<string>
+    {
+        "Master your serve with this focused drill.",
+        "Improve your footwork for better court coverage.",
+        "Learn advanced forehand techniques from the pros.",
+        "Develop your net play with intensive practice.",
+        "Get control over your backhand for stronger returns.",
+        "Boost your stamina with endurance-based tennis drills.",
+        "Train your reflexes with high-speed rallies.",
+        "Improve your drop shots with targeted practice.",
+        "Master the perfect volley with expert coaching.",
+        "Gain consistency in your game with steady practice.",
+        "Learn how to slice for precision shots.",
+        "Refine your approach shots for aggressive plays.",
+        "Dominate your groundstrokes with advanced drills.",
+        "Increase your spin control for tricky serves.",
+        "Get faster reaction times with rapid-fire drills.",
+        "Practice your lob shots for better defensive plays.",
+        "Fine-tune your strategy with tactical training.",
+        "Enhance your baseline game with power drills.",
+        "Develop your doubles game with partner drills.",
+        "Get pro tips for better on-court focus."
+    };
+
             using (var transaction = await localContext.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    // Enable identity insert for schedules to preserve IDs
-                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Schedule ON;");
-
-                    var random = new Random(); // To generate random values
-
                     foreach (var sourceSchedule in schedulesFromSource)
                     {
-                        // Check if the schedule exists in the local database
-                        var existingSchedule = localSchedules.FirstOrDefault(s => s.ScheduleId == sourceSchedule.ScheduleId);
+                        // Check if the schedule exists in the local database by its name
+                        var existingSchedules = localSchedules.Where(s => s.Name == sourceSchedule.Name).ToList();
 
-                        if (existingSchedule != null)
+                        // Create a new schedule if it's a new entry
+                        if (!existingSchedules.Any())
                         {
-                            // Update the existing schedule
-                            if (existingSchedule.Name != sourceSchedule.Name ||
-                                existingSchedule.Location != sourceSchedule.Location ||
-                                existingSchedule.Description != sourceSchedule.Description)
+                            // Create a new schedule if it's not already in the local database
+                            var description = tennisDescriptions[random.Next(tennisDescriptions.Count)]; // Assign a random description
+                            var newSchedule = new Schedule
                             {
-                                existingSchedule.Name = sourceSchedule.Name;
-                                existingSchedule.Location = sourceSchedule.Location;
-                                existingSchedule.Description = sourceSchedule.Description;
+                                Name = sourceSchedule.Name,
+                                Location = sourceSchedule.Location,
+                                Description = description // Use the random tennis-related description
+                            };
+                            localContext.Schedule.Add(newSchedule);
+                            await localContext.SaveChangesAsync();
 
-                                Console.WriteLine($"Updated schedule: {sourceSchedule.Name}");
-                            }
+                            Console.WriteLine($"Added new schedule: {sourceSchedule.Name}");
+
+                            // Assign SchedulePlus to the new schedule
+                            await AddSchedulePlus(localContext, newSchedule.ScheduleId, random);
                         }
                         else
                         {
-                            // Add new schedule if it doesn't exist locally
-                            localContext.Schedule.Add(new Schedule
-                            {
-                                ScheduleId = sourceSchedule.ScheduleId,
-                                Name = sourceSchedule.Name,
-                                Location = sourceSchedule.Location,
-                                Description = sourceSchedule.Description
-                            });
+                            // If the schedule already exists, create a new SchedulePlus one week later
+                            var latestSchedule = existingSchedules.OrderByDescending(s => s.ScheduleId).First();
+                            Console.WriteLine($"Schedule with name '{sourceSchedule.Name}' already exists. Adding a SchedulePlus one week later.");
 
-                            Console.WriteLine($"Added new schedule: {sourceSchedule.Name}");
-                        }
-
-                        // Check if a SchedulePlus already exists for this schedule
-                        var existingSchedulePlus = await localContext.SchedulePlus
-                            .FirstOrDefaultAsync(sp => sp.ScheduleId == sourceSchedule.ScheduleId);
-
-                        if (existingSchedulePlus == null)
-                        {
-                            // Assign a random CoachId between 1 and 20 for the new SchedulePlus
-                            int randomCoachId = random.Next(1, 21); // Generates a random number between 1 and 20
-
-                            localContext.SchedulePlus.Add(new SchedulePlus
-                            {
-                                ScheduleId = sourceSchedule.ScheduleId,
-                                CoachId = randomCoachId, // Assign random CoachId between 1 and 20
-                                DateTime = GetRandomDate(random)
-                            });
-
-                            Console.WriteLine($"Added new SchedulePlus for schedule: {sourceSchedule.Name} with random CoachId: {randomCoachId}.");
+                            // Create a new SchedulePlus for the existing schedule
+                            await AddSchedulePlus(localContext, latestSchedule.ScheduleId, random, addWeek: true);
                         }
                     }
 
-                    // Save all changes
-                    await localContext.SaveChangesAsync();
-                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Schedule OFF;");
                     await transaction.CommitAsync();
                     Console.WriteLine("Schedule data synchronized successfully.");
                 }
@@ -325,6 +326,37 @@ namespace AnyoneForTennis.Models
                 }
             }
         }
+
+        // Helper method to add a SchedulePlus for a schedule
+        private static async Task AddSchedulePlus(LocalDbContext localContext, int scheduleId, Random random, bool addWeek = false)
+        {
+            // Get a random coachId (assuming coach IDs are in the range 1 to 20)
+            int coachId = random.Next(1, 21);
+
+            // Fetch the most recent SchedulePlus entry for this schedule to determine the new DateTime
+            var latestSchedulePlus = await localContext.SchedulePlus
+                .Where(sp => sp.ScheduleId == scheduleId)
+                .OrderByDescending(sp => sp.DateTime)
+                .FirstOrDefaultAsync();
+
+            // Set the DateTime one week after the most recent SchedulePlus or use a random new DateTime
+            DateTime newDateTime = latestSchedulePlus != null && addWeek
+                ? latestSchedulePlus.DateTime.AddDays(7)
+                : new DateTime(2024, random.Next(1, 13), random.Next(1, 29), random.Next(8, 18), random.Next(0, 60), 0); // Random DateTime for new schedule
+
+            // Add the new SchedulePlus
+            localContext.SchedulePlus.Add(new SchedulePlus
+            {
+                ScheduleId = scheduleId,
+                CoachId = coachId,
+                DateTime = newDateTime
+            });
+            await localContext.SaveChangesAsync();
+
+            Console.WriteLine($"Added new SchedulePlus for schedule {scheduleId} with DateTime {newDateTime}.");
+        }
+
+
 
 
         private static DateTime GetRandomDate(Random random)

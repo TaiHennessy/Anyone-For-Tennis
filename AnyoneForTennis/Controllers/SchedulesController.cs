@@ -25,7 +25,12 @@ namespace AnyoneForTennis.Controllers
         // Schedule Page
         public async Task<IActionResult> GetSchedule()
         {
-            return View(await _localContext.Schedule.ToListAsync());
+            var schedules = await _localContext.Schedule
+                .Include(s => s.SchedulePlus)  // Include related SchedulePlus data
+                .ThenInclude(sp => sp.Coach)   // Include related Coach data
+                .ToListAsync();
+
+            return View(schedules); // Pass the list of schedules to the view
         }
 
         // Coach Schedule Page

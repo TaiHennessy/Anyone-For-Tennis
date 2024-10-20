@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "My Page";
-    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Fetching UserId using the correct Claim type.
+    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
 
 <div class="container mt-5">
@@ -10,9 +10,7 @@
 
     @if (userId != null)
     {
-        <!-- Displaying user-specific details in long cards -->
         <div class="row justify-content-center">
-            <!-- Coach or Member Info -->
             <div class="col-md-8">
                 @if (Model.UserCoaches?.FirstOrDefault() != null)
                 {
@@ -31,9 +29,25 @@
                                 {
                                     <img src="@Url.Content("~/img/8-512.jpg")" class="img-fluid rounded" alt="Default Coach Photo" />
                                 }
-
                             </p>
                         </div>
+                    </div>
+
+                    <!-- Display Schedules associated with the Coach -->
+                    <h3 class="text-center mt-5">Your Upcoming Schedules</h3>
+                    <div class="row">
+                        @foreach (var schedulePlus in Model.SchedulePluses.OrderBy(sp => sp.DateTime))
+                        {
+                            <div class="col-md-12 mb-4">
+                                <div class="card shadow-lg" style="background-color:@GetRandomPastelColor();">
+                                    <div class="card-body">
+                                        <h5>@schedulePlus.Schedule.Name</h5>
+                                        <p><strong>Location:</strong> @schedulePlus.Schedule.Location</p>
+                                        <p><strong>Date:</strong> @schedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
                 else if (Model.UserMembers?.FirstOrDefault() != null)
@@ -88,6 +102,14 @@
     .container {
         font-size: 1.2rem;
     }
-
-    }
 </style>
+
+@functions {
+    // Function to return a random pastel color
+    private string GetRandomPastelColor()
+    {
+        var colors = new[] { "#FFB3BA", "#BAE1FF", "#FFDFBA", "#BAFFC9", "#FFFFBA" };
+        Random rand = new Random();
+        return colors[rand.Next(colors.Length)];
+    }
+}

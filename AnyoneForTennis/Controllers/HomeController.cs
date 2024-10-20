@@ -24,44 +24,47 @@ namespace AnyoneForTennis.Controllers
         // Action for Homepage
         public async Task<IActionResult> Index()
         {
-            // Get the logged-in user's ID (using claims-based authentication)
             var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             var viewModel = new HomePageViewModel();
 
-            // If the user is logged in, fetch their UserCoach and UserMember data
             if (userId != null)
             {
                 int parsedUserId = int.Parse(userId);
 
                 // Fetch UserCoach data
                 var userCoach = await _context.UserCoaches
-                    .Include(uc => uc.Coach) // Include the Coach data
+                    .Include(uc => uc.Coach)
                     .Where(uc => uc.UserId == parsedUserId)
                     .ToListAsync();
 
                 // Fetch UserMember data
                 var userMember = await _context.UserMembers
-                    .Include(um => um.Member) // Include the Member data
+                    .Include(um => um.Member)
                     .Where(um => um.UserId == parsedUserId)
                     .ToListAsync();
 
-                // Assign the fetched data to the ViewModel
+                // Fetch SchedulePlus data for the logged-in user's coach
+                var schedulePluses = new List<SchedulePlus>();
+
+                if (userCoach.Any())
+                {
+                    var coachIds = userCoach.Select(uc => uc.CoachId).ToList();
+                    schedulePluses = await _context.SchedulePlus
+                        .Include(sp => sp.Schedule)
+                        .Where(sp => coachIds.Contains(sp.CoachId))
+                        .ToListAsync();
+                }
+
                 viewModel.UserCoaches = userCoach;
                 viewModel.UserMembers = userMember;
+                viewModel.SchedulePluses = schedulePluses;
             }
 
-            // Pass coaches and schedules for the homepage display
-            viewModel.Coaches = await _context.Coach.Take(5).ToListAsync();
-            viewModel.Schedules = await _context.Schedule.Include(s => s.SchedulePlus).Take(5).ToListAsync();
-
-            // Check if the user is an admin and pass this information to the view
-            var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
-            ViewBag.IsAdmin = isAdmin;
-
             // Return the Homepage view with the ViewModel
-            return View("Index", viewModel);
+            return View(viewModel); // Ensure you are using the "Index" view in your Views/Home folder
         }
+
 
         // Action for Homepage (Main Landing Page)
         public async Task<IActionResult> HomePage()
