@@ -26,19 +26,23 @@ namespace AnyoneForTennis.Controllers
         {
             var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            var viewModel = new HomePageViewModel();
+            var viewModel = new HomePageViewModel
+            {
+                Enrollments = new List<Enrollment>(), // Initialize with an empty list
+                RegisteredMembers = new List<Member>() // Also initialize RegisteredMembers
+            };
 
             if (userId != null)
             {
                 int parsedUserId = int.Parse(userId);
 
-                // Fetch UserCoach data
+                // Fetch UserCoach data (for logged-in coach)
                 var userCoach = await _context.UserCoaches
                     .Include(uc => uc.Coach)
                     .Where(uc => uc.UserId == parsedUserId)
                     .ToListAsync();
 
-                // Fetch UserMember data
+                // Fetch UserMember data (for logged-in members)
                 var userMember = await _context.UserMembers
                     .Include(um => um.Member)
                     .Where(um => um.UserId == parsedUserId)
@@ -54,6 +58,17 @@ namespace AnyoneForTennis.Controllers
                         .Include(sp => sp.Schedule)
                         .Where(sp => coachIds.Contains(sp.CoachId))
                         .ToListAsync();
+
+                    // Fetch Enrollments linked to the schedules
+                    var scheduleIds = schedulePluses.Select(sp => sp.ScheduleId).ToList();
+                    var enrollments = await _context.Enrollments
+                        .Include(e => e.Schedule)
+                        .ThenInclude(s => s.SchedulePlus)
+                        .Include(e => e.Member)
+                        .Where(e => scheduleIds.Contains(e.ScheduleId))
+                        .ToListAsync();
+
+                    viewModel.Enrollments = enrollments;
                 }
 
                 viewModel.UserCoaches = userCoach;
@@ -64,6 +79,10 @@ namespace AnyoneForTennis.Controllers
             // Return the Homepage view with the ViewModel
             return View(viewModel); // Ensure you are using the "Index" view in your Views/Home folder
         }
+
+
+
+
 
 
         // Action for Homepage (Main Landing Page)

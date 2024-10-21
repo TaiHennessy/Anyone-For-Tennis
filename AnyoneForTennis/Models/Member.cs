@@ -14,4 +14,6 @@ public partial class Member
     public string? Email { get; set; }
 
     public bool Active { get; set; }
+
+    public ICollection<Enrollment> Enrollments { get; set; } // Navigation Property
 }

@@ -17,18 +17,18 @@ namespace AnyoneForTennis.Models
 
             using (var localContext = new LocalDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<LocalDbContext>>()))
-    
-
             {
                 Console.WriteLine("SeedData: Initializing data...");
 
                 // Ensure the local database is created
                 await localContext.Database.EnsureCreatedAsync();
-                //
                 await CreateIdentityTablesAsync(localContext);
 
                 // Ensure Coaches are seeded first
                 await SeedCoachesAsync(coachContext, localContext);
+
+                // Ensure Members are seeded
+                await SeedMembersAsync(coachContext, localContext);
 
                 // Fetch schedules from the source database
                 var schedulesFromSource = await coachContext.Schedules.ToListAsync();
@@ -60,11 +60,11 @@ namespace AnyoneForTennis.Models
                     // Seed predefined schedules
                     var predefinedSchedules = new[]
                     {
-                        new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
-                        new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
-                        new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
-                        new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
-                    };
+                new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
+                new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
+                new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
+                new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
+            };
 
                     localContext.Schedule.AddRange(predefinedSchedules);
                     await localContext.SaveChangesAsync();
@@ -106,6 +106,22 @@ namespace AnyoneForTennis.Models
             // Sync the coaches data between source and local database
             await SyncCoaches(coachesFromSource, localCoaches, localContext);
         }
+
+        // Seed members from the source database to the local one
+        private static async Task SeedMembersAsync(Hitdb1Context coachContext, LocalDbContext localContext)
+        {
+            // Fetch members from Hitdb1Context (source database)
+            var membersFromSource = await coachContext.Members
+                .FromSqlRaw("SELECT MemberId, FirstName, LastName, Email, Active FROM dbo.Members")
+                .ToListAsync();
+
+            // Fetch members from the local database
+            var localMembers = await localContext.Member.ToListAsync();
+
+            // Sync the members data between source and local database
+            await SyncMembers(membersFromSource, localMembers, localContext);
+        }
+
 
         private static async Task SyncCoaches(List<Coach> coachesFromSource, List<Coach> localCoaches, LocalDbContext localContext)
         {
@@ -161,6 +177,65 @@ namespace AnyoneForTennis.Models
                 }
             }
         }
+
+        private static async Task SyncMembers(List<Member> membersFromSource, List<Member> localMembers, LocalDbContext localContext)
+        {
+            using (var transaction = await localContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Member ON;");
+
+                    foreach (var sourceMember in membersFromSource)
+                    {
+                        // Check if the member exists in the local database
+                        var existingMember = localMembers.FirstOrDefault(m => m.MemberId == sourceMember.MemberId);
+
+                        if (existingMember != null)
+                        {
+                            // Update the existing member
+                            if (existingMember.FirstName != sourceMember.FirstName ||
+                                existingMember.LastName != sourceMember.LastName ||
+                                existingMember.Email != sourceMember.Email ||
+                                existingMember.Active != sourceMember.Active)
+                            {
+                                existingMember.FirstName = sourceMember.FirstName;
+                                existingMember.LastName = sourceMember.LastName;
+                                existingMember.Email = sourceMember.Email;
+                                existingMember.Active = sourceMember.Active;
+
+                                Console.WriteLine($"Updated member: {sourceMember.FirstName} {sourceMember.LastName}");
+                            }
+                        }
+                        else
+                        {
+                            // Add new member if it doesn't exist locally
+                            localContext.Member.Add(new Member
+                            {
+                                MemberId = sourceMember.MemberId,
+                                FirstName = sourceMember.FirstName,
+                                LastName = sourceMember.LastName,
+                                Email = sourceMember.Email,
+                                Active = sourceMember.Active
+                            });
+
+                            Console.WriteLine($"Added new member: {sourceMember.FirstName} {sourceMember.LastName}");
+                        }
+                    }
+
+                    await localContext.SaveChangesAsync();
+                    await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Member OFF;");
+                    await transaction.CommitAsync();
+                    Console.WriteLine("Member data synchronized successfully.");
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine($"Error syncing members: {ex.Message}");
+                }
+            }
+        }
+
 
 
         private static async Task CreateIdentityTablesAsync(LocalDbContext context)
@@ -368,19 +443,24 @@ namespace AnyoneForTennis.Models
             Console.WriteLine($"Added new SchedulePlus for schedule {scheduleId} with DateTime {newDateTime}.");
         }
 
+
+
         private static async Task SeedUsersAsync(LocalDbContext localContext)
         {
             var passwordHasher = new PasswordHasher<User>();
 
             var users = new[]
             {
-                new User { Id = 1, UserName = "BigBoy", Email = "bigboy@example.com", IsAdmin = true, SecurityStamp = "5e8f8f5e-4b37-4d4a-b45d-6f6c5a123456" },
-                new User { Id = 2, UserName = "JohnSmith", Email = "john@example.com", IsAdmin = false, SecurityStamp = "d9f7a8e3-2f5a-41b1-9836-4d5678912345" },
-                new User { Id = 3, UserName = "NoName", Email = "noname@example.com", IsAdmin = false, SecurityStamp = "d452f4d2-1e0a-49bb-9e45-7c6b98765432" },
-                new User { Id = 4, UserName = "LuigiMortadella", Email = "luigi@example.com", IsAdmin = false, SecurityStamp = "a2c567d8-8b34-4d23-912c-3f9c23456789" }
-            };
+        new User { Id = 1, UserName = "BigBoy", Email = "bigboy@example.com", IsAdmin = true, SecurityStamp = "5e8f8f5e-4b37-4d4a-b45d-6f6c5a123456" },
+        new User { Id = 2, UserName = "JohnSmith", Email = "john@example.com", IsAdmin = false, SecurityStamp = "d9f7a8e3-2f5a-41b1-9836-4d5678912345" },
+        new User { Id = 3, UserName = "NoName", Email = "noname@example.com", IsAdmin = false, SecurityStamp = "d452f4d2-1e0a-49bb-9e45-7c6b98765432" },
+        new User { Id = 4, UserName = "LuigiMortadella", Email = "luigi@example.com", IsAdmin = false, SecurityStamp = "a2c567d8-8b34-4d23-912c-3f9c23456789" },
+        new User { Id = 5, UserName = "StrobeMan", Email = "strobelight@example.com", IsAdmin = false, SecurityStamp = "c4b12345-8b34-4d23-912c-3f9c23456789" }, // Referencing song 2
+        new User { Id = 6, UserName = "GoldRush", Email = "goldrush@example.com", IsAdmin = false, SecurityStamp = "a3b567d8-8b34-4d23-912c-3f9c23456789" },  // Referencing song 7
+        new User { Id = 7, UserName = "GunPiece", Email = "gunpiece@example.com", IsAdmin = false, SecurityStamp = "a4c567d8-8b34-4d23-912c-3f9c23456789" }  // Referencing song 8
+    };
 
-            var passwords = new[] { "safepassword", "123456", "No Password", "parmesan" };
+            var passwords = new[] { "safepassword", "123456", "No Password", "parmesan", "strobeflash", "golddigger", "gunshot" };
 
             using (var transaction = await localContext.Database.BeginTransactionAsync())
             {
@@ -400,6 +480,7 @@ namespace AnyoneForTennis.Models
                     await localContext.SaveChangesAsync();
                     await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Users OFF;");
 
+                    // Link Luigi's UserId to Emily Smith's CoachId
                     var luigiUserId = users.First(u => u.UserName == "LuigiMortadella").Id;
                     var userCoach = await localContext.UserCoaches.FirstOrDefaultAsync(uc => uc.UserId == 4 && uc.CoachId == 2);
 
@@ -419,15 +500,28 @@ namespace AnyoneForTennis.Models
                         Console.WriteLine("Luigi's UserId is already linked to Emily Smith's CoachId (2).");
                     }
 
+                    // Link new users to members via UserMember table
+                    var userMemberLinks = new[]
+                    {
+                new UserMember { UserId = 5, MemberId = 2 },  // StrobeMan linked to MemberId 2
+                new UserMember { UserId = 6, MemberId = 3 },  // GoldRush linked to MemberId 3
+                new UserMember { UserId = 7, MemberId = 4 }   // GunPiece linked to MemberId 4
+            };
+
+                    localContext.UserMembers.AddRange(userMemberLinks);
+                    await localContext.SaveChangesAsync();
+                    Console.WriteLine("Linked new users to their respective MemberIds.");
+
                     await transaction.CommitAsync();
-                    Console.WriteLine("Users and User-Coach data seeded successfully.");
+                    Console.WriteLine("Users, User-Coach, and User-Member data seeded successfully.");
                 }
                 catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-                    Console.WriteLine($"Error seeding users and linking to coaches: {ex.Message}");
+                    Console.WriteLine($"Error seeding users and linking to members/coaches: {ex.Message}");
                 }
             }
         }
+
     }
 }

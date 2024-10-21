@@ -44,6 +44,15 @@
                                         <h5>@schedulePlus.Schedule.Name</h5>
                                         <p><strong>Location:</strong> @schedulePlus.Schedule.Location</p>
                                         <p><strong>Date:</strong> @schedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
+
+                                        <!-- Display registered members for each schedule -->
+                                        <p><strong>Registered Members:</strong></p>
+                                        <ul>
+                                            @foreach (var enrollment in Model.Enrollments.Where(e => e.ScheduleId == schedulePlus.ScheduleId))
+                                            {
+                                                <li>@enrollment.Member.FirstName @enrollment.Member.LastName</li>
+                                            }
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -58,6 +67,24 @@
                             <h3 class="card-title">Member Information</h3>
                             <p><strong>Name:</strong> @userMember.Member.FirstName @userMember.Member.LastName</p>
                         </div>
+                    </div>
+
+                    <!-- Display Enrollments (Timetable for the member) -->
+                    <h3 class="text-center mt-5">Your Upcoming Lessons</h3>
+                    <div class="row">
+                        @foreach (var enrollment in Model.Enrollments.OrderBy(e => e.Schedule.SchedulePlus.DateTime))
+                        {
+                            <div class="col-md-12 mb-4">
+                                <div class="card shadow-lg" style="background-color:@GetRandomPastelColor();">
+                                    <div class="card-body">
+                                        <h5>@enrollment.Schedule.Name</h5>
+                                        <p><strong>Location:</strong> @enrollment.Schedule.Location</p>
+                                        <p><strong>Date:</strong> @enrollment.Schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
+                                        <p><strong>Coach:</strong> @enrollment.Schedule.SchedulePlus.Coach.FirstName @enrollment.Schedule.SchedulePlus.Coach.LastName</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
                 else

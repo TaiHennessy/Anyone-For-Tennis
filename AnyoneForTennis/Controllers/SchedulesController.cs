@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AnyoneForTennis.Data;
 using AnyoneForTennis.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace AnyoneForTennis.Controllers
@@ -354,6 +355,61 @@ namespace AnyoneForTennis.Controllers
                 await _localContext.SaveChangesAsync();
             }
             return RedirectToAction(nameof(ControlPanel));
+        }
+
+        // POST: Schedules/Enroll
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]  // Only allow logged-in users to enroll
+        public async Task<IActionResult> Enroll(int scheduleId)
+        {
+            // Get the currently logged-in user
+            var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // Check if the user is a member (linked to a Member object)
+            var userMember = await _localContext.UserMembers.FirstOrDefaultAsync(um => um.UserId == int.Parse(userId));
+
+            if (userMember == null)
+            {
+                // If the user is not a member, redirect back to the schedule page with an error message
+                TempData["ErrorMessage"] = "You need to be a member to enroll in a schedule.";
+                return RedirectToAction(nameof(GetSchedule));
+            }
+
+            // Get the selected schedule and its related SchedulePlus record
+            var schedule = await _localContext.Schedule
+                .Include(s => s.SchedulePlus)
+                .FirstOrDefaultAsync(s => s.ScheduleId == scheduleId);
+
+            if (schedule == null || schedule.SchedulePlus == null)
+            {
+                TempData["ErrorMessage"] = "Invalid schedule.";
+                return RedirectToAction(nameof(GetSchedule));
+            }
+
+            // Check if the user is already enrolled in this schedule
+            var existingEnrollment = await _localContext.Enrollments
+                .FirstOrDefaultAsync(e => e.MemberId == userMember.MemberId && e.ScheduleId == schedule.ScheduleId);
+
+            if (existingEnrollment != null)
+            {
+                TempData["ErrorMessage"] = "You are already enrolled in this schedule.";
+                return RedirectToAction(nameof(GetSchedule));
+            }
+
+            // Create a new enrollment record
+            var enrollment = new Enrollment
+            {
+                MemberId = userMember.MemberId,
+                CoachId = schedule.SchedulePlus.CoachId,
+                ScheduleId = schedule.ScheduleId
+            };
+
+            _localContext.Enrollments.Add(enrollment);
+            await _localContext.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "You have successfully enrolled in the schedule!";
+            return RedirectToAction(nameof(GetSchedule));
         }
 
 

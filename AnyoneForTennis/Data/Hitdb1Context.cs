@@ -72,6 +72,8 @@ namespace AnyoneForTennis.Data
         public DbSet<SchedulePlus> SchedulePlus { get; set; }
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<Coach> Coach { get; set; }
+        public DbSet<Member> Member { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,6 +133,36 @@ namespace AnyoneForTennis.Data
                 entity.Property(e => e.Biography).HasMaxLength(200);
                 entity.Property(e => e.Photo).HasMaxLength(200);
             });
+
+            modelBuilder.Entity<Member>(entity =>
+            {
+                entity.HasKey(e => e.MemberId);
+                entity.Property(e => e.Email).HasMaxLength(400);
+                entity.Property(e => e.FirstName).HasMaxLength(200);
+                entity.Property(e => e.LastName).HasMaxLength(200).IsRequired();
+            });
+
+
+            modelBuilder.Entity<Enrollment>(entity =>
+            {
+                entity.HasKey(e => e.EnrollmentId);
+                entity.HasOne(e => e.Member)
+                    .WithMany(m => m.Enrollments)
+                    .HasForeignKey(e => e.MemberId)
+                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+
+                entity.HasOne(e => e.Coach)
+                    .WithMany(c => c.Enrollments)
+                    .HasForeignKey(e => e.CoachId)
+                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+
+                entity.HasOne(e => e.Schedule)
+                    .WithMany(s => s.Enrollments)
+                    .HasForeignKey(e => e.ScheduleId)
+                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+            });
+
+
         }
     }
 }

@@ -32,7 +32,7 @@ namespace AnyoneForTennis.Migrations.LocalDb
                 name: "IX_SchedulePlus_CoachId",
                 table: "SchedulePlus",
                 column: "CoachId",
-                unique: true);
+                unique: false);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_SchedulePlus_Coach_CoachId",

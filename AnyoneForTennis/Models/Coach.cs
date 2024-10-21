@@ -20,5 +20,6 @@ public partial class Coach
     public string? FullName => $"{FirstName} {LastName}";
 
     public ICollection<SchedulePlus> SchedulePlusPlus { get; set; } = new List<SchedulePlus>();
+    public ICollection<Enrollment> Enrollments { get; set; } // Navigation Property
 
 }

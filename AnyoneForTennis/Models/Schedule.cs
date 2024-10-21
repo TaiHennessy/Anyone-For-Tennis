@@ -28,4 +28,6 @@ public partial class Schedule
             new SelectListItem { Value = "Court D", Text = "Court D" }
         };
     }
+
+    public ICollection<Enrollment> Enrollments { get; set; } // Navigation Property
 }

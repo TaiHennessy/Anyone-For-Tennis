@@ -2,30 +2,60 @@
 
 @{
     ViewData["Title"] = "All Schedules";
+    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Get logged-in user ID
 }
 
 <div class="container">
     <h2 class="text-center mb-4">Upcoming Schedules</h2>
 
-    <div class="row">
-        @foreach (var schedule in Model.OrderBy(s => s.SchedulePlus.DateTime)) // Sort by DateTime
-        {
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm" style="background-color: @GetRandomPastelColor();">
-                    <div class="card-body">
-                        <h5 class="card-title">@schedule.Name</h5>
-                        <p class="card-text">
-                            <strong>Location:</strong> @schedule.Location<br />
-                            <strong>Description:</strong> @schedule.Description<br />
-                            <strong>Date:</strong> @schedule.SchedulePlus?.DateTime.ToString("dd MMM yyyy | hh:mm tt")<br />
-                            <strong>Coach:</strong> @schedule.SchedulePlus?.Coach?.FullName
-                        </p>
-                        <a href="@Url.Action("Details", "Schedules", new { id = schedule.ScheduleId })" class="btn btn-primary">View Details</a>
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var schedule in Model.OrderBy(s => s.SchedulePlus?.DateTime)) // Sort by DateTime
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm" style="background-color: @GetRandomPastelColor();">
+                        <div class="card-body">
+                            <h5 class="card-title">@schedule.Name</h5>
+                            <p class="card-text">
+                                <strong>Location:</strong> @schedule.Location<br />
+                                <strong>Description:</strong> @schedule.Description<br />
+
+                                @if (schedule.SchedulePlus != null)
+                                {
+                                    <strong>Date:</strong> @schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")
+
+                                    <br />
+                                    <strong>Coach:</strong> @schedule.SchedulePlus.Coach?.FullName
+                                }
+                                else
+                                {
+                                    <span class="text-danger">No schedule details available.</span>
+                                }
+                            </p>
+
+                            <a href="@Url.Action("Details", "Schedules", new { id = schedule.ScheduleId })" class="btn btn-primary">View Details</a>
+
+                            @if (User.Identity.IsAuthenticated && userId != null)
+                            {
+                                <!-- Enroll button for logged-in users -->
+                                <form asp-action="Enroll" asp-controller="Schedules" method="post">
+                                    <input type="hidden" name="scheduleId" value="@schedule.ScheduleId" />
+                                    <button type="submit" class="btn btn-success mt-2">Enroll</button>
+                                </form>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            No schedules available.
+        </div>
+    }
 </div>
 
 @functions {
