@@ -171,7 +171,7 @@
               "RelativeDocumentMoniker": "AnyoneForTennis\\Views\\Home\\Homepage.cshtml",
               "ToolTip": "C:\\Users\\User\\source\\repos\\AnyoneTennis\\Anyone-For-Tennis\\AnyoneForTennis\\Views\\Home\\Homepage.cshtml",
               "RelativeToolTip": "AnyoneForTennis\\Views\\Home\\Homepage.cshtml",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABUAAAAqAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABsAAABSAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-10-20T15:28:18.091Z",
               "EditorCaption": ""
@@ -186,8 +186,7 @@
               "RelativeToolTip": "AnyoneForTennis\\Controllers\\SchedulesController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-16T09:27:38.195Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-16T09:27:38.195Z"
             },
             {
               "$type": "Document",
@@ -211,8 +210,7 @@
               "RelativeToolTip": "AnyoneForTennis\\Views\\Home\\index.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAHMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-20T05:29:14.412Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-20T05:29:14.412Z"
             },
             {
               "$type": "Document",
@@ -224,8 +222,7 @@
               "RelativeToolTip": "AnyoneForTennis\\Models\\HomePageViewModel.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAB/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-20T05:32:33.545Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-20T05:32:33.545Z"
             },
             {
               "$type": "Document",
@@ -234,8 +231,7 @@
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/LocalHITDB1/True/SqlTable/dbo.SchedulePlus.sql",
               "ToolTip": "dbo.SchedulePlus [Data]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-10-17T03:19:45.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-17T03:19:45.678Z"
             },
             {
               "$type": "Document",
@@ -247,8 +243,7 @@
               "RelativeToolTip": "AnyoneForTennis\\Controllers\\HomeController.cs",
               "ViewState": "AQIAACMAAAAAAAAAAAAAAEIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-16T07:55:38.899Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-16T07:55:38.899Z"
             },
             {
               "$type": "Document",

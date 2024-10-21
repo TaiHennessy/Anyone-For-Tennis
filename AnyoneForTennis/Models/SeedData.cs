@@ -17,12 +17,18 @@ namespace AnyoneForTennis.Models
 
             using (var localContext = new LocalDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<LocalDbContext>>()))
+    
 
             {
                 Console.WriteLine("SeedData: Initializing data...");
 
                 // Ensure the local database is created
                 await localContext.Database.EnsureCreatedAsync();
+                //
+                await CreateIdentityTablesAsync(localContext);
+
+                // Ensure Coaches are seeded first
+                await SeedCoachesAsync(coachContext, localContext);
 
                 // Fetch schedules from the source database
                 var schedulesFromSource = await coachContext.Schedules.ToListAsync();
@@ -54,11 +60,11 @@ namespace AnyoneForTennis.Models
                     // Seed predefined schedules
                     var predefinedSchedules = new[]
                     {
-                new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
-                new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
-                new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
-                new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
-            };
+                        new Schedule { Name = "Super Tennis Training", Location = "Court D", Description = "Training for Winners" },
+                        new Schedule { Name = "Defensive Tennis Drills", Location = "Court A", Description = "Defense is the best Offence" },
+                        new Schedule { Name = "Tennis for Beginners", Location = "Court C", Description = "Training for Beginners" },
+                        new Schedule { Name = "Ultra Marathon Tennis", Location = "Court B", Description = "Not for the weak willed" }
+                    };
 
                     localContext.Schedule.AddRange(predefinedSchedules);
                     await localContext.SaveChangesAsync();
@@ -86,102 +92,19 @@ namespace AnyoneForTennis.Models
             }
         }
 
-        private static async Task CreateIdentityTablesAsync(LocalDbContext context)
+        // Seed coaches from the source database to the local one
+        private static async Task SeedCoachesAsync(Hitdb1Context coachContext, LocalDbContext localContext)
         {
-            // Create AspNetRoles Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetRoles', 'U') IS NULL
-                CREATE TABLE AspNetRoles (
-                    Id INT IDENTITY(1,1) PRIMARY KEY,
-                    Name NVARCHAR(256) NULL,
-                    NormalizedName NVARCHAR(256) NULL UNIQUE,
-                    ConcurrencyStamp NVARCHAR(MAX) NULL
-                );
-            ");
+            // Fetch coaches from Hitdb1Context (source database)
+            var coachesFromSource = await coachContext.Coaches
+                .FromSqlRaw("SELECT CoachId, FirstName, LastName, Biography, Photo FROM dbo.Coaches")
+                .ToListAsync();
 
-            // Create AspNetUsers Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetUsers', 'U') IS NULL
-                CREATE TABLE AspNetUsers (
-                    Id INT IDENTITY(1,1) PRIMARY KEY,
-                    UserName NVARCHAR(256) NULL,
-                    NormalizedUserName NVARCHAR(256) NULL UNIQUE,
-                    Email NVARCHAR(256) NULL,
-                    NormalizedEmail NVARCHAR(256) NULL,
-                    EmailConfirmed BIT NOT NULL DEFAULT 0,
-                    PasswordHash NVARCHAR(MAX) NULL,
-                    SecurityStamp NVARCHAR(MAX) NULL,
-                    ConcurrencyStamp NVARCHAR(MAX) NULL,
-                    PhoneNumber NVARCHAR(MAX) NULL,
-                    PhoneNumberConfirmed BIT NOT NULL DEFAULT 0,
-                    TwoFactorEnabled BIT NOT NULL DEFAULT 0,
-                    LockoutEnd DATETIMEOFFSET NULL,
-                    LockoutEnabled BIT NOT NULL DEFAULT 0,
-                    AccessFailedCount INT NOT NULL DEFAULT 0
-                );
-            ");
+            // Fetch coaches from the local database
+            var localCoaches = await localContext.Coach.ToListAsync();
 
-            // Create AspNetUserClaims Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetUserClaims', 'U') IS NULL
-                CREATE TABLE AspNetUserClaims (
-                    Id INT IDENTITY(1,1) PRIMARY KEY,
-                    UserId INT NOT NULL,
-                    ClaimType NVARCHAR(MAX) NULL,
-                    ClaimValue NVARCHAR(MAX) NULL,
-                    CONSTRAINT FK_AspNetUserClaims_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
-                );
-            ");
-
-            // Create AspNetUserLogins Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetUserLogins', 'U') IS NULL
-                CREATE TABLE AspNetUserLogins (
-                    LoginProvider NVARCHAR(450) NOT NULL,
-                    ProviderKey NVARCHAR(450) NOT NULL,
-                    ProviderDisplayName NVARCHAR(MAX) NULL,
-                    UserId INT NOT NULL,
-                    PRIMARY KEY (LoginProvider, ProviderKey),
-                    CONSTRAINT FK_AspNetUserLogins_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
-                );
-            ");
-
-            // Create AspNetUserRoles Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetUserRoles', 'U') IS NULL
-                CREATE TABLE AspNetUserRoles (
-                    UserId INT NOT NULL,
-                    RoleId INT NOT NULL,
-                    PRIMARY KEY (UserId, RoleId),
-                    CONSTRAINT FK_AspNetUserRoles_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE,
-                    CONSTRAINT FK_AspNetUserRoles_Role FOREIGN KEY (RoleId) REFERENCES AspNetRoles(Id) ON DELETE CASCADE
-                );
-            ");
-
-            // Create AspNetUserTokens Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetUserTokens', 'U') IS NULL
-                CREATE TABLE AspNetUserTokens (
-                    UserId INT NOT NULL,
-                    LoginProvider NVARCHAR(450) NOT NULL,
-                    Name NVARCHAR(450) NOT NULL,
-                    Value NVARCHAR(MAX) NULL,
-                    PRIMARY KEY (UserId, LoginProvider, Name),
-                    CONSTRAINT FK_AspNetUserTokens_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
-                );
-            ");
-
-            // Create AspNetRoleClaims Table
-            await context.Database.ExecuteSqlRawAsync(@"
-                IF OBJECT_ID('dbo.AspNetRoleClaims', 'U') IS NULL
-                CREATE TABLE AspNetRoleClaims (
-                    Id INT IDENTITY(1,1) PRIMARY KEY,
-                    RoleId INT NOT NULL,
-                    ClaimType NVARCHAR(MAX) NULL,
-                    ClaimValue NVARCHAR(MAX) NULL,
-                    CONSTRAINT FK_AspNetRoleClaims_Role FOREIGN KEY (RoleId) REFERENCES AspNetRoles(Id) ON DELETE CASCADE
-                );
-            ");
+            // Sync the coaches data between source and local database
+            await SyncCoaches(coachesFromSource, localCoaches, localContext);
         }
 
         private static async Task SyncCoaches(List<Coach> coachesFromSource, List<Coach> localCoaches, LocalDbContext localContext)
@@ -205,7 +128,7 @@ namespace AnyoneForTennis.Models
                             {
                                 existingCoach.FirstName = sourceCoach.FirstName;
                                 existingCoach.LastName = sourceCoach.LastName;
-                                existingCoach.Biography = sourceCoach.Biography ??  " ";
+                                existingCoach.Biography = sourceCoach.Biography ?? " ";
                                 existingCoach.Photo = sourceCoach.Photo;
 
                                 Console.WriteLine($"Updated coach: {sourceCoach.FirstName} {sourceCoach.LastName}");
@@ -226,15 +149,6 @@ namespace AnyoneForTennis.Models
                         }
                     }
 
-                    foreach (var localCoach in localCoaches)
-                    {
-                        if (!coachesFromSource.Any(c => c.CoachId == localCoach.CoachId))
-                        {
-                            localContext.Coach.Remove(localCoach);
-                            Console.WriteLine($"Removed coach: {localCoach.FirstName} {localCoach.LastName}");
-                        }
-                    }
-
                     await localContext.SaveChangesAsync();
                     await localContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Coach OFF;");
                     await transaction.CommitAsync();
@@ -248,34 +162,132 @@ namespace AnyoneForTennis.Models
             }
         }
 
+
+        private static async Task CreateIdentityTablesAsync(LocalDbContext context)
+        {
+            // Create AspNetRoles Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetRoles', 'U') IS NULL
+         CREATE TABLE AspNetRoles (
+             Id INT IDENTITY(1,1) PRIMARY KEY,
+             Name NVARCHAR(256) NULL,
+             NormalizedName NVARCHAR(256) NULL UNIQUE,
+             ConcurrencyStamp NVARCHAR(MAX) NULL
+         );
+     ");
+
+            // Create AspNetUsers Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetUsers', 'U') IS NULL
+         CREATE TABLE AspNetUsers (
+             Id INT IDENTITY(1,1) PRIMARY KEY,
+             UserName NVARCHAR(256) NULL,
+             NormalizedUserName NVARCHAR(256) NULL UNIQUE,
+             Email NVARCHAR(256) NULL,
+             NormalizedEmail NVARCHAR(256) NULL,
+             EmailConfirmed BIT NOT NULL DEFAULT 0,
+             PasswordHash NVARCHAR(MAX) NULL,
+             SecurityStamp NVARCHAR(MAX) NULL,
+             ConcurrencyStamp NVARCHAR(MAX) NULL,
+             PhoneNumber NVARCHAR(MAX) NULL,
+             PhoneNumberConfirmed BIT NOT NULL DEFAULT 0,
+             TwoFactorEnabled BIT NOT NULL DEFAULT 0,
+             LockoutEnd DATETIMEOFFSET NULL,
+             LockoutEnabled BIT NOT NULL DEFAULT 0,
+             AccessFailedCount INT NOT NULL DEFAULT 0
+         );
+     ");
+
+            // Create AspNetUserClaims Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetUserClaims', 'U') IS NULL
+         CREATE TABLE AspNetUserClaims (
+             Id INT IDENTITY(1,1) PRIMARY KEY,
+             UserId INT NOT NULL,
+             ClaimType NVARCHAR(MAX) NULL,
+             ClaimValue NVARCHAR(MAX) NULL,
+             CONSTRAINT FK_AspNetUserClaims_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
+         );
+     ");
+
+            // Create AspNetUserLogins Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetUserLogins', 'U') IS NULL
+         CREATE TABLE AspNetUserLogins (
+             LoginProvider NVARCHAR(450) NOT NULL,
+             ProviderKey NVARCHAR(450) NOT NULL,
+             ProviderDisplayName NVARCHAR(MAX) NULL,
+             UserId INT NOT NULL,
+             PRIMARY KEY (LoginProvider, ProviderKey),
+             CONSTRAINT FK_AspNetUserLogins_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
+         );
+     ");
+
+            // Create AspNetUserRoles Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetUserRoles', 'U') IS NULL
+         CREATE TABLE AspNetUserRoles (
+             UserId INT NOT NULL,
+             RoleId INT NOT NULL,
+             PRIMARY KEY (UserId, RoleId),
+             CONSTRAINT FK_AspNetUserRoles_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE,
+             CONSTRAINT FK_AspNetUserRoles_Role FOREIGN KEY (RoleId) REFERENCES AspNetRoles(Id) ON DELETE CASCADE
+         );
+     ");
+
+            // Create AspNetUserTokens Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetUserTokens', 'U') IS NULL
+         CREATE TABLE AspNetUserTokens (
+             UserId INT NOT NULL,
+             LoginProvider NVARCHAR(450) NOT NULL,
+             Name NVARCHAR(450) NOT NULL,
+             Value NVARCHAR(MAX) NULL,
+             PRIMARY KEY (UserId, LoginProvider, Name),
+             CONSTRAINT FK_AspNetUserTokens_User FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
+         );
+     ");
+
+            // Create AspNetRoleClaims Table
+            await context.Database.ExecuteSqlRawAsync(@"
+         IF OBJECT_ID('dbo.AspNetRoleClaims', 'U') IS NULL
+         CREATE TABLE AspNetRoleClaims (
+             Id INT IDENTITY(1,1) PRIMARY KEY,
+             RoleId INT NOT NULL,
+             ClaimType NVARCHAR(MAX) NULL,
+             ClaimValue NVARCHAR(MAX) NULL,
+             CONSTRAINT FK_AspNetRoleClaims_Role FOREIGN KEY (RoleId) REFERENCES AspNetRoles(Id) ON DELETE CASCADE
+         );
+     ");
+        }
         private static async Task SyncSchedules(List<Schedule> schedulesFromSource, List<Schedule> localSchedules, LocalDbContext localContext)
         {
             var random = new Random();
 
             // List of random tennis-related descriptions
             var tennisDescriptions = new List<string>
-    {
-        "Master your serve with this focused drill.",
-        "Improve your footwork for better court coverage.",
-        "Learn advanced forehand techniques from the pros.",
-        "Develop your net play with intensive practice.",
-        "Get control over your backhand for stronger returns.",
-        "Boost your stamina with endurance-based tennis drills.",
-        "Train your reflexes with high-speed rallies.",
-        "Improve your drop shots with targeted practice.",
-        "Master the perfect volley with expert coaching.",
-        "Gain consistency in your game with steady practice.",
-        "Learn how to slice for precision shots.",
-        "Refine your approach shots for aggressive plays.",
-        "Dominate your groundstrokes with advanced drills.",
-        "Increase your spin control for tricky serves.",
-        "Get faster reaction times with rapid-fire drills.",
-        "Practice your lob shots for better defensive plays.",
-        "Fine-tune your strategy with tactical training.",
-        "Enhance your baseline game with power drills.",
-        "Develop your doubles game with partner drills.",
-        "Get pro tips for better on-court focus."
-    };
+            {
+                "Master your serve with this focused drill.",
+                "Improve your footwork for better court coverage.",
+                "Learn advanced forehand techniques from the pros.",
+                "Develop your net play with intensive practice.",
+                "Get control over your backhand for stronger returns.",
+                "Boost your stamina with endurance-based tennis drills.",
+                "Train your reflexes with high-speed rallies.",
+                "Improve your drop shots with targeted practice.",
+                "Master the perfect volley with expert coaching.",
+                "Gain consistency in your game with steady practice.",
+                "Learn how to slice for precision shots.",
+                "Refine your approach shots for aggressive plays.",
+                "Dominate your groundstrokes with advanced drills.",
+                "Increase your spin control for tricky serves.",
+                "Get faster reaction times with rapid-fire drills.",
+                "Practice your lob shots for better defensive plays.",
+                "Fine-tune your strategy with tactical training.",
+                "Enhance your baseline game with power drills.",
+                "Develop your doubles game with partner drills.",
+                "Get pro tips for better on-court focus."
+            };
 
             using (var transaction = await localContext.Database.BeginTransactionAsync())
             {
@@ -355,20 +367,6 @@ namespace AnyoneForTennis.Models
 
             Console.WriteLine($"Added new SchedulePlus for schedule {scheduleId} with DateTime {newDateTime}.");
         }
-
-
-
-
-        private static DateTime GetRandomDate(Random random)
-        {
-            DateTime start = DateTime.Now;
-            DateTime end = DateTime.Now.AddYears(1);
-
-            int range = (end - start).Days;
-            return start.AddDays(random.Next(range)).AddHours(random.Next(24)).AddMinutes(random.Next(60));
-        }
-
-
 
         private static async Task SeedUsersAsync(LocalDbContext localContext)
         {
