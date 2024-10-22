@@ -1,0 +1,107 @@
+﻿@model AnyoneForTennis.Models.Coach
+
+@{
+    ViewData["Title"] = "Edit Biography";
+}
+
+<!-- Main Edit Container -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary mb-4">Edit Your Biography</h1>
+
+    <!-- Card for the Edit Form -->
+    <div class="card shadow-lg border-0 rounded">
+        <div class="card-body p-5">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="CoachId" />
+
+                <!-- First Name (read-only) -->
+                <div class="form-group">
+                    <label asp-for="FirstName" class="font-weight-bold">First Name</label>
+                    <input asp-for="FirstName" class="form-control" disabled="disabled" />
+                </div>
+
+                <!-- Last Name (read-only) -->
+                <div class="form-group">
+                    <label asp-for="LastName" class="font-weight-bold">Last Name</label>
+                    <input asp-for="LastName" class="form-control" disabled="disabled" />
+                </div>
+
+                <!-- Biography (editable) -->
+                <div class="form-group">
+                    <label asp-for="Biography" class="font-weight-bold">Your Biography</label>
+                    <textarea asp-for="Biography" class="form-control" rows="5" placeholder="Tell us more about yourself"></textarea>
+                    <span asp-validation-for="Biography" class="text-danger"></span>
+                </div>
+
+                <!-- Profile Photo (read-only) -->
+                <div class="form-group text-center">
+                    <label class="font-weight-bold">Your Profile Photo</label>
+                    <div class="my-3">
+                        @if (Model.Photo != null && Model.Photo.Length > 0 && Model.Photo[0] != 0)
+                        {
+                            <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Photo)" class="img-fluid rounded-circle shadow-sm" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/img/8-512.jpg")" class="img-fluid rounded-circle shadow-sm" alt="Default Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                        }
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="form-group text-center">
+                    <input type="submit" value="Save Changes" class="btn btn-lg btn-primary px-5 shadow-sm" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Back to List -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    </div>
+</div>
+
+<!-- Styles -->
+<style>
+    .container {
+        max-width: 600px;
+    }
+
+    .form-group label {
+        font-size: 1.2rem;
+        color: #343a40;
+    }
+
+    .form-control {
+        border-radius: 0.375rem;
+        padding: 10px;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-outline-secondary {
+        padding: 10px 20px;
+        border-radius: 0.375rem;
+    }
+
+    .img-fluid {
+        border: 3px solid #ddd;
+    }
+
+    .text-primary {
+        color: #007bff;
+    }
+</style>

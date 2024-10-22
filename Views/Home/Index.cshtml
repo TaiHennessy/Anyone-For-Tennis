@@ -1,0 +1,142 @@
+﻿@model AnyoneForTennis.Models.HomePageViewModel
+
+@{
+    ViewData["Title"] = "My Page";
+    var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Welcome to Your Page</h1>
+
+    @if (userId != null)
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                @if (Model.UserCoaches?.FirstOrDefault() != null)
+                {
+                    var userCoach = Model.UserCoaches.FirstOrDefault();
+                    <div class="card mb-4 shadow-lg">
+                        <div class="card-body">
+                            <h3 class="card-title">Coach Information</h3>
+                            <p><strong>Name:</strong> @userCoach.Coach.FirstName @userCoach.Coach.LastName</p>
+                            <p><strong>Biography:</strong> @userCoach.Coach.Biography</p>
+                            <p>
+                                @if (userCoach.Coach.Photo != null && userCoach.Coach.Photo.Length > 0)
+                                {
+                                    <img src="data:image/jpg;base64,@Convert.ToBase64String(userCoach.Coach.Photo)" class="img-fluid rounded" alt="Coach Photo" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/img/8-512.jpg")" class="img-fluid rounded" alt="Default Coach Photo" />
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Display Schedules associated with the Coach -->
+                    <h3 class="text-center mt-5">Your Upcoming Schedules</h3>
+                    <div class="row">
+                        @foreach (var schedulePlus in Model.SchedulePluses.OrderBy(sp => sp.DateTime))
+                        {
+                            <div class="col-md-12 mb-4">
+                                <div class="card shadow-lg" style="background-color:@GetRandomPastelColor();">
+                                    <div class="card-body">
+                                        <h5>@schedulePlus.Schedule.Name</h5>
+                                        <p><strong>Location:</strong> @schedulePlus.Schedule.Location</p>
+                                        <p><strong>Date:</strong> @schedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
+
+                                        <!-- Display registered members for each schedule -->
+                                        <p><strong>Registered Members:</strong></p>
+                                        <ul>
+                                            @foreach (var enrollment in Model.Enrollments.Where(e => e.ScheduleId == schedulePlus.ScheduleId))
+                                            {
+                                                <li>@enrollment.Member.FirstName @enrollment.Member.LastName</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (Model.UserMembers?.FirstOrDefault() != null)
+                {
+                    var userMember = Model.UserMembers.FirstOrDefault();
+                    <div class="card mb-4 shadow-lg">
+                        <div class="card-body">
+                            <h3 class="card-title">Member Information</h3>
+                            <p><strong>Name:</strong> @userMember.Member.FirstName @userMember.Member.LastName</p>
+                        </div>
+                    </div>
+
+                    <!-- Display Enrollments (Timetable for the member) -->
+                    <h3 class="text-center mt-5">Your Upcoming Lessons</h3>
+                    <div class="row">
+                        @foreach (var enrollment in Model.Enrollments.OrderBy(e => e.Schedule.SchedulePlus.DateTime))
+                        {
+                            <div class="col-md-12 mb-4">
+                                <div class="card shadow-lg" style="background-color:@GetRandomPastelColor();">
+                                    <div class="card-body">
+                                        <h5>@enrollment.Schedule.Name</h5>
+                                        <p><strong>Location:</strong> @enrollment.Schedule.Location</p>
+                                        <p><strong>Date:</strong> @enrollment.Schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
+                                        <p><strong>Coach:</strong> @enrollment.Schedule.SchedulePlus.Coach.FirstName @enrollment.Schedule.SchedulePlus.Coach.LastName</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No additional information found for your user profile.
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            You are not logged in. Please log in to view your profile and related details.
+        </div>
+    }
+</div>
+
+<!-- Custom Styles for the cards -->
+<style>
+    .card {
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        background-color: #f9f9f9;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+
+    .img-fluid {
+        max-width: 300px;
+        border-radius: 10px;
+        margin-top: 15px;
+    }
+
+    .container {
+        font-size: 1.2rem;
+    }
+</style>
+
+@functions {
+    // Function to return a random pastel color
+    private string GetRandomPastelColor()
+    {
+        var colors = new[] { "#FFB3BA", "#BAE1FF", "#FFDFBA", "#BAFFC9", "#FFFFBA" };
+        Random rand = new Random();
+        return colors[rand.Next(colors.Length)];
+    }
+}

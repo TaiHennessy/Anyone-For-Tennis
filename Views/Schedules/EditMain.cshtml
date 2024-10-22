@@ -1,0 +1,45 @@
+﻿@model AnyoneForTennis.Models.SchedulesViewModel
+@{
+    ViewData["Title"] = "Edit Main Schedule";
+}
+
+<h1>Edit Main Schedule</h1>
+<form asp-action="EditMain" method="post">
+    <div class="form-group">
+        <label asp-for="Schedule.Name" class="control-label"></label>
+        <input asp-for="Schedule.Name" class="form-control" readonly="readonly" />
+        <span asp-validation-for="Schedule.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Schedule.Location" class="control-label"></label>
+        <input asp-for="Schedule.Location" class="form-control" readonly="readonly" />
+        <span asp-validation-for="Schedule.Location" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Schedule.Description" class="control-label"></label>
+        <input asp-for="Schedule.Description" class="form-control" readonly="readonly" />
+        <span asp-validation-for="Schedule.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SchedulePlus.DateTime" class="control-label"></label>
+        <input asp-for="SchedulePlus.DateTime" class="form-control" />
+        <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SchedulePlus.CoachId" class="control-label"></label>
+        <select asp-for="SchedulePlus.CoachId" class="form-control" asp-items="ViewBag.Coaches"></select>
+        <span asp-validation-for="SchedulePlus.CoachId" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="Schedule.ScheduleId" />
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+<div>
+    <a asp-action="ControlPanel">Back to List</a>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
