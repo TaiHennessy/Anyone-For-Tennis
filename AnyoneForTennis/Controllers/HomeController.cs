@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace AnyoneForTennis.Controllers
 {
@@ -111,7 +112,23 @@ namespace AnyoneForTennis.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            if (HttpContext.Features.Get<IExceptionHandlerFeature>() is { Error: var exception })   // For displaying error message
+            {
+                errorViewModel.ExceptionMessage = exception.Message; // Message exception will be captured
+            }
+
+            return View(errorViewModel);
+        }
+
+        // Route for simulating an error
+        public IActionResult SimulatedError()
+        {
+            throw new InvalidOperationException("This error is a simulated one, for demonstration purposes.");  // The simulated error itself (throwing an invalid opration), and the custom message associated with it
         }
 
         // GET: /Home/Logout

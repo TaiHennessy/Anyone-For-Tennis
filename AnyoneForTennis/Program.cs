@@ -57,10 +57,23 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeAsync(services); // Await the seeding method
 }
 
+
+/* OG Error Handling
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+} */
+
+//New Error handling middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // Shows detailed error information in development
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error"); // Redirects to Error action in HomeController
+    app.UseHsts(); // HTTP Strict Transport Security (HSTS) is enforced
 }
 
 app.UseHttpsRedirection();
@@ -78,6 +91,12 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Route for simulated error
+app.MapControllerRoute(
+    name: "simulateError",
+    pattern: "Home/SimulatedError",
+    defaults: new { controller = "Home", action = "SimulatedError" });
 
 // Run the application
 app.Run();

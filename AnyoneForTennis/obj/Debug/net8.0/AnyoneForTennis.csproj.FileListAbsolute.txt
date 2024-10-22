@@ -1317,3 +1317,11 @@ C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\De
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\AnyoneForTennis.pdb
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\AnyoneForTennis.genruntimeconfig.cache
 C:\Users\User\source\repos\AnyoneTennis\Anyone-For-Tennis\AnyoneForTennis\obj\Debug\net8.0\ref\AnyoneForTennis.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\sathy\OneDrive\Documents\339_Repo\real\Anyone-For-Tennis\AnyoneForTennis\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
