@@ -59,9 +59,11 @@ namespace AnyoneForTennis.Controllers
         {
             if (id == null) return NotFound();
 
-            var schedule = isLocal
-                ? await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id)
-                : await _context.Schedules.FirstOrDefaultAsync(m => m.ScheduleId == id);
+            var schedule = new Schedule();
+
+            schedule = await _localContext.Schedule.FirstOrDefaultAsync(m => m.ScheduleId == id);
+        
+
             if (schedule == null) return NotFound();
 
             // Always try to fetch SchedulePlus from the local context
@@ -123,6 +125,7 @@ namespace AnyoneForTennis.Controllers
             ModelState.Remove("Coach.Coach");
             ModelState.Remove("SchedulePlus.Coach");
             ModelState.Remove("SchedulePlus.Schedule");
+            ModelState.Remove("Schedule.Enrollments");
 
             // Step 2: Log ModelState after removing properties
             if (!ModelState.IsValid)
@@ -255,6 +258,7 @@ namespace AnyoneForTennis.Controllers
             ModelState.Remove("Coach.Coach");
             ModelState.Remove("SchedulePlus.Coach");
             ModelState.Remove("SchedulePlus.Schedule");
+            ModelState.Remove("Schedule.Enrollments");
 
             if (ModelState.IsValid)
             {
