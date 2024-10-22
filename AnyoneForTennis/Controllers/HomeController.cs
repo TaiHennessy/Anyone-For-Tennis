@@ -51,7 +51,9 @@ namespace AnyoneForTennis.Controllers
 
                 // Fetch SchedulePlus data for the logged-in user's coach
                 var schedulePluses = new List<SchedulePlus>();
+                var enrollments = new List<Enrollment>();
 
+                // If the user is a coach, fetch schedules and related enrollments
                 if (userCoach.Any())
                 {
                     var coachIds = userCoach.Select(uc => uc.CoachId).ToList();
@@ -60,13 +62,27 @@ namespace AnyoneForTennis.Controllers
                         .Where(sp => coachIds.Contains(sp.CoachId))
                         .ToListAsync();
 
-                    // Fetch Enrollments linked to the schedules
+                    // Fetch Enrollments linked to the schedules (for coaches to see who enrolled)
                     var scheduleIds = schedulePluses.Select(sp => sp.ScheduleId).ToList();
-                    var enrollments = await _context.Enrollments
+                    enrollments = await _context.Enrollments
                         .Include(e => e.Schedule)
                         .ThenInclude(s => s.SchedulePlus)
-                        .Include(e => e.Member)
+                        .Include(e => e.Member) // To get the members
                         .Where(e => scheduleIds.Contains(e.ScheduleId))
+                        .ToListAsync();
+
+                    viewModel.Enrollments = enrollments;
+                }
+
+                // If the user is a member, fetch their enrollments
+                if (userMember.Any())
+                {
+                    var memberIds = userMember.Select(um => um.MemberId).ToList();
+                    enrollments = await _context.Enrollments
+                        .Include(e => e.Schedule)
+                        .ThenInclude(s => s.SchedulePlus)
+                        .Include(e => e.Schedule.SchedulePlus.Coach) // To show coach details in the view
+                        .Where(e => memberIds.Contains(e.MemberId)) // Get enrollments where the member is logged in
                         .ToListAsync();
 
                     viewModel.Enrollments = enrollments;
@@ -80,6 +96,7 @@ namespace AnyoneForTennis.Controllers
             // Return the Homepage view with the ViewModel
             return View(viewModel); // Ensure you are using the "Index" view in your Views/Home folder
         }
+
 
 
 
