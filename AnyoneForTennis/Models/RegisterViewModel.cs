@@ -24,6 +24,14 @@ namespace AnyoneForTennis.Models
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public bool IsAdmin { get; set; } = false;  // Optional: Default to false
+        [Required(ErrorMessage = "First name is required.")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last name is required.")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        public bool IsAdmin { get; set; } = false;
     }
 }

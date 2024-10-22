@@ -1,7 +1,9 @@
-﻿using AnyoneForTennis.Models;
+﻿using AnyoneForTennis.Data;
+using AnyoneForTennis.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace AnyoneForTennis.Controllers
@@ -10,11 +12,13 @@ namespace AnyoneForTennis.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly LocalDbContext _context;
 
-        public RegistrationController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public RegistrationController(UserManager<User> userManager, SignInManager<User> signInManager, LocalDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         // GET: /Registration/Register
@@ -22,7 +26,7 @@ namespace AnyoneForTennis.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            return View("~/Views/Home/Register.cshtml");  // Explicitly specify the view path
+            return View("~/Views/Home/Register.cshtml");
         }
 
         // POST: /Registration/Register
@@ -33,18 +37,49 @@ namespace AnyoneForTennis.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if the email is already in use
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, "A user with this email already exists.");
+                    return View("~/Views/Home/Register.cshtml", model);
+                }
+
                 // Create a new User instance
                 var user = new User
                 {
                     UserName = model.Username,
-                    Email = model.Email,  // Optional: Add email if needed
-                    IsAdmin = model.IsAdmin
+                    Email = model.Email,
+                    IsAdmin = model.IsAdmin,
+                    SecurityStamp = Guid.NewGuid().ToString() // Generate a new security stamp
                 };
 
                 // Create the user with hashed password
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // Create a new Member instance
+                    var member = new Member
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Email = model.Email,
+                        Active = true
+                    };
+
+                    _context.Member.Add(member);
+                    await _context.SaveChangesAsync();
+
+                    // Link the user and member in UserMember
+                    var userMember = new UserMember
+                    {
+                        UserId = user.Id,
+                        MemberId = member.MemberId
+                    };
+
+                    _context.UserMembers.Add(userMember);
+                    await _context.SaveChangesAsync();
+
                     // Sign in the user after registration
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
@@ -58,8 +93,9 @@ namespace AnyoneForTennis.Controllers
             }
 
             // If we get this far, something failed
-            return View("~/Views/Home/Register.cshtml");
+            return View("~/Views/Home/Register.cshtml", model);
         }
+
 
         // GET: /Registration/Login
         [HttpGet]

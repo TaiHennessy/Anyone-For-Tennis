@@ -17,7 +17,6 @@
         body {
             font-size: 1.1rem;
         }
-
     </style>
 </head>
 <body>
@@ -32,7 +31,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">My Page</a>  <!-- Renamed from Index -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">My Page</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Coaches" asp-action="Index">Coaches</a>
@@ -40,7 +39,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="GetSchedule">Schedule</a>
                         </li>
-                        
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             var userId = UserManager.GetUserId(User);
@@ -48,7 +47,7 @@
                             if (user?.IsAdmin == true)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="ControlPanel">ControlPanel</a>  <!-- Visible only to Admins -->
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Schedules" asp-action="ControlPanel">Control Panel</a>
                                 </li>
                             }
                         }
@@ -62,6 +61,9 @@
                                     @User.Identity.Name
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+                                    </li>
                                     <form asp-area="" asp-controller="Registration" asp-action="Logout" method="post" class="form-inline">
                                         <button type="submit" class="dropdown-item">Logout</button>
                                         @Html.AntiForgeryToken()
@@ -71,8 +73,14 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Login">Login</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Sign In Options
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Registration" asp-action="Login">Login</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Registration" asp-action="Register">Register</a></li>
+                                </ul>
                             </li>
                         }
                     </ul>
@@ -80,7 +88,7 @@
             </div>
         </nav>
     </header>
-    
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -92,7 +100,7 @@
             &copy; 2024 - AnyoneForTennis - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

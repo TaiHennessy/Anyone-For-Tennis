@@ -39,14 +39,7 @@ builder.Services.AddSession(options =>
 });
 
 // Add controllers and views
-builder.Services.AddControllersWithViews(options =>
-{
-    // Enforce authentication globally for all controllers/actions by default
-    var policy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-    options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
-});
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -57,23 +50,10 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeAsync(services); // Await the seeding method
 }
 
-
-/* OG Error Handling
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-} */
-
-//New Error handling middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage(); // Shows detailed error information in development
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error"); // Redirects to Error action in HomeController
-    app.UseHsts(); // HTTP Strict Transport Security (HSTS) is enforced
 }
 
 app.UseHttpsRedirection();
@@ -87,16 +67,18 @@ app.UseAuthorization();  // Enable authorization middleware
 
 app.UseSession();
 
-// Map default route and allow anonymous access to Login and Register pages
+// Map default route and configure anonymous access for Login and Register actions
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Route for simulated error
 app.MapControllerRoute(
-    name: "simulateError",
-    pattern: "Home/SimulatedError",
-    defaults: new { controller = "Home", action = "SimulatedError" });
+    name: "anonymous",
+    pattern: "{controller=Registration}/{action=Login}/{id?}");
+
+app.MapControllerRoute(
+    name: "anonymous",
+    pattern: "{controller=Registration}/{action=Register}/{id?}");
 
 // Run the application
 app.Run();
