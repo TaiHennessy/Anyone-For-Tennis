@@ -8157,11 +8157,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+      "projectUniqueName": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
       "projectName": "AnyoneForTennis",
-      "projectPath": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+      "projectPath": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
       "packagesPath": "C:\\Users\\ttenn\\.nuget\\packages\\",
-      "outputPath": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
+      "outputPath": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

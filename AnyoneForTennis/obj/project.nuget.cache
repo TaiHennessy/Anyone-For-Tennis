@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HirQI0ADBg4=",
+  "dgSpecHash": "VqQ2xlt4cLc=",
   "success": true,
-  "projectFilePath": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+  "projectFilePath": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ttenn\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\ttenn\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

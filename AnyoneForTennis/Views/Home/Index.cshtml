@@ -81,6 +81,12 @@
                                         <p><strong>Location:</strong> @enrollment.Schedule.Location</p>
                                         <p><strong>Date:</strong> @enrollment.Schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")</p>
                                         <p><strong>Coach:</strong> @enrollment.Schedule.SchedulePlus.Coach.FirstName @enrollment.Schedule.SchedulePlus.Coach.LastName</p>
+
+                                        <!-- Remove Enrollment Button -->
+                                        <form asp-action="RemoveEnrollment" asp-controller="Home" method="post" style="display:inline;">
+                                            <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentId" />
+                                            <button type="submit" class="btn btn-danger btn-sm mt-2">Remove</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

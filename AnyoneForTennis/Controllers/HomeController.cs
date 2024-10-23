@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Diagnostics;
+using System.Linq;
 
 namespace AnyoneForTennis.Controllers
 {
@@ -97,10 +98,47 @@ namespace AnyoneForTennis.Controllers
             return View(viewModel); // Ensure you are using the "Index" view in your Views/Home folder
         }
 
+        // POST: Home/RemoveEnrollment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveEnrollment(int enrollmentId)
+        {
+            var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
+            if (userId == null)
+            {
+                return RedirectToAction("Index");
+            }
 
+            // Find the UserMember entry for the logged-in user
+            var userMember = await _context.UserMembers
+                .Include(um => um.Member)
+                .FirstOrDefaultAsync(um => um.UserId == int.Parse(userId));
 
+            if (userMember == null)
+            {
+                // If no UserMember relationship is found for the logged-in user
+                return NotFound();
+            }
 
+            // Find the enrollment by ID and ensure it belongs to the logged-in user's member
+            var enrollment = await _context.Enrollments
+                .Include(e => e.Member)
+                .FirstOrDefaultAsync(e => e.EnrollmentId == enrollmentId && e.MemberId == userMember.MemberId);
+
+            if (enrollment == null)
+            {
+                // Enrollment not found or doesn't belong to this user's member
+                return NotFound();
+            }
+
+            // Remove the enrollment from the database
+            _context.Enrollments.Remove(enrollment);
+            await _context.SaveChangesAsync();
+
+            // Redirect to Index page after successful removal
+            return RedirectToAction("Index");
+        }
 
 
         // Action for Homepage (Main Landing Page)
@@ -129,24 +167,28 @@ namespace AnyoneForTennis.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            var errorViewModel = new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            };
-
-            if (HttpContext.Features.Get<IExceptionHandlerFeature>() is { Error: var exception })   // For displaying error message
-            {
-                errorViewModel.ExceptionMessage = exception.Message; // Message exception will be captured
-            }
-
-            return View(errorViewModel);
+            return View(); // This will render the Views/Shared/Error.cshtml page
         }
+
 
         // Route for simulating an error
         public IActionResult SimulatedError()
         {
-            throw new InvalidOperationException("This error is a simulated one, for demonstration purposes.");  // The simulated error itself (throwing an invalid opration), and the custom message associated with it
+            try
+            {
+                // Simulate an error by throwing an exception
+                throw new InvalidOperationException("This is a simulated error for testing purposes.");
+            }
+            catch (Exception ex)
+            {
+                // Log the error to the console
+                _logger.LogError(ex, "Simulated error occurred");
+
+
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
+
 
         // GET: /Home/Logout
         [HttpGet]

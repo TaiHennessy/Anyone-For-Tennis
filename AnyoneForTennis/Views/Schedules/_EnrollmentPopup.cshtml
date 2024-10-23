@@ -5,18 +5,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">@Model.Message</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <p>@(Model.IsSuccess ? "You have successfully enrolled in the schedule." : "Please try again.")</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue browsing</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Continue browsing</button>
                 @if (Model.IsSuccess)
                 {
-                    <a href="@Url.Content("~")" class="btn btn-primary">View my schedule</a>
+                    <a href="@Url.Content("~")" class="btn btn-primary">View my enrollments</a>
                 }
             </div>
         </div>
@@ -27,4 +24,8 @@
     $(document).ready(function () {
         $('#enrollmentPopup').modal('show');
     });
+
+    function closeModal() {
+        $('#enrollmentPopup').modal('hide');
+    }
 </script>

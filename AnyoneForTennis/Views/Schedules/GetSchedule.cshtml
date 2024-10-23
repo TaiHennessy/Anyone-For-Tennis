@@ -88,9 +88,10 @@
                     $('#enrollmentModalLabel').text(response.isSuccess ? 'Successfully Enrolled' : 'Enrollment Failed');
                     $('#enrollmentModalBody').text(response.message);
 
-                    // Show or hide the "See my schedule" button
+                    // Show or hide the "View my schedule" button
                     if (response.isSuccess) {
-                        $('#scheduleLink').attr('href', '@Url.Action("Homepage", "Home")').show();
+                        // Use window.location.origin to get the base URL
+                        $('#scheduleLink').attr('href', window.location.origin).show();
                     } else {
                         $('#scheduleLink').hide();
                     }
@@ -105,6 +106,7 @@
         }
     </script>
 }
+
 
 @functions {
     // Helper function to return a random pastel color for the cards

@@ -1,29 +1,28 @@
-﻿@model ErrorViewModel
-@{
-    ViewData["Title"] = "Error";
+﻿@{
+    ViewData["Title"] = "An Error Occurred";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="container text-center mt-5">
+    <h1 class="display-3 text-danger">Oops!</h1>
+    <h2>Something went wrong.</h2>
+    <p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Go to Homepage</a>
+</div>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+<style>
+    .container {
+        margin-top: 50px;
+    }
 
-@if (Model.ExceptionMessage != null)
-{
-    <p>
-        <strong>Error Message:</strong> <code>@Model.ExceptionMessage</code>
-    </p>
-}
+    .display-3 {
+        font-size: 6rem;
+    }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>Development environment shouldn't be enabled for the deployed applications.</strong>
-</p>
+    h2 {
+        margin-top: 20px;
+    }
+
+    .lead {
+        font-size: 1.25rem;
+    }
+</style>

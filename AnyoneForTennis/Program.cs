@@ -1,8 +1,7 @@
 using AnyoneForTennis.Data;
+using AnyoneForTennis.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AnyoneForTennis.Models;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,45 +14,46 @@ builder.Services.AddDbContext<Hitdb1Context>(options =>
 builder.Services.AddDbContext<LocalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Identity services (including UserManager and SignInManager)
+// Add Identity services
 builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<LocalDbContext>()
     .AddDefaultTokenProviders();
 
-// Configure the login path to point to Registration/Login
+// Configure application cookies
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Registration/Login";   // Set login redirection path
-    options.LogoutPath = "/Home/Logout";         // Set logout handling path
-    options.AccessDeniedPath = "/Home/AccessDenied"; // Set access denied redirection
+    options.LoginPath = "/Registration/Login";
+    options.LogoutPath = "/Home/Logout";
+    options.AccessDeniedPath = "/Home/AccessDenied";
     options.SlidingExpiration = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
 
 // Add session services
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout duration
-    options.Cookie.HttpOnly = true; // Set the cookie to be HttpOnly
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
-// Add controllers and views
+// Add controllers with views
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Seed Data Initializer
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await SeedData.InitializeAsync(services); // Await the seeding method
-}
-
+// Configure error handling middleware
 if (!app.Environment.IsDevelopment())
 {
+    // Use the custom error page in production
     app.UseExceptionHandler("/Home/Error");
+    app.UseStatusCodePagesWithReExecute("/Home/Error");
     app.UseHsts();
+}
+else
+{
+    // Show detailed error pages in development
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
@@ -61,24 +61,16 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Use Identity services
-app.UseAuthentication(); // Enable authentication middleware
-app.UseAuthorization();  // Enable authorization middleware
+// Use authentication and authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseSession();
 
-// Map default route and configure anonymous access for Login and Register actions
+// Map default routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "anonymous",
-    pattern: "{controller=Registration}/{action=Login}/{id?}");
-
-app.MapControllerRoute(
-    name: "anonymous",
-    pattern: "{controller=Registration}/{action=Register}/{id?}");
 
 // Run the application
 app.Run();
