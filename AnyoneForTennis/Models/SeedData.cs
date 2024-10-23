@@ -467,7 +467,7 @@ namespace AnyoneForTennis.Models
         new User { Id = 7, UserName = "GunPiece", Email = "gunpiece@example.com", IsAdmin = false, SecurityStamp = "a4c567d8-8b34-4d23-912c-3f9c23456789" }  // Referencing song 8
     };
 
-            var passwords = new[] { "safepassword", "123456", "No Password", "parmesan", "strobeflash", "golddigger", "gunshot" };
+            var passwords = new[] { "Dragonrage104@", "123456", "No Password", "parmesan", "strobeflash", "golddigger", "gunshot" };
 
             using (var transaction = await localContext.Database.BeginTransactionAsync())
             {

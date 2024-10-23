@@ -55,26 +55,7 @@
                 </div>
             </div>
 
-            <!-- Announcements -->
-            @if (TempData["Message"] != null)
-            {
-                <div class="mt-4">
-                    <div class="alert alert-success">
-                        @TempData["Message"]
-                    </div>
-                </div>
-            }
 
-            <!-- Admin Section -->
-            @if (ViewBag.IsAdmin)
-            {
-                <div class="mt-4">
-                    <div class="alert alert-info">
-                        <h4>Admin Panel</h4>
-                        <p>Exclusive content for admins. Check out this cool <a href="https://www.youtube.com/watch?v=tJi0QwGlTTk&themeRefresh=1" target="_blank" class="text-primary">tennis video!</a></p>
-                    </div>
-                </div>
-            }
         </div>
 
         <!-- Right Side Panel: Coach Info -->
@@ -96,6 +77,6 @@
 <!-- Footer -->
 <footer class="footer-section py-3 text-center">
     <p>&copy; 2024 Anyone for Tennis. All rights reserved.</p>
-    <a href="/Privacy" class="text-light">Privacy Policy</a> | <a href="/Contact" class="text-light">Contact Us</a>
+    <a href="@Url.Action("Privacy", "Home")" " class="text-light">Privacy Policy</a> | <a href="/Contact" class="text-light">Contact Us</a>
     <a href="@Url.Action("SimulatedError", "Home")" class="btn btn-danger mt-3">Trigger Simulated Error</a>
 </footer>

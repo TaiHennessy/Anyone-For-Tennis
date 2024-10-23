@@ -2,6 +2,7 @@ using AnyoneForTennis.Data;
 using AnyoneForTennis.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,12 +43,21 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure error handling middleware
+// Seed Data Initializer
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedData.InitializeAsync(services); // Await the seeding method
+}
+
+// Create a logger
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+// Configure global error handling middleware
 if (!app.Environment.IsDevelopment())
 {
-    // Use the custom error page in production
+    // Use the custom error handler for non-development environments
     app.UseExceptionHandler("/Home/Error");
-    app.UseStatusCodePagesWithReExecute("/Home/Error");
     app.UseHsts();
 }
 else
@@ -56,6 +66,27 @@ else
     app.UseDeveloperExceptionPage();
 }
 
+// Handle 404 and other status code pages explicitly
+app.UseStatusCodePages(async context =>
+{
+    var statusCode = context.HttpContext.Response.StatusCode;
+    if (statusCode == 404)
+    {
+        // Log the 404 error as an error in the console
+        var path = context.HttpContext.Request.Path;
+        logger.LogError("404 Error - Page Not Found: {Path}", path);
+
+        // Redirect to the custom error page
+        context.HttpContext.Response.Redirect("/Home/Error");
+    }
+    else
+    {
+        // Handle other status codes here if needed
+        logger.LogError("Error - Status Code: {StatusCode} at {Path}", statusCode, context.HttpContext.Request.Path);
+    }
+});
+
+// Middleware pipeline configuration
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

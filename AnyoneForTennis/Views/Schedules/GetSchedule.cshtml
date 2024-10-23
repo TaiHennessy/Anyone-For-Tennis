@@ -8,12 +8,28 @@
 <div class="container">
     <h2 class="text-center mb-4">Upcoming Schedules</h2>
 
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" id="coachSearch" class="form-control" placeholder="Search by coach..." onkeyup="filterSchedules()">
+        </div>
+        <div class="col-md-6">
+            <select id="locationSort" class="form-control" onchange="filterSchedules()">
+                <option value="">Sort by location...</option>
+                @foreach (var location in Model.Select(s => s.Location.Trim().ToUpper()).Distinct().OrderBy(l => l))
+                {
+                    <option value="@location">@location</option>
+                }
+            </select>
+        </div>
+    </div>
+
     @if (Model != null && Model.Any())
     {
-        <div class="row">
+        <div class="row" id="scheduleList">
             @foreach (var schedule in Model.OrderBy(s => s.SchedulePlus?.DateTime)) // Sort by DateTime
             {
-                <div class="col-md-6 mb-4">
+                <div class="col-md-6 mb-4 schedule-card" data-coach="@schedule.SchedulePlus?.Coach?.FullName" data-location="@schedule.Location.Trim().ToUpper()">
                     <div class="card shadow-sm" style="background-color: @GetRandomPastelColor();">
                         <div class="card-body">
                             <h5 class="card-title">@schedule.Name</h5>
@@ -54,6 +70,8 @@
     }
 </div>
 
+
+
 <!-- Modal for Enrollment Popup -->
 <div class="modal fade" id="enrollmentModal" tabindex="-1" role="dialog" aria-labelledby="enrollmentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -84,19 +102,13 @@
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (response) {
-                    // Set the modal title and body based on the response
                     $('#enrollmentModalLabel').text(response.isSuccess ? 'Successfully Enrolled' : 'Enrollment Failed');
                     $('#enrollmentModalBody').text(response.message);
-
-                    // Show or hide the "View my schedule" button
                     if (response.isSuccess) {
-                        // Use window.location.origin to get the base URL
                         $('#scheduleLink').attr('href', window.location.origin).show();
                     } else {
                         $('#scheduleLink').hide();
                     }
-
-                    // Show the modal
                     $('#enrollmentModal').modal('show');
                 },
                 error: function () {
@@ -104,12 +116,28 @@
                 }
             });
         }
+
+        function filterSchedules() {
+            var input = document.getElementById("coachSearch").value.toUpperCase();
+            var location = document.getElementById("locationSort").value.toUpperCase();
+            var scheduleCards = document.getElementsByClassName("schedule-card");
+
+            for (var i = 0; i < scheduleCards.length; i++) {
+                var card = scheduleCards[i];
+                var coachName = card.getAttribute("data-coach").toUpperCase();
+                var scheduleLocation = card.getAttribute("data-location").toUpperCase();
+
+                if ((coachName.indexOf(input) > -1 || input === "") && (scheduleLocation === location || location === "")) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
     </script>
 }
 
-
 @functions {
-    // Helper function to return a random pastel color for the cards
     private string GetRandomPastelColor()
     {
         var colors = new[] { "#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", "#C2CFFF", "#C6E2FF", "#D1F2EB" };

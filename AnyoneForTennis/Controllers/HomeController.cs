@@ -164,11 +164,21 @@ namespace AnyoneForTennis.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(); // This will render the Views/Shared/Error.cshtml page
+            // Log the error message if available
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionFeature != null)
+            {
+                // Log the exception details to the console
+                Console.WriteLine($"Error occurred on path: {exceptionFeature.Path}");
+                Console.WriteLine($"Error Message: {exceptionFeature.Error.Message}");
+            }
+
+            // Return the Error view
+            return View();
         }
+
 
 
         // Route for simulating an error
