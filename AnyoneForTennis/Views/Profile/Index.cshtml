@@ -1,0 +1,27 @@
+﻿@model AnyoneForTennis.Models.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <h1 class="text-primary">Profile</h1>
+
+    <div class="card shadow-lg border-0 rounded p-4">
+        <dl class="row">
+            <dt class="col-sm-3">Username</dt>
+            <dd class="col-sm-9">@Model.UserName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">First Name</dt>
+            <dd class="col-sm-9">@Model.FirstName</dd>
+
+            <dt class="col-sm-3">Last Name</dt>
+            <dd class="col-sm-9">@Model.LastName</dd>
+        </dl>
+
+        <a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+    </div>
+</div>

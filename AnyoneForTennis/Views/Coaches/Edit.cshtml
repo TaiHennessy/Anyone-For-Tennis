@@ -11,7 +11,8 @@
     <!-- Card for the Edit Form -->
     <div class="card shadow-lg border-0 rounded">
         <div class="card-body p-5">
-            <form asp-action="Edit">
+            <!-- Correctly set the form action to post data to the Edit action -->
+            <form asp-action="Edit" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="CoachId" />
 

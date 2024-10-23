@@ -361,7 +361,6 @@ namespace AnyoneForTennis.Controllers
             return RedirectToAction(nameof(ControlPanel));
         }
 
-        // POST: Schedules/Enroll
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]  // Only allow logged-in users to enroll
@@ -375,20 +374,19 @@ namespace AnyoneForTennis.Controllers
 
             if (userMember == null)
             {
-                // If the user is not a member, redirect back to the schedule page with an error message
-                TempData["ErrorMessage"] = "You need to be a member to enroll in a schedule.";
-                return RedirectToAction(nameof(GetSchedule));
+                // If the user is not a member, show error
+                return Json(new { isSuccess = false, message = "You need to be a member to enroll in a schedule." });
             }
 
-            // Get the selected schedule and its related SchedulePlus record
+            // Get the selected schedule
             var schedule = await _localContext.Schedule
                 .Include(s => s.SchedulePlus)
                 .FirstOrDefaultAsync(s => s.ScheduleId == scheduleId);
 
             if (schedule == null || schedule.SchedulePlus == null)
             {
-                TempData["ErrorMessage"] = "Invalid schedule.";
-                return RedirectToAction(nameof(GetSchedule));
+                // Invalid schedule
+                return Json(new { isSuccess = false, message = "Invalid schedule." });
             }
 
             // Check if the user is already enrolled in this schedule
@@ -397,8 +395,8 @@ namespace AnyoneForTennis.Controllers
 
             if (existingEnrollment != null)
             {
-                TempData["ErrorMessage"] = "You are already enrolled in this schedule.";
-                return RedirectToAction(nameof(GetSchedule));
+                // User is already enrolled
+                return Json(new { isSuccess = false, message = "You have already enrolled in this." });
             }
 
             // Create a new enrollment record
@@ -412,9 +410,11 @@ namespace AnyoneForTennis.Controllers
             _localContext.Enrollments.Add(enrollment);
             await _localContext.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "You have successfully enrolled in the schedule!";
-            return RedirectToAction(nameof(GetSchedule));
+            // Successfully enrolled
+            return Json(new { isSuccess = true, message = "Successfully enrolled." });
         }
+
+
 
 
 

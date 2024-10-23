@@ -107,22 +107,6 @@ namespace AnyoneForTennis.Models
             await SyncCoaches(coachesFromSource, localCoaches, localContext);
         }
 
-        // Seed members from the source database to the local one
-        private static async Task SeedMembersAsync(Hitdb1Context coachContext, LocalDbContext localContext)
-        {
-            // Fetch members from Hitdb1Context (source database)
-            var membersFromSource = await coachContext.Members
-                .FromSqlRaw("SELECT MemberId, FirstName, LastName, Email, Active FROM dbo.Members")
-                .ToListAsync();
-
-            // Fetch members from the local database
-            var localMembers = await localContext.Member.ToListAsync();
-
-            // Sync the members data between source and local database
-            await SyncMembers(membersFromSource, localMembers, localContext);
-        }
-
-
         private static async Task SyncCoaches(List<Coach> coachesFromSource, List<Coach> localCoaches, LocalDbContext localContext)
         {
             using (var transaction = await localContext.Database.BeginTransactionAsync())
@@ -137,21 +121,28 @@ namespace AnyoneForTennis.Models
 
                         if (existingCoach != null)
                         {
+                            // Only update fields if they differ, except for Biography
                             if (existingCoach.FirstName != sourceCoach.FirstName ||
                                 existingCoach.LastName != sourceCoach.LastName ||
-                                existingCoach.Biography != sourceCoach.Biography ||
-                                existingCoach.Photo != sourceCoach.Photo)
+                                existingCoach.Photo != sourceCoach.Photo ||
+                                (existingCoach.Biography == null && sourceCoach.Biography != null)) // Update Biography only if it is null in the local database
                             {
                                 existingCoach.FirstName = sourceCoach.FirstName;
                                 existingCoach.LastName = sourceCoach.LastName;
-                                existingCoach.Biography = sourceCoach.Biography ?? " ";
                                 existingCoach.Photo = sourceCoach.Photo;
+
+                                // Update Biography only if the local Biography is null
+                                if (existingCoach.Biography == null)
+                                {
+                                    existingCoach.Biography = sourceCoach.Biography ?? " ";
+                                }
 
                                 Console.WriteLine($"Updated coach: {sourceCoach.FirstName} {sourceCoach.LastName}");
                             }
                         }
                         else
                         {
+                            // Add new coach, use the source biography if available
                             localContext.Coach.Add(new Coach
                             {
                                 CoachId = sourceCoach.CoachId,
@@ -176,6 +167,22 @@ namespace AnyoneForTennis.Models
                     Console.WriteLine($"Error syncing coaches: {ex.Message}");
                 }
             }
+        }
+
+
+        // Seed members from the source database to the local one
+        private static async Task SeedMembersAsync(Hitdb1Context coachContext, LocalDbContext localContext)
+        {
+            // Fetch members from Hitdb1Context (source database)
+            var membersFromSource = await coachContext.Members
+                .FromSqlRaw("SELECT MemberId, FirstName, LastName, Email, Active FROM dbo.Members")
+                .ToListAsync();
+
+            // Fetch members from the local database
+            var localMembers = await localContext.Member.ToListAsync();
+
+            // Sync the members data between source and local database
+            await SyncMembers(membersFromSource, localMembers, localContext);
         }
 
         private static async Task SyncMembers(List<Member> membersFromSource, List<Member> localMembers, LocalDbContext localContext)

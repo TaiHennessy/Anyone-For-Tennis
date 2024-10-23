@@ -115,52 +115,63 @@ namespace AnyoneForTennis.Controllers
 
         // POST: Coaches/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Coach updatedCoach)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("CoachId,Biography")] Coach updatedCoach)
         {
-            var coach = await _context.Coach.FindAsync(id);
+            if (id != updatedCoach.CoachId)
+            {
+                _logger.LogError($"Edit: Mismatch between URL ID {id} and Coach ID {updatedCoach.CoachId}");
+                return NotFound();
+            }
 
+            var coach = await _context.Coach.FindAsync(id);
             if (coach == null)
             {
                 _logger.LogError($"Edit: Coach with ID {id} not found");
                 return NotFound();
             }
 
-            // Only update the Biography field
+            // Update only the Biography field
             coach.Biography = updatedCoach.Biography;
 
-            // Remove other fields from ModelState validation since we're not updating them
+            // Remove validation for properties not being updated
             ModelState.Remove("FirstName");
             ModelState.Remove("LastName");
             ModelState.Remove("Photo");
+            ModelState.Remove("Enrollments");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _logger.LogInformation($"Edit: Updating coach with ID {id}");
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CoachExists(coach.CoachId))
-                    {
-                        _logger.LogError($"Edit: Concurrency issue - Coach with ID {id} no longer exists");
-                        return NotFound();
-                    }
-                    else
-                    {
-                        _logger.LogError($"Edit: Concurrency issue when editing coach with ID {id}");
-                        throw;
-                    }
-                }
+                // Log ModelState errors
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+                _logger.LogWarning($"Edit: ModelState is invalid for coach with ID {id}. Errors: {string.Join(", ", errorMessages)}");
 
-                _logger.LogInformation($"Edit: Successfully updated coach with ID {id}");
-                return RedirectToAction(nameof(Index));
+                return View(updatedCoach);
             }
 
-            _logger.LogWarning($"Edit: ModelState is invalid for coach with ID {id}");
-            return View(updatedCoach);
+            try
+            {
+                _logger.LogInformation($"Edit: Updating biography for coach with ID {id}");
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Edit: Successfully updated biography for coach with ID {id}");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CoachExists(coach.CoachId))
+                {
+                    _logger.LogError($"Edit: Concurrency issue - Coach with ID {id} no longer exists");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogError($"Edit: Concurrency issue when editing coach with ID {id}");
+                    throw;
+                }
+            }
         }
+
 
 
         // GET: Coaches/Delete/5
