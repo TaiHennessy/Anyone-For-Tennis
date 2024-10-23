@@ -1,7 +1,12 @@
 ﻿@model AnyoneForTennis.Models.SchedulesViewModel
+@using Microsoft.AspNetCore.Identity
+@using AnyoneForTennis.Models
+@inject UserManager<AnyoneForTennis.Models.User> UserManager
 
 @{
     ViewData["Title"] = "Details";
+    var currentUser = await UserManager.GetUserAsync(User);
+    bool isAdmin = currentUser?.IsAdmin ?? false;
 }
 
 <h1>Details</h1>
@@ -44,7 +49,11 @@
     </dl>
 </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" asp-route-isLocal="@ViewData["isLocal"]">Edit</a> |
-    <a asp-action="ControlPanel">Back to List</a>
-</div>
+@if (isAdmin)
+{
+    <div>
+
+        <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" asp-route-isLocal="@ViewData["isLocal"]">Edit</a> |
+        <a asp-action="ControlPanel">Back to List</a>
+    </div>
+}

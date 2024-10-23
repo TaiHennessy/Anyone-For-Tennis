@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {}
+    "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {}
   },
   "projects": {
-    "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {
+    "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+        "projectUniqueName": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
         "projectName": "AnyoneForTennis",
-        "projectPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
-        "packagesPath": "C:\\Users\\axebl\\.nuget\\packages\\",
-        "outputPath": "C:\\Uni\\Yr 3 S2\\HIT339\\Group Assignment\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
+        "projectPath": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\AnyoneForTennis.csproj",
+        "packagesPath": "C:\\Users\\ttenn\\.nuget\\packages\\",
+        "outputPath": "D:\\CDU 3rd year\\HIT339\\fuck around\\Anyone-For-Tennis\\AnyoneForTennis\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\axebl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ttenn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -98,7 +102,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
