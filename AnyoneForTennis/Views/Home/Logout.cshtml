@@ -2,7 +2,58 @@
     ViewData["Title"] = "Logged Out";
 }
 
-<h2>You have successfully logged out.</h2>
-<p>
-    <a asp-controller="Registration" asp-action="Login" class="btn btn-primary">Log In Again</a>
-</p>
+<div class="container mt-5 text-center">
+    <div class="card shadow-lg border-0 rounded p-4 tennis-card">
+        <h2 class="text-primary">You have successfully logged out.</h2>
+        <p class="mt-3">
+            <a asp-controller="Registration" asp-action="Login" class="btn btn-tennis">Log In Again</a>
+        </p>
+    </div>
+</div>
+
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
+
+    h2.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+        padding: 30px;
+    }
+
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 500px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>

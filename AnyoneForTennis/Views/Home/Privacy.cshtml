@@ -3,7 +3,7 @@
 }
 
 <div class="container mt-5">
-    <div class="privacy-policy-card shadow p-5 rounded">
+    <div class="privacy-policy-card shadow-lg p-5 rounded">
         <h1 class="text-center mb-4 text-primary">Privacy Policy</h1>
 
         <p class="lead text-center">
@@ -69,10 +69,13 @@
     }
 
     .privacy-policy-card {
-        background-color: #fafafa;
+        background: linear-gradient(145deg, #f0fff0, #d8ffd8);
         border-radius: 20px;
         border: 2px solid #28a745;
         padding: 40px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
     }
 
     h1 {
@@ -91,14 +94,16 @@
     p, ul {
         font-size: 1.2rem;
         color: #444;
+        line-height: 1.6;
     }
 
     ul {
         margin-top: 15px;
+        padding-left: 20px;
     }
 
         ul li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
     .lead {
@@ -108,8 +113,9 @@
 
     footer {
         margin-top: 50px;
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
+        border-top: 2px solid #ddd;
+        padding-top: 20px;
+        color: #555;
     }
 
     .text-primary {
@@ -137,4 +143,31 @@
         font-size: 1.5em;
         color: #007bff;
     }
+
+    /* Bouncing Tennis Ball Animation */
+    .tennis-ball {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: url('/img/ball.png') no-repeat center center / cover;
+        border-radius: 50%;
+        animation: bounce 4s infinite cubic-bezier(0.5, 0.05, 1, 0.5);
+        opacity: 0.8;
+    }
+
+    @@keyframes bounce {
+        0%, 100% {
+            top: 0;
+            left: 0;
+            transform: translateY(0);
+        }
+        50% {
+            top: 70%;
+            left: 90%;
+            transform: translateY(-20px);
+        }
+    }
 </style>
+
+<!-- Tennis Ball Element -->
+<div class="tennis-ball"></div>

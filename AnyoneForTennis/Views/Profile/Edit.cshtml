@@ -5,48 +5,107 @@
 }
 
 <div class="container mt-5">
-    <h1 class="text-primary">Edit Profile</h1>
+    <h1 class="text-primary text-center">Edit Profile</h1>
 
-    <form asp-action="Edit" method="post" class="card shadow-lg border-0 rounded p-4">
+    <form asp-action="Edit" method="post" class="card shadow-lg border-0 rounded p-4 tennis-card">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
             <label asp-for="UserName" class="font-weight-bold">Username</label>
-            <input asp-for="UserName" class="form-control" />
+            <input asp-for="UserName" class="form-control tennis-input" />
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Email" class="font-weight-bold">Email</label>
-            <input asp-for="Email" class="form-control" />
+            <input asp-for="Email" class="form-control tennis-input" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="FirstName" class="font-weight-bold">First Name</label>
-            <input asp-for="FirstName" class="form-control" />
+            <input asp-for="FirstName" class="form-control tennis-input" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="LastName" class="font-weight-bold">Last Name</label>
-            <input asp-for="LastName" class="form-control" />
+            <input asp-for="LastName" class="form-control tennis-input" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="OldPassword" class="font-weight-bold">Current Password</label>
-            <input asp-for="OldPassword" class="form-control" type="password" />
+            <input asp-for="OldPassword" class="form-control tennis-input" type="password" />
             <span asp-validation-for="OldPassword" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="NewPassword" class="font-weight-bold">New Password</label>
-            <input asp-for="NewPassword" class="form-control" type="password" />
+            <input asp-for="NewPassword" class="form-control tennis-input" type="password" />
             <span asp-validation-for="NewPassword" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-tennis">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
+
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
+
+    h1.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .form-group label {
+        color: #388e3c; /* Dark green for labels */
+        font-family: 'Courier New', monospace;
+    }
+
+    .tennis-input {
+        border: 2px solid #388e3c; /* Dark green border */
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>

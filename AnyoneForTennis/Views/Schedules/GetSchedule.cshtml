@@ -5,92 +5,85 @@
     var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; // Get logged-in user ID
 }
 
-<div class="container">
-    <h2 class="text-center mb-4">Upcoming Schedules</h2>
+    <div class="container">
+        <h2 class="text-center mb-4">Upcoming Schedules</h2>
 
-    <!-- Search and Filter Section -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <input type="text" id="coachSearch" class="form-control" placeholder="Search by coach..." onkeyup="filterSchedules()">
+        <!-- Search and Filter Section -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="text" id="coachSearch" class="form-control" placeholder="Search by coach..." onkeyup="filterSchedules()">
+            </div>
+            <div class="col-md-6">
+                <select id="locationSort" class="form-control" onchange="filterSchedules()">
+                    <option value="">Sort by location...</option>
+                    @foreach (var location in Model.Select(s => s.Location.Trim().ToUpper()).Distinct().OrderBy(l => l))
+                    {
+                        <option value="@location">@location</option>
+                    }
+                </select>
+            </div>
         </div>
-        <div class="col-md-6">
-            <select id="locationSort" class="form-control" onchange="filterSchedules()">
-                <option value="">Sort by location...</option>
-                @foreach (var location in Model.Select(s => s.Location.Trim().ToUpper()).Distinct().OrderBy(l => l))
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row" id="scheduleList">
+                @foreach (var schedule in Model.OrderBy(s => s.SchedulePlus?.DateTime)) // Sort by DateTime
                 {
-                    <option value="@location">@location</option>
-                }
-            </select>
-        </div>
-    </div>
+                    <div class="col-md-6 mb-4 schedule-card" data-coach="@schedule.SchedulePlus?.Coach?.FullName" data-location="@schedule.Location.Trim().ToUpper()">
+                        <div class="card shadow-sm" style="background-color: @GetRandomPastelColor();">
+                            <div class="card-body">
+                                <h5 class="card-title">@schedule.Name</h5>
+                                <p class="card-text">
+                                    <strong>Location:</strong> @schedule.Location<br />
+                                    <strong>Description:</strong> @schedule.Description<br />
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row" id="scheduleList">
-            @foreach (var schedule in Model.OrderBy(s => s.SchedulePlus?.DateTime)) // Sort by DateTime
-            {
-                <div class="col-md-6 mb-4 schedule-card" data-coach="@schedule.SchedulePlus?.Coach?.FullName" data-location="@schedule.Location.Trim().ToUpper()">
-                    <div class="card shadow-sm" style="background-color: @GetRandomPastelColor();">
-                        <div class="card-body">
-                            <h5 class="card-title">@schedule.Name</h5>
-                            <p class="card-text">
-                                <strong>Location:</strong> @schedule.Location<br />
-                                <strong>Description:</strong> @schedule.Description<br />
+                                    @if (schedule.SchedulePlus != null)
+                                    {
+                                        <strong>Date:</strong> @schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")
+                                        <br />
+                                        <strong>Coach:</strong> @schedule.SchedulePlus.Coach?.FullName
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">No schedule details available.</span>
+                                    }
+                                </p>
 
-                                @if (schedule.SchedulePlus != null)
+                                <a href="@Url.Action("Details", "Schedules", new { id = schedule.ScheduleId })" class="btn btn-primary">View Details</a>
+
+                                @if (User.Identity.IsAuthenticated && userId != null)
                                 {
-                                    <strong>Date:</strong> @schedule.SchedulePlus.DateTime.ToString("dd MMM yyyy | hh:mm tt")
-                                    <br />
-                                    <strong>Coach:</strong> @schedule.SchedulePlus.Coach?.FullName
+                                    <!-- Enroll button for logged-in users -->
+                                    <button type="button" class="btn btn-success mt-2" onclick="enroll(@schedule.ScheduleId)">Enroll</button>
                                 }
-                                else
-                                {
-                                    <span class="text-danger">No schedule details available.</span>
-                                }
-                            </p>
-
-                            <a href="@Url.Action("Details", "Schedules", new { id = schedule.ScheduleId })" class="btn btn-primary">View Details</a>
-
-                            @if (User.Identity.IsAuthenticated && userId != null)
-                            {
-                                <!-- Enroll button for logged-in users -->
-                                <button type="button" class="btn btn-success mt-2" onclick="enroll(@schedule.ScheduleId)">Enroll</button>
-                            }
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-warning text-center">
-            No schedules available.
-        </div>
-    }
-</div>
-
-
-
-<!-- Modal for Enrollment Popup -->
-<div class="modal fade" id="enrollmentModal" tabindex="-1" role="dialog" aria-labelledby="enrollmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="enrollmentModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                }
             </div>
-            <div class="modal-body" id="enrollmentModalBody"></div>
-            <div class="modal-footer" id="enrollmentModalFooter">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue browsing</button>
-                <a id="scheduleLink" class="btn btn-primary" style="display: none;">See my schedule</a>
+        }
+        else
+        {
+            <div class="alert alert-warning text-center">
+                No schedules available.
+            </div>
+        }
+    </div>
+
+
+
+    <!-- Modal for Enrollment Popup -->
+    <div class="modal fade" id="enrollmentModal" tabindex="-1" role="dialog" aria-labelledby="enrollmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body" id="enrollmentModalBody"></div>
+                <div class="modal-footer" id="enrollmentModalFooter">
+
+                    <a id="scheduleLink" class="btn btn-primary" style="display: none;">See my schedule</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 @section Scripts {
     <script>
         function enroll(scheduleId) {

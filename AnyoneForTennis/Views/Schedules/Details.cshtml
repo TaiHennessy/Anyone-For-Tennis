@@ -9,51 +9,118 @@
     bool isAdmin = currentUser?.IsAdmin ?? false;
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded p-4 tennis-card">
+        <h1 class="text-center text-primary">Details</h1>
 
-<div>
-    <h4>Schedule</h4>
-    <hr />
-    <!-- dl is discription List, dt is term, dd is descriptions, just an alternative to tables -->
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Schedule.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Schedule.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Schedule.Location)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Schedule.Location)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Schedule.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Schedule.Description)
-        </dd>
-        <dt class="col-sm-2">
-            Date
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SchedulePlus.DateTime)
-        </dd>
-        <dt class="col-sm-2">
-            Coach
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SchedulePlus.Coach.FullName)
-        </dd>
-    </dl>
+        <div>
+            <h4 class="text-secondary">Schedule</h4>
+            <hr />
+            <!-- Description List for Schedule Details -->
+            <dl class="row">
+                <dt class="col-sm-3 text-right font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Schedule.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Schedule.Name)
+                </dd>
+                <dt class="col-sm-3 text-right font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Schedule.Location)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Schedule.Location)
+                </dd>
+                <dt class="col-sm-3 text-right font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Schedule.Description)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Schedule.Description)
+                </dd>
+                <dt class="col-sm-3 text-right font-weight-bold">
+                    Date
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.SchedulePlus.DateTime)
+                </dd>
+                <dt class="col-sm-3 text-right font-weight-bold">
+                    Coach
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.SchedulePlus.Coach.FullName)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="text-center mt-4">
+            @if (isAdmin)
+            {
+                <a asp-action="ControlPanel" class="btn btn-tennis">Back to List</a>
+                <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" asp-route-isLocal="@ViewData["isLocal"]" class="btn btn-tennis ml-2">Edit</a>
+            }
+            else
+            {
+                <a asp-action="GetSchedule" class="btn btn-tennis">Back to List</a>
+            }
+        </div>
+    </div>
 </div>
 
-@if (isAdmin)
-{
-    <div>
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
 
-        <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" asp-route-isLocal="@ViewData["isLocal"]">Edit</a> |
-        <a asp-action="ControlPanel">Back to List</a>
-    </div>
-}
+    h1.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .text-secondary {
+        color: #388e3c; /* Dark green for subheadings */
+        font-family: 'Georgia', serif;
+    }
+
+    .font-weight-bold {
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Styling for the buttons */
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .ml-2 {
+        margin-left: 0.5rem;
+    }
+</style>

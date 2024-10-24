@@ -1,20 +1,92 @@
 ﻿@model AnyoneForTennis.Models.LoginViewModel
 
-<form asp-action="Login" asp-controller="Registration" method="post">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded p-4 tennis-card">
+        <h2 class="text-center text-primary">Login</h2>
+        <form asp-action="Login" asp-controller="Registration" method="post">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <label asp-for="Username" class="font-weight-bold">Username</label>
+                <input asp-for="Username" class="form-control tennis-input" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="font-weight-bold">Password</label>
+                <input asp-for="Password" class="form-control tennis-input" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                <label asp-for="RememberMe" class="form-check-label">Remember Me</label>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-tennis">Login</button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" type="password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="RememberMe"></label>
-        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</div>
+
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
+
+    h2.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .form-group label {
+        color: #388e3c; /* Dark green for labels */
+        font-family: 'Courier New', monospace;
+    }
+
+    .tennis-input {
+        border: 2px solid #388e3c; /* Dark green border */
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 400px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-check-label {
+        color: #388e3c; /* Dark green for the checkbox label */
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>

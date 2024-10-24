@@ -24,7 +24,10 @@
                     <h2 class="card-title">@Model.FirstName @Model.LastName</h2>
                     <p class="card-text"><strong>Biography:</strong></p>
                     <p class="card-text">@Model.Biography</p>
-                    <a class="btn btn-primary mt-3" asp-action="Edit" asp-route-id="@Model?.CoachId">Edit</a>
+                    @if (ViewBag.IsAdmin == true || ViewBag.UserCoachId == Model.CoachId)
+                    {
+                        <a class="btn btn-primary mt-3" asp-action="Edit" asp-route-id="@Model?.CoachId">Edit</a>
+                    }
                     <a class="btn btn-secondary mt-3" asp-action="Index">Back to List</a>
                 </div>
             </div>

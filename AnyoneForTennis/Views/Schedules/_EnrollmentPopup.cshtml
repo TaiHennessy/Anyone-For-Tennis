@@ -1,24 +1,22 @@
 ﻿@model AnyoneForTennis.Models.EnrollmentPopupViewModel
 
-<div class="modal" tabindex="-1" role="dialog" id="enrollmentPopup">
+<!-- Enrollment Popup -->
+<div class="modal fade" id="enrollmentPopup" tabindex="-1" role="dialog" aria-labelledby="enrollmentPopupLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">@Model.Message</h5>
+                <h5 class="modal-title" id="enrollmentPopupLabel">Enrollment Confirmation</h5>
             </div>
             <div class="modal-body">
-                <p>@(Model.IsSuccess ? "You have successfully enrolled in the schedule." : "Please try again.")</p>
+                <p>You have successfully enrolled in the schedule.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Continue browsing</button>
-                @if (Model.IsSuccess)
-                {
-                    <a href="@Url.Content("~")" class="btn btn-primary">View my enrollments</a>
-                }
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function () {

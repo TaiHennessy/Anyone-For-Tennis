@@ -1,58 +1,70 @@
 ﻿@model AnyoneForTennis.Models.Coach
 
 @{
-    ViewData["Title"] = "Edit Coach";
-    var isAdmin = ViewBag.IsAdmin as bool? ?? false;
-    var userCoach = ViewBag.UserCoach;
+    ViewData["Title"] = "Edit Biography";
 }
 
-@if (isAdmin || userCoach != null)
+<!-- Main Edit Container -->
+@if (User.Identity.IsAuthenticated)
 {
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Edit Coach Details</h1>
+        <h1 class="text-center text-primary mb-4">Edit Your Biography</h1>
 
-        <div class="card shadow-lg">
-            <div class="card-body">
+        <!-- Card for the Edit Form -->
+        <div class="card shadow-lg border-0 rounded">
+            <div class="card-body p-5">
+                <!-- Correctly set the form action to post data to the Edit action -->
                 <form asp-action="Edit" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="CoachId" />
 
-                    <!-- First Name -->
+                    <!-- First Name (read-only) -->
                     <div class="form-group">
-                        <label asp-for="FirstName" class="control-label">First Name</label>
-                        <input asp-for="FirstName" class="form-control" disabled />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <label asp-for="FirstName" class="font-weight-bold">First Name</label>
+                        <input asp-for="FirstName" class="form-control" disabled="disabled" />
                     </div>
 
-                    <!-- Last Name -->
+                    <!-- Last Name (read-only) -->
                     <div class="form-group">
-                        <label asp-for="LastName" class="control-label">Last Name</label>
-                        <input asp-for="LastName" class="form-control" disabled />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        <label asp-for="LastName" class="font-weight-bold">Last Name</label>
+                        <input asp-for="LastName" class="form-control" disabled="disabled" />
                     </div>
 
-                    <!-- Biography -->
+                    <!-- Biography (editable) -->
                     <div class="form-group">
-                        <label asp-for="Biography" class="control-label">Biography</label>
-                        <textarea asp-for="Biography" class="form-control"></textarea>
+                        <label asp-for="Biography" class="font-weight-bold">Your Biography</label>
+                        <textarea asp-for="Biography" class="form-control" rows="5" placeholder="Tell us more about yourself"></textarea>
                         <span asp-validation-for="Biography" class="text-danger"></span>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <!-- Profile Photo (read-only) -->
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold">Your Profile Photo</label>
+                        <div class="my-3">
+                            @if (Model.Photo != null && Model.Photo.Length > 0 && Model.Photo[0] != 0)
+                            {
+                                <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Photo)" class="img-fluid rounded-circle shadow-sm" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/img/8-512.jpg")" class="img-fluid rounded-circle shadow-sm" alt="Default Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-group text-center">
+                        <input type="submit" value="Save Changes" class="btn btn-lg btn-primary px-5 shadow-sm" />
+                    </div>
                 </form>
             </div>
         </div>
-    </div>
-}
-else
-{
-    <div class="alert alert-danger text-center">
-        You do not have permission to edit this coach's details.
-    </div>
-}
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+        <!-- Back to List -->
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
 }
 
 <!-- Styles -->

@@ -5,23 +5,82 @@
 }
 
 <div class="container mt-5">
-    <h1 class="text-primary">Profile</h1>
+    <h1 class="text-primary text-center">My Profile</h1>
 
-    <div class="card shadow-lg border-0 rounded p-4">
+    <div class="card shadow-lg border-0 rounded p-4 tennis-card">
         <dl class="row">
-            <dt class="col-sm-3">Username</dt>
+            <dt class="col-sm-3 text-right">Username</dt>
             <dd class="col-sm-9">@Model.UserName</dd>
 
-            <dt class="col-sm-3">Email</dt>
+            <dt class="col-sm-3 text-right">Email</dt>
             <dd class="col-sm-9">@Model.Email</dd>
 
-            <dt class="col-sm-3">First Name</dt>
+            <dt class="col-sm-3 text-right">First Name</dt>
             <dd class="col-sm-9">@Model.FirstName</dd>
 
-            <dt class="col-sm-3">Last Name</dt>
+            <dt class="col-sm-3 text-right">Last Name</dt>
             <dd class="col-sm-9">@Model.LastName</dd>
         </dl>
 
-        <a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+        <div class="text-center mt-4">
+            <a asp-action="Edit" class="btn btn-tennis">Edit Profile</a>
+        </div>
     </div>
 </div>
+
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
+
+    h1.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    dt {
+        color: #388e3c; /* Dark green for labels */
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+    }
+
+    dd {
+        color: #000; /* Black for details */
+        font-family: 'Georgia', serif;
+    }
+
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-right {
+        text-align: right;
+    }
+</style>

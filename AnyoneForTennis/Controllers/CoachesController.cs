@@ -59,16 +59,35 @@ namespace AnyoneForTennis.Controllers
                 return NotFound();
             }
 
-            var coach = await _context.Coach
-                .FirstOrDefaultAsync(m => m.CoachId == id);
+            var coach = await _context.Coach.FirstOrDefaultAsync(m => m.CoachId == id);
             if (coach == null)
             {
                 _logger.LogError($"Details: Coach with ID {id} not found");
                 return NotFound();
             }
 
-            return View(coach);
+            // Get user details for access control
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            bool isAdmin = false;
+            int? userCoachId = null;
+
+            if (userId != null)
+            {
+                var user = await _context.Users.FindAsync(int.Parse(userId));
+                isAdmin = user?.IsAdmin ?? false;
+
+                var userCoach = await _context.UserCoaches
+                    .Where(uc => uc.UserId == int.Parse(userId))
+                    .FirstOrDefaultAsync();
+                userCoachId = userCoach?.CoachId;
+            }
+
+            ViewBag.IsAdmin = isAdmin;
+            ViewBag.UserCoachId = userCoachId;
+
+            return View(coach); // Pass the single coach object to the view
         }
+
 
         // GET: Coaches/Create
         public IActionResult Create()
@@ -98,43 +117,20 @@ namespace AnyoneForTennis.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("Edit: Coach ID is null");
                 return NotFound();
             }
 
             var coach = await _context.Coach.FindAsync(id);
             if (coach == null)
             {
+                _logger.LogError($"Edit: Coach with ID {id} not found");
                 return NotFound();
             }
 
-            // Check if the user is an admin
-            var isAdmin = User.IsInRole("Admin"); // Assuming you have an "Admin" role
-
-            // Validate and parse the user ID
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdClaim, out var userId))
-            {
-                // Log the error if the user ID is invalid
-                _logger.LogError("Invalid user ID: {UserId}", userIdClaim);
-                return RedirectToAction("Error", "Home");
-            }
-
-            // Check if the logged-in user is associated with the coach
-            var userCoach = await _context.UserCoaches
-                .FirstOrDefaultAsync(uc => uc.UserId == userId && uc.CoachId == coach.CoachId);
-
-            // Allow access if the user is an admin or if they are the coach themselves
-            if (!isAdmin && userCoach == null)
-            {
-                return Forbid(); // Return "Forbidden" if the user is neither an admin nor the coach
-            }
-
-            ViewBag.IsAdmin = isAdmin;
-            ViewBag.UserCoach = userCoach;
-
-            return View(coach);
+            _logger.LogInformation($"Edit: Found coach with ID {id}");
+            return View(coach); 
         }
-
 
 
         // POST: Coaches/Edit/5

@@ -4,64 +4,131 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create Schedule</h1>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-5">
+        <div class="card shadow-lg border-0 rounded p-4 tennis-card">
+            <h1 class="text-center text-primary">Create Schedule</h1>
 
-<h4>Schedule</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h4 class="text-secondary text-center">Schedule</h4>
+            <hr />
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Schedule Name -->
-            <div class="form-group">
-                <label asp-for="Schedule.Name" class="control-label"></label>
-                <input asp-for="Schedule.Name" class="form-control" />
-                <span asp-validation-for="Schedule.Name" class="text-danger"></span>
+                        <!-- Schedule Name -->
+                        <div class="form-group">
+                            <label asp-for="Schedule.Name" class="control-label font-weight-bold">Name</label>
+                            <input asp-for="Schedule.Name" class="form-control tennis-input" />
+                            <span asp-validation-for="Schedule.Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- Schedule Location -->
+                        <div class="form-group">
+                            <label asp-for="Schedule.Location" class="control-label font-weight-bold">Location</label>
+                            <select asp-for="Schedule.Location" class="form-control tennis-input" asp-items="ViewBag.Locations"></select>
+                            <span asp-validation-for="Schedule.Location" class="text-danger"></span>
+                        </div>
+
+                        <!-- Schedule Description -->
+                        <div class="form-group">
+                            <label asp-for="Schedule.Description" class="control-label font-weight-bold">Description</label>
+                            <input asp-for="Schedule.Description" class="form-control tennis-input" />
+                            <span asp-validation-for="Schedule.Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- SchedulePlus DateTime -->
+                        <div class="form-group">
+                            <label asp-for="SchedulePlus.DateTime" class="control-label font-weight-bold">Date</label>
+                            <input asp-for="SchedulePlus.DateTime" class="form-control tennis-input" type="datetime-local" value="@Model.SchedulePlus.DateTime.ToString("yyyy-MM-ddTHH:mm")" step="60" />
+                            <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
+                        </div>
+
+                        <!-- SchedulePlus CoachId -->
+                        <div class="form-group">
+                            <label asp-for="SchedulePlus.CoachId" class="control-label font-weight-bold">Coach</label>
+                            <select asp-for="SchedulePlus.CoachId" class="form-control tennis-input" asp-items="ViewBag.Coaches"></select>
+                            <span asp-validation-for="SchedulePlus.CoachId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <input type="submit" value="Create" class="btn btn-tennis" />
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <!-- Schedule Location -->
-            <div class="form-group">
-                <label asp-for="Schedule.Location" class="control-label"></label>
-                <select asp-for="Schedule.Location" class="form-control" asp-items="ViewBag.Locations"></select>
-                <span asp-validation-for="Schedule.Location" class="text-danger"></span>
+            <!-- Back Link -->
+            <div class="text-center mt-3">
+                <a asp-action="ControlPanel" class="btn btn-secondary">Back to List</a>
             </div>
-
-            <!-- Schedule Description -->
-            <div class="form-group">
-                <label asp-for="Schedule.Description" class="control-label"></label>
-                <input asp-for="Schedule.Description" class="form-control" />
-                <span asp-validation-for="Schedule.Description" class="text-danger"></span>
-            </div>
-
-            <!-- SchedulePlus DateTime -->
-            <div class="form-group">
-                <label asp-for="SchedulePlus.DateTime" class="control-label">Date</label>
-                <input asp-for="SchedulePlus.DateTime" class="form-control" type="datetime-local" value="@Model.SchedulePlus.DateTime.ToString("yyyy-MM-ddTHH:mm")" step="60" />
-                <span asp-validation-for="SchedulePlus.DateTime" class="text-danger"></span>
-            </div>
-
-            <!-- SchedulePlus CoachId -->
-            <div class="form-group">
-                <label asp-for="SchedulePlus.CoachId" class="control-label">Coach</label>
-                <select asp-for="SchedulePlus.CoachId" class="form-control" asp-items="ViewBag.Coaches"></select>
-                <span asp-validation-for="SchedulePlus.CoachId" class="text-danger"></span>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<!-- Back Link -->
-<div>
-    <a asp-action="ControlPanel">Back to List</a>
-</div>
-
-<!-- Scripts for Validation -->
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
+<!-- Tennis-Themed CSS -->
+<style>
+    /* Tennis-themed colors */
+    .tennis-card {
+        background-color: #e8f5e9; /* Light green background */
+        border-left: 5px solid #388e3c; /* Dark green border */
+    }
+
+    h1.text-primary {
+        color: #ffeb3b; /* Tennis ball yellow */
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+
+    h4.text-secondary {
+        color: #388e3c; /* Dark green for subheadings */
+        font-family: 'Georgia', serif;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .font-weight-bold {
+        font-family: 'Courier New', monospace;
+    }
+
+    .tennis-input {
+        border: 2px solid #388e3c; /* Dark green border */
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-tennis {
+        background-color: #ffeb3b; /* Tennis ball yellow */
+        color: #388e3c; /* Dark green text */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-tennis:hover {
+        background-color: #388e3c; /* Dark green on hover */
+        color: #ffeb3b; /* Yellow text on hover */
+    }
+
+    /* Additional styles for aesthetics */
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-danger {
+        font-weight: bold;
+    }
+</style>

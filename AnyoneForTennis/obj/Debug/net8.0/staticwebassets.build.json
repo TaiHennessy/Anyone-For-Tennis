@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8jQA1Mqfpf+qPh/FbF/ccXmtS4M9mFI+m4C5PmyhO/w=",
+  "Hash": "7g9AtSvj15N8/SDGctpW2MAgnN7VOv7IA+N+pJu8WYQ=",
   "Source": "AnyoneForTennis",
   "BasePath": "_content/AnyoneForTennis",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\8-512.jpg"
+    },
+    {
+      "Identity": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\wwwroot\\img\\ball.png",
+      "SourceId": "AnyoneForTennis",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\wwwroot\\",
+      "BasePath": "_content/AnyoneForTennis",
+      "RelativePath": "img/ball.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\ball.png"
     },
     {
       "Identity": "D:\\CDU 3rd year\\HIT339\\hopefully last\\Anyone-For-Tennis\\AnyoneForTennis\\wwwroot\\js\\site.js",
